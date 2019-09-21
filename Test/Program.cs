@@ -10,7 +10,13 @@ namespace Test
         {
             using (var ctx = new MinusContext())
             {
-                ctx.Database.EnsureCreated();
+                Product newProduct = new Product()
+                {
+                    Name = "asd",
+                    Rating = 3.4,
+
+                };
+                ctx.Products.Add(newProduct);
                 ctx.SaveChanges();
             }
         }

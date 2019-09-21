@@ -9,9 +9,15 @@ namespace DAL.Context
 {
     public class MinusContext : DbContext
     {
+        //public MinusContext(DbContextOptions<MinusContext> options) : base(options) { }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseMySQL(@"server=localhost;database=minus;user=root;password=admin");
+        }
+
+        public virtual void Commit()
+        {
+            SaveChanges();
         }
 
         public DbSet<Comment> Comments { get; set; }
