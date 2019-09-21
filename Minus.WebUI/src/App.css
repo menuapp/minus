@@ -1,0 +1,239 @@
+/* .scContainer{
+  margin: 0 auto;
+  position: absolute;
+  overflow: auto;
+  list-style: none;
+  padding: 0;
+  z-index: 1;
+  width: 100%;
+  height: auto;
+  overflow-y:visible
+} */
+
+.slide0 {
+  font-size: 18px;
+  color: whitesmoke;
+  background-color: #243b4a;
+  text-align: center;
+  height: auto;
+}
+
+.slide0-h1 {
+  text-align: center;
+}
+
+.slide1 {
+  /* background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%); */
+  background-color: #243b4a71;
+}
+
+.slide2 {
+  /* background-image: linear-gradient(-225deg, #B6CEE8 0%, #F578DC 100%); */
+  background-color: #243b4a71;
+}
+
+.slide3 {
+  /* background-image: linear-gradient(to right, #eea2a2 0%, #bbc1bf 19%, #57c6e1 42%, #b49fda 79%, #7ac5d8 100%);  */
+  background-color: #243b4a71;
+}
+
+.slide4 {
+  /* background-image: linear-gradient(-225deg, #69EACB 0%, #EACCF8 48%, #6654F1 100%);  */
+  background-color: #243b4a71;
+}
+
+.slide5 {
+  /* background-image: linear-gradient(to right, #243949 0%, #517fa4 100%); */
+  background-color: #243b4a;
+}
+
+.with-margin {
+  margin-bottom: 25px;
+}
+
+.slide {
+  display: flex;
+}
+
+.zoom {
+  transition: transform 0.7s;
+}
+
+.zoom:hover {
+  transform: scale(1.5);
+}
+.card-fiyat {
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+  background-color: orange;
+  padding: 6px 11px;
+  display: inline-block;
+  margin: 1px 4px;
+}
+
+/*  Examples Section */
+
+.examples {
+  max-width: 700px;
+  background-color: #fff;
+  margin: 0 auto 75px;
+  padding: 30px 50px;
+  color: #4c4e56;
+}
+
+.examples-note {
+  text-align: center;
+  font-size: 14px;
+  max-width: 370px;
+  margin: 0 auto 40px;
+  line-height: 1.7;
+  color: #7a7a7a;
+}
+
+.examples table {
+  margin: 5px 0 0 0;
+  font-size: 14px;
+}
+
+.show {
+  display: block !important;
+}
+.form-signin {
+  display: none;
+}
+
+
+.form-control {
+  width: 20% !important;
+}
+
+.inline-items {
+  display: inline !important;
+}
+/*                       shopping cart kısmı                         */
+
+.purchase-card {
+  width: 350px;
+  box-shadow: black, blanchedalmond;
+  padding: 1em;
+}
+
+.purchase-card > .show-grid {
+  padding-bottom: 1.5em;
+}
+
+
+/*                       productgrid index icon kısmı                         */
+
+.btn-sepete-ekle{
+  background-color: aquamarine;
+  color: black;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  border-radius: 10px;
+}
+
+.product-price{
+  font-family: monospace;
+  color: gold;
+}
+
+.productName{
+  font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: white;
+}
+
+.product-image{
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+}
+
+.test-component {
+ background-image: url(./images/sepetIcon.png);
+}
+
+.product-count {
+  z-index: 8;
+  position: fixed;
+  bottom: 52px;
+  right: 58px;
+  min-width: 24px;
+  color: #2f3542;
+  line-height: 24px;
+  text-align: center;
+  font-size: 48px;
+  font-family: monospace;
+}
+.btn-inc{
+  height: 42px;
+  float: left;
+  color: green;
+  padding: 0px 18px 0px;
+  margin: 0px 6px 0px;
+  font-weight: bold;
+  font-size: 23px;
+}
+
+.btn-dec{
+  height: 42px;
+  float: right;
+  color: green;
+  padding: 0px 18px 0px;
+  margin: 0px 6px 0px;
+  font-weight: bold;
+  font-size: 23px;
+}
+.count-rakam{
+  color: gold;
+  line-height: 33px;
+  background: rgba(102, 0, 153, 0.562);
+  height: 42px;
+  float: left;
+  font-size: 55px;
+  margin: 0px 1px 0px;
+  padding: 2px 1px 0px;
+}
+.odeme-form{
+  font-size: 20px;
+  margin: 16px 2px 0px 0px;
+	position: relative;
+	padding: 18px 0 10px 0;
+	font-weight: bold;
+	text-align: center;
+  padding-bottom: 15px;
+  border-radius: 5px;
+  background-color: rgba(211, 207, 207, 0.377);
+}
+.bahsis-kutusu {
+  font-size: 20px;
+  margin: 16px 2px 0px 0px;
+	position: relative;
+	padding: 18px 0 10px 0;
+	font-weight: bold;
+	text-align: center;
+  padding-bottom: 15px;
+  border-radius: 5px;
+  background-color: rgba(211, 207, 207, 0.377);
+
+}
+
+.tip-box{
+  background-image: url(./images/tip-box.png);
+  width: 250px;
+  height: 244px;
+  position: fixed;
+  right: 500px;
+  bottom: 50px;
+  margin: 30px;
+  z-index: 101;
+}
+.input-styles{
+  font-size: 20px;
+  color: gray;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  border-radius: 10px;
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
