@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AdminUI.Mapping;
+using AutoMapper;
 using DAL.Context;
+using DAL.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +14,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Service;
+using Service.Mapping;
 
 namespace AdminUI
 {
@@ -26,6 +31,22 @@ namespace AdminUI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            List<Profile> profiles = new List<Profile>
+            {
+                new DomainProfile(),
+                new ModelProfile()
+            };
+
+            MapperConfiguration config = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfiles(profiles);
+            });
+
+            IMapper mapper = config.CreateMapper();
+
+            services.AddScoped<RoleService>();
+            services.AddScoped<RoleRepository>();
+            services.AddSingleton(mapper);
             services.AddDbContext<MinusContext>();
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -33,6 +54,8 @@ namespace AdminUI
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
+
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

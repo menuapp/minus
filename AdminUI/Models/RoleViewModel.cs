@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Service.Domains
+namespace AdminUI.Models
 {
-    public class RoleDomain
+    public class RoleViewModel
     {
-        public int Id { get; set; }
         public string Name { get; set; }
     }
 }
