@@ -13,6 +13,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+var navigationBar_1 = require("./components/navigationBar");
 var React = require('react');
 var ReactDOM = require('react-dom');
 var Hello = /** @class */ (function (_super) {
@@ -21,9 +22,11 @@ var Hello = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Hello.prototype.render = function () {
-        return (React.createElement("h2", null,
-            React.createElement("h1", null, "Welcome to webUI"),
-            "werwe"));
+        return (React.createElement("div", null,
+            React.createElement(navigationBar_1.NavigationBar, null),
+            React.createElement("h2", null,
+                React.createElement("h1", null, "Welcome to webUI"),
+                "werwe")));
     };
     return Hello;
 }(React.Component));

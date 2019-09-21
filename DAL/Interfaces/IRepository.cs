@@ -10,7 +10,7 @@ namespace DAL.Interfaces
         void Update(T entity);
         bool Delete(T entity);
 
-        T getById(int id);
+        T GetById(int id);
         IEnumerable<T> GetAll();
 
         IEnumerable<T> GetMany();

@@ -109,6 +109,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+var navigationBar_1 = __webpack_require__(/*! ./components/navigationBar */ "./components/navigationBar.js");
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 var Hello = /** @class */ (function (_super) {
@@ -117,13 +118,71 @@ var Hello = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Hello.prototype.render = function () {
-        return (React.createElement("h1", null, "Welcome to React!!"));
+        return (React.createElement("div", null,
+            React.createElement(navigationBar_1.NavigationBar, null),
+            React.createElement("h1", null, "Welcome to minus")));
     };
     return Hello;
 }(React.Component));
 exports.Hello = Hello;
 ReactDOM.render(React.createElement(Hello, null), document.getElementById('root'));
 
+
+/***/ }),
+
+/***/ "./components/navigationBar.css":
+/*!**************************************!*\
+  !*** ./components/navigationBar.css ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+throw new Error("Module parse failed: Unexpected token (1:6)\nYou may need an appropriate loader to handle this file type.\n> ﻿body {\r\n| }\r\n| \r");
+
+/***/ }),
+
+/***/ "./components/navigationBar.js":
+/*!*************************************!*\
+  !*** ./components/navigationBar.js ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+__webpack_require__(/*! ./navigationBar.css */ "./components/navigationBar.css");
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+var NavigationBar = /** @class */ (function (_super) {
+    __extends(NavigationBar, _super);
+    function NavigationBar(props) {
+        return _super.call(this, props) || this;
+    }
+    NavigationBar.prototype.render = function () {
+        return (React.createElement("nav", null,
+            React.createElement("li", null, "Menus"),
+            React.createElement("li", null, "Restaurants"),
+            React.createElement("li", null, "Products"),
+            React.createElement("li", null, "Contact")));
+    };
+    return NavigationBar;
+}(React.Component));
+exports.NavigationBar = NavigationBar;
+//# sourceMappingURL=navigationBar.js.map
 
 /***/ }),
 

@@ -44,8 +44,13 @@ namespace AdminUI
 
             IMapper mapper = config.CreateMapper();
 
+            //Register services
             services.AddScoped<RoleService>();
+
+            //Register repositories
             services.AddScoped<RoleRepository>();
+
+
             services.AddSingleton(mapper);
             services.AddDbContext<MinusContext>();
             services.Configure<CookiePolicyOptions>(options =>
