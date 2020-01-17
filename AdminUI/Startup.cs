@@ -35,6 +35,7 @@ namespace AdminUI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddDbContext<MinusContext>(ServiceLifetime.Singleton);
             //REGISTER REPOSITORY LAYER
             services.AddTransient<IUserRepository, UserRepository>();
@@ -43,7 +44,7 @@ namespace AdminUI
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
-            services.AddAutoMapper(typeof(ModelProfile),typeof(DomainProfile));
+            services.AddAutoMapper(typeof(ModelProfile), typeof(DomainProfile));
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -72,6 +73,11 @@ namespace AdminUI
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+
+            using (var context = new MinusContext())
+            {
+                context.Database.EnsureCreated();
+            }
 
             app.UseMvc(routes =>
             {

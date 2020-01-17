@@ -39,8 +39,9 @@ namespace Service
                 unitOfWork.Commit();
 
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return false;
             }
 
