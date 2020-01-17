@@ -9,5 +9,6 @@ namespace Service.Interfaces
     {
         IEnumerable<UserDomain> ListUsers();
         bool CreateUser(UserDomain userDomain);
+        UserDomain Get(int id);
     }
 }

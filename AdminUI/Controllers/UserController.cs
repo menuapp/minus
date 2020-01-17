@@ -24,7 +24,8 @@ namespace AdminUI.Controllers
         public IActionResult Index()
         {
             List<UserViewModel> userViewModels = mapper.Map<List<UserDomain>, List<UserViewModel>>(userService.ListUsers().ToList());
-            return RedirectToAction("Create");
+
+            return View(userViewModels);
         }
 
         public IActionResult Create()
@@ -40,6 +41,22 @@ namespace AdminUI.Controllers
                 return RedirectToAction("index");
             }
 
+            return View();
+        }
+
+        public IActionResult Details(int id)
+        {
+            return View();
+        }
+
+        public IActionResult Delete(int id)
+        {
+            UserViewModel userViewModel = userService.
+            return View();
+        }
+
+        public IActionResult Edit(int id)
+        {
             return View();
         }
 
