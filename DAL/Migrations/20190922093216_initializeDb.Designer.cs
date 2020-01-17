@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(MinusContext))]
-    [Migration("20190920225850_initializeDb")]
+    [Migration("20190922093216_initializeDb")]
     partial class initializeDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -110,11 +110,7 @@ namespace DAL.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<int?>("UserId");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Permissions");
                 });
@@ -182,11 +178,15 @@ namespace DAL.Migrations
 
                     b.Property<int>("RoleId");
 
+                    b.Property<int?>("UserId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("PermissionId");
 
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("RolePermissions");
                 });
@@ -253,13 +253,6 @@ namespace DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Entity.Permission", b =>
-                {
-                    b.HasOne("Entity.User")
-                        .WithMany("Permissions")
-                        .HasForeignKey("UserId");
-                });
-
             modelBuilder.Entity("Entity.Product", b =>
                 {
                     b.HasOne("Entity.ProductCategory", "Category")
@@ -279,6 +272,10 @@ namespace DAL.Migrations
                         .WithMany("RolePermissions")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Entity.User")
+                        .WithMany("RolePermissions")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Entity.User", b =>

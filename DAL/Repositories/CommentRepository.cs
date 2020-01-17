@@ -1,49 +1,35 @@
 ﻿using DAL.Context;
 using DAL.Interfaces;
 using Entity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace DAL.Repositories
 {
-    public class CommentRepository: IRepository<Comment>
+    public class CommentRepository : RepositoryBase<Comment>, IRepositoryEager<Comment>
     {
-        public MinusContext context { get; set; }
-        public CommentRepository(MinusContext context)
+        public CommentRepository(MinusContext context) : base(context)
         {
-            this.context = context;
+
         }
 
-        public Comment GetById(int id)
+        public IEnumerable<Comment> GetAllEagerly()
         {
-            return context.Comments.Find(id);
+            return dbSet.Include(commment => commment.User).ToList();
         }
 
-        public IEnumerable<Comment> GetAll()
+        public Comment GetByIdEagerly(int id)
         {
-            return context.Comments.ToList();
+            return dbSet.Include(comment => comment.User).FirstOrDefault(comment => comment.Id == id);
         }
 
-        public void Add(Comment entity)
+        public IEnumerable<Comment> GetManyEagerly(Expression<Func<Comment, bool>> where)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Update(Comment entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Delete(Comment entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Comment> GetMany()
-        {
-            throw new NotImplementedException();
+            return dbSet.Include(comment => comment.User).Where(where).ToList();
         }
     }
 }

@@ -5,16 +5,20 @@ using System.Threading.Tasks;
 using AdminUI.Mapping;
 using AutoMapper;
 using DAL.Context;
+using DAL.Infrastructure;
+using DAL.Interfaces;
 using DAL.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Service;
+using Service.Interfaces;
 using Service.Mapping;
 
 namespace AdminUI
@@ -31,37 +35,22 @@ namespace AdminUI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            List<Profile> profiles = new List<Profile>
-            {
-                new DomainProfile(),
-                new ModelProfile()
-            };
+            services.AddDbContext<MinusContext>(ServiceLifetime.Singleton);
+            //REGISTER REPOSITORY LAYER
+            services.AddTransient<IUserRepository, UserRepository>();
+            //REGISTER SERVICE LAYER
+            services.AddTransient<IUserService, UserService>();
 
-            MapperConfiguration config = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfiles(profiles);
-            });
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
 
-            IMapper mapper = config.CreateMapper();
+            services.AddAutoMapper(typeof(ModelProfile),typeof(DomainProfile));
 
-            //Register services
-            services.AddScoped<RoleService>();
-
-            //Register repositories
-            services.AddScoped<RoleRepository>();
-
-
-            services.AddSingleton(mapper);
-            services.AddDbContext<MinusContext>();
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
-
-
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
