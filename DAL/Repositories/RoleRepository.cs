@@ -1,35 +1,33 @@
 ﻿using DAL.Context;
-using DAL.Infrastructure;
+using DAL.Interfaces;
 using Entity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace DAL.Repositories
 {
-    public class RoleRepository
+    public class RoleRepository : RepositoryBase<Role>, IRepositoryEager<Role>
     {
-        public MinusContext context { get; set; }
-        public RoleRepository(MinusContext context)
+        public RoleRepository(MinusContext context) : base(context) { }
+
+        public IEnumerable<Role> GetAllEagerly()
         {
-            this.context = context;
-        }
-        public Role GetById(int id)
-        {
-            return context.Roles.FirstOrDefault(role => role.Id == id);
+            return dbSet.Include(role => role.RolePermissions).ToList();
         }
 
-        public ICollection<Role> GetAll()
+        public Role GetByIdEagerly(int id)
         {
-            return context.Roles.ToList();
+            return dbSet.Include(role => role.RolePermissions).Single(role => role.Id == id);
         }
 
-        public int Add(Role newRoles)
+        public IEnumerable<Role> GetManyEagerly(Expression<Func<Role, bool>> where)
         {
-            context.Roles.Add(newRoles);
-
-            return newRoles.Id;
+            return dbSet.Include(role => role.RolePermissions.Select(rolePermission => rolePermission.Permission))
+                .Where(where);
         }
     }
 }

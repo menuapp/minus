@@ -1,21 +1,22 @@
 ﻿using DAL.Context;
 using DAL.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace DAL.Infrastructure
 {
-    class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
-        private DBFactory dbFactory { get; set; }
-        public UnitOfWork(IDBFactory dBFactory)
+        private MinusContext minusContext { get; set; }
+        public UnitOfWork(MinusContext minusContext)
         {
-            dbFactory = dbFactory;
+            this.minusContext = minusContext;
         }
         public void Commit()
         {
-            dbFactory._dbContext.Commit();
+            minusContext.SaveChanges();
         }
     }
 }

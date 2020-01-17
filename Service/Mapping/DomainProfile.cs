@@ -13,6 +13,9 @@ namespace Service.Mapping
         {
             CreateMap<RoleDomain, Role>();
             CreateMap<Role, RoleDomain>();
+
+            CreateMap<UserDomain, User>();
+            CreateMap<User, UserDomain>();
         }
     }
 }

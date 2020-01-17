@@ -1,41 +1,35 @@
-﻿using DAL.Interfaces;
+﻿using DAL.Context;
+using DAL.Interfaces;
 using Entity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace DAL.Repositories
 {
-    class ProductCategoryRepository : IRepository<ProductCategory>
+    public class ProductCategoryRepository : RepositoryBase<ProductCategory>, IRepositoryEager<ProductCategory>
     {
-        public void Add(ProductCategory entity)
+        public ProductCategoryRepository(MinusContext context) : base(context)
         {
-            throw new NotImplementedException();
+
         }
 
-        public bool Delete(ProductCategory entity)
+        public IEnumerable<ProductCategory> GetAllEagerly()
         {
-            throw new NotImplementedException();
+            return dbSet.Include(productCategory => productCategory.Products).ToList();
         }
 
-        public IEnumerable<ProductCategory> GetAll()
+        public ProductCategory GetByIdEagerly(int id)
         {
-            throw new NotImplementedException();
+            return dbSet.Include(productCategory => productCategory.Products).Single(productCategory => productCategory.Id == id);
         }
 
-        public ProductCategory GetById(int id)
+        public IEnumerable<ProductCategory> GetManyEagerly(Expression<Func<ProductCategory, bool>> where)
         {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<ProductCategory> GetMany()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(ProductCategory entity)
-        {
-            throw new NotImplementedException();
+            return dbSet.Include(productCategory => productCategory.Products).Where(where).ToList();
         }
     }
 }

@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DAL.Infrastructure
+namespace Service
 {
-    public interface IDBFactory
+    class OrderService
     {
-        void Init();
     }
 }

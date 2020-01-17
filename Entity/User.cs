@@ -17,8 +17,8 @@ namespace Entity
         public string Password { get; set; }
         public DateTime BirthDate { get; set; }
         public Role Role { get; set; }
-        public ICollection<Permission> Permissions { get; set; }
+        public ICollection<RolePermission> RolePermissions { get; set; }
         public ICollection<Order> Orders { get; set; }
-        public ICollection<Comment> Comments { get; set; }
+        public ICollection<Comment> Comments { get; set; }  
     }
 }

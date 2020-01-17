@@ -18,11 +18,11 @@ namespace Service
             this.roleRepository = roleRepository;
         }
 
-        public IEnumerable<RoleDomain> GetAll()
+        public IEnumerable<RoleDomain> GetAllRoles()
         {
-            ICollection<Role> roles =  roleRepository.GetAll();
+            IEnumerable<Role> roles = roleRepository.GetAll();
 
-            return mapper.Map<ICollection<Role>,IEnumerable<RoleDomain>>(roles);
+            return mapper.Map<IEnumerable<Role>, IEnumerable<RoleDomain>>(roles);
         }
     }
 }

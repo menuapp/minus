@@ -1,41 +1,20 @@
-﻿using DAL.Interfaces;
+﻿using DAL.Context;
+using DAL.Interfaces;
 using Entity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace DAL.Repositories
 {
-    class OrderProductRepository : IRepository<OrderProduct>
+    public class OrderProductRepository : RepositoryBase<OrderProduct>
     {
-        public void Add(OrderProduct entity)
+        public OrderProductRepository(MinusContext context) : base(context)
         {
-            throw new NotImplementedException();
-        }
 
-        public bool Delete(OrderProduct entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<OrderProduct> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public OrderProduct GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<OrderProduct> GetMany()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(OrderProduct entity)
-        {
-            throw new NotImplementedException();
         }
     }
 }

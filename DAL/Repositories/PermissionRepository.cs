@@ -1,41 +1,36 @@
-﻿using DAL.Interfaces;
+﻿using DAL.Context;
+using DAL.Interfaces;
 using Entity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace DAL.Repositories
 {
-    class PermissionRepository : IRepository<Permission>
+    public class PermissionRepository : RepositoryBase<Permission>, IRepositoryEager<Permission>
     {
-        public void Add(Permission entity)
+        public PermissionRepository(MinusContext context) : base(context)
         {
-            throw new NotImplementedException();
+
         }
 
-        public bool Delete(Permission entity)
+        public IEnumerable<Permission> GetAllEagerly()
         {
-            throw new NotImplementedException();
+            return dbSet.Include(permission => permission.RolePermissions.Select(rolePermission => rolePermission.Role)).ToList();
         }
 
-        public IEnumerable<Permission> GetAll()
+        public Permission GetByIdEagerly(int id)
         {
-            throw new NotImplementedException();
+            return dbSet.Include(permission => permission.RolePermissions.Select(rolePermission => rolePermission.Role))
+                .Single(permission => permission.Id == id);
         }
 
-        public Permission GetById(int id)
+        public IEnumerable<Permission> GetManyEagerly(Expression<Func<Permission, bool>> where)
         {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Permission> GetMany()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(Permission entity)
-        {
-            throw new NotImplementedException();
+            return dbSet.Include(permission => permission.RolePermissions.Select(rolePermission => rolePermission.Role)).Where(where).ToList();
         }
     }
 }
