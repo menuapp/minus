@@ -1,41 +1,35 @@
-﻿using DAL.Interfaces;
+﻿using DAL.Context;
+using DAL.Interfaces;
 using Entity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace DAL.Repositories
 {
-    class OrderRepository : IRepository<Order>
+    public class OrderRepository : RepositoryBase<Order>, IRepositoryEager<Order>
     {
-        public void Add(Order entity)
+        public OrderRepository(MinusContext context) : base(context)
         {
-            throw new NotImplementedException();
+
         }
 
-        public bool Delete(Order entity)
+        public IEnumerable<Order> GetAllEagerly()
         {
-            throw new NotImplementedException();
+            return dbSet.Include(order => order.OrderProducts.Select(orderProducts => orderProducts.Product)).ToList();
         }
 
-        public IEnumerable<Order> GetAll()
+        public Order GetByIdEagerly(int id)
         {
-            throw new NotImplementedException();
+            return dbSet.Include(order => order.OrderProducts.Select(orderProducts => orderProducts.Product)).Single(order => order.Id == id);
         }
 
-        public Order GetById(int id)
+        public IEnumerable<Order> GetManyEagerly(Expression<Func<Order, bool>> where)
         {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Order> GetMany()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(Order entity)
-        {
-            throw new NotImplementedException();
+            return dbSet.Include(order => order.OrderProducts.Select(orderProducts => orderProducts.Product)).Where(where).ToList();
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace DAL.Interfaces
 {
-    interface IRepository<T>
+    public interface IRepository<T>
     {
         void Add(T entity);
         void Update(T entity);
@@ -13,6 +14,6 @@ namespace DAL.Interfaces
         T GetById(int id);
         IEnumerable<T> GetAll();
 
-        IEnumerable<T> GetMany();
+        IEnumerable<T> GetMany(Expression<Func<T, bool>> where);
     }
 }

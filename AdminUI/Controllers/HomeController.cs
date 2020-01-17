@@ -13,20 +13,14 @@ namespace AdminUI.Controllers
 {
     public class HomeController : Controller
     {
-        public RoleService roleService { get; set; }
         public IMapper mapper { get; set; }
-        public HomeController(RoleService roleService, IMapper mapper)
+        public HomeController(IMapper mapper)
         {
             this.mapper = mapper;
-            this.roleService = roleService;
         }
         public IActionResult Index()
         {
-            IEnumerable<RoleDomain> roles = roleService.GetAll().ToList();
-
-            IEnumerable<RoleViewModel> model = mapper.Map<IEnumerable<RoleDomain>, IEnumerable<RoleViewModel>>(roles);
-
-            return View(model);
+            return View();
         }
 
         public IActionResult Privacy()

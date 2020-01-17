@@ -15,11 +15,6 @@ namespace DAL.Context
             optionsBuilder.UseMySQL(@"server=localhost;database=minus;user=root;password=admin");
         }
 
-        public virtual void Commit()
-        {
-            SaveChanges();
-        }
-
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderProduct> OrderProducts { get; set; }
@@ -39,7 +34,7 @@ namespace DAL.Context
                 entity.Property(e => e.Content).IsRequired();
                 entity.Property(e => e.PublishDate).IsRequired();
                 entity.Property(e => e.IsVisible);
-                entity.HasOne(e => e.User).WithMany(src => src.Comments).HasForeignKey(e => e.UserId);
+                entity.HasOne(e => e.User).WithMany(src => src.Comments).HasForeignKey(e => e.UserId).IsRequired();
             });
 
             modelBuilder.Entity<Order>(entity =>
@@ -53,8 +48,8 @@ namespace DAL.Context
             modelBuilder.Entity<OrderProduct>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                entity.HasOne(e => e.Order).WithMany(e => e.OrderProducts).HasForeignKey(e => e.OrderId);
-                entity.HasOne(e => e.Product).WithMany(e => e.OrderProducts).HasForeignKey(e => e.ProductId);
+                entity.HasOne(e => e.Order).WithMany(e => e.OrderProducts).HasForeignKey(e => e.OrderId).IsRequired();
+                entity.HasOne(e => e.Product).WithMany(e => e.OrderProducts).HasForeignKey(e => e.ProductId).IsRequired();
 
             });
             modelBuilder.Entity<Partner>(entity =>
@@ -107,8 +102,8 @@ namespace DAL.Context
             modelBuilder.Entity<RolePermission>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                entity.HasOne(e => e.Permission).WithMany(t => t.RolePermissions);
-                entity.HasOne(e => e.Role).WithMany(t => t.RolePermissions);
+                entity.HasOne(e => e.Permission).WithMany(t => t.RolePermissions).IsRequired();
+                entity.HasOne(e => e.Role).WithMany(t => t.RolePermissions).IsRequired();
             });
         }
     }
