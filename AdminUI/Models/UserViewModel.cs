@@ -8,6 +8,7 @@ namespace AdminUI.Models
 {
     public class UserViewModel
     {
+        public int Id { get; set; }
         [Required(ErrorMessage = "Name is required")]
         public string Name { get; set; }
         [Required(ErrorMessage = "Surname is required")]

@@ -47,5 +47,20 @@ namespace Service
 
             return true;
         }
+
+        public UserDomain GetUser(int id)
+        {
+            return mapper.Map<User, UserDomain>(userRepository.GetById(id));
+        }
+
+        public bool Delete(UserDomain userDomain)
+        {
+            return userRepository.Delete(mapper.Map<UserDomain, User>(userDomain));
+        }
+
+        public void Update(UserDomain userDomain)
+        {
+            userRepository.Update(mapper.Map<UserDomain, User>(userDomain));
+        }
     }
 }

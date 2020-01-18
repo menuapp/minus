@@ -34,7 +34,7 @@ namespace DAL.Repositories
 
         public void Update(T entity)
         {
-            dbSet.Update(entity);
+            EntityEntry result = dbSet.Attach(entity);
         }
 
         public bool Delete(T entity)
