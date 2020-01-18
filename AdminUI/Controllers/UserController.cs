@@ -25,7 +25,7 @@ namespace AdminUI.Controllers
         {
             List<UserViewModel> userViewModels = mapper.Map<List<UserDomain>, List<UserViewModel>>(userService.ListUsers().ToList());
 
-            return PartialView(userViewModels);
+            return View(userViewModels);
         }
 
         public IActionResult Create()
@@ -46,17 +46,17 @@ namespace AdminUI.Controllers
 
         public IActionResult Details(int id)
         {
-            return View(mapper.Map<UserDomain, UserViewModel>(userService.GetUser(id)));
+            return PartialView(mapper.Map<UserDomain, UserViewModel>(userService.GetUser(id)));
         }
 
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            return View(mapper.Map<UserDomain, UserViewModel>(userService.GetUser(id)));
+            return PartialView(mapper.Map<UserDomain, UserViewModel>(userService.GetUser(id)));
         }
         public IActionResult Edit(int id)
         {
-            return View(mapper.Map<UserDomain, UserViewModel>(userService.GetUser(id)));
+            return PartialView(mapper.Map<UserDomain, UserViewModel>(userService.GetUser(id)));
         }
 
         [HttpPost]
