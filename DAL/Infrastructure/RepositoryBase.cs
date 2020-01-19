@@ -24,6 +24,7 @@ namespace DAL.Repositories
 
         public IEnumerable<T> GetAll()
         {
+            var a = dbSet.ToList();
             return dbSet.ToList();
         }
 

@@ -17,6 +17,9 @@ namespace AdminUI.Mapping
 
             CreateMap<UserViewModel, UserDomain>();
             CreateMap<UserDomain, UserViewModel>();
+
+            CreateMap<ProductViewModel, ProductDomain>();
+            CreateMap<ProductDomain, ProductViewModel>();
         }
     }
 }

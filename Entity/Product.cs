@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Entity
@@ -11,6 +12,7 @@ namespace Entity
         public int Id { get; set; }
         public string Name { get; set; }
         public ProductCategory Category { get; set; }
+        [Column(TypeName="BIT(1)")]
         public bool IsInStock { get; set; }
         public decimal TotalProductVolume { get; set; }
         public string ProductVolumeUnit { get; set; }

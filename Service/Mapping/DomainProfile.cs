@@ -16,6 +16,9 @@ namespace Service.Mapping
 
             CreateMap<UserDomain, User>();
             CreateMap<User, UserDomain>();
+
+            CreateMap<ProductDomain, Product>();
+            CreateMap<Product, ProductDomain>();
         }
     }
 }

@@ -38,8 +38,10 @@ namespace AdminUI
 
             services.AddDbContext<MinusContext>(ServiceLifetime.Singleton);
             //REGISTER REPOSITORY LAYER
+            services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
             //REGISTER SERVICE LAYER
+            services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IUserService, UserService>();
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
