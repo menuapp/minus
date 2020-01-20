@@ -174,11 +174,26 @@
               <p>Anasayfa</p>
             </a>
           </li>
-          <li class="nav-item">
-            <a href="/AdminUI/Contents/pages/tables/jsgrid.html" class="nav-link">
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
               <i class="fas fa-users nav-icon"></i>
               <p>Kullanıcılar</p>
+              <i class="right fas fa-angle-left"></i>
             </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/AdminUI/Contents/pages/tables/jsgrid.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Tüm Kullanıcılar</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/AdminUI/Contents/pages/examples/kullanici_ekle.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Kullanıcı Ekle</p>
+                </a>
+              </li>
+            </ul>
           </li>
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
@@ -252,12 +267,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>jsGrid</h1>
+            <h1>Tüm Kullanıcılar</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">jsGrid</li>
+              <li class="breadcrumb-item"><a href="/AdminUI/Contents/index.html">Home</a></li>
+              <li class="breadcrumb-item active">Kullanıcılar</li>
             </ol>
           </div>
         </div>
@@ -268,7 +283,7 @@
     <section class="content">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">jsGrid</h3>
+          <h3 class="card-title">Kullanıcılar</h3>
         </div>
         <!-- /.card-header -->
         <div class="card-body">
@@ -282,11 +297,11 @@
   </div>
   <!-- /.content-wrapper -->
   <footer class="main-footer">
-    <div class="float-right d-none d-sm-block">
-      <b>Version</b> 3.0.2
+    <strong>Copyright &copy; 2020 <a href="http://minusapp.org">Minus App</a>.</strong>
+    Tüm Hakları Saklıdır.
+    <div class="float-right d-none d-sm-inline-block">
+      <b>Online</b>
     </div>
-    <strong>Copyright &copy; 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</strong> All rights
-    reserved.
   </footer>
 
   <!-- Control Sidebar -->
