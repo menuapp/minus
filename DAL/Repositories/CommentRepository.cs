@@ -19,17 +19,17 @@ namespace DAL.Repositories
 
         public IEnumerable<Comment> GetAllEagerly()
         {
-            return dbSet.Include(commment => commment.User).ToList();
+            return dbSet.Include(commment => commment.Customer).ToList();
         }
 
         public Comment GetByIdEagerly(int id)
         {
-            return dbSet.Include(comment => comment.User).FirstOrDefault(comment => comment.Id == id);
+            return dbSet.Include(comment => comment.Customer).FirstOrDefault(comment => comment.Id == id);
         }
 
         public IEnumerable<Comment> GetManyEagerly(Expression<Func<Comment, bool>> where)
         {
-            return dbSet.Include(comment => comment.User).Where(where).ToList();
+            return dbSet.Include(comment => comment.Customer).Where(where).ToList();
         }
     }
 }

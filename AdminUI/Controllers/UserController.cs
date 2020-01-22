@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AdminUI.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service;
 using Service.Domains;
@@ -21,6 +22,8 @@ namespace AdminUI.Controllers
             this.mapper = mapper;
             this.userService = userService;
         }
+
+        [Authorize]
         public IActionResult Index()
         {
             List<UserViewModel> userViewModels = mapper.Map<List<UserDomain>, List<UserViewModel>>(userService.ListUsers().ToList());

@@ -3,7 +3,7 @@
 <h4>ProductViewModel</h4>
 <hr />
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-6">
         <div class="card card-primary">
             <div class="card-header">
                 <h3 class="card-title">Add Product</h3>
@@ -11,19 +11,40 @@
             <!-- /.card-header -->
             <!-- form start -->
             <form role="form" asp-action="Create">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="card-body">
                     <div class="form-group">
-                        <label asp-for="Name"></label>
-                        <input asp-for="Name">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="TotalProductVolume" class="control-label"></label>
+                        <input asp-for="TotalProductVolume" class="form-control" />
+                        <span asp-validation-for="TotalProductVolume" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ProductVolumeUnit" class="control-label"></label>
+                        <input asp-for="ProductVolumeUnit" class="form-control" />
+                        <span asp-validation-for="ProductVolumeUnit" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Rating" class="control-label"></label>
+                        <input asp-for="Rating" class="form-control" />
+                        <span asp-validation-for="Rating" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UnitPrice" class="control-label"></label>
+                        <input asp-for="UnitPrice" class="form-control" />
+                        <span asp-validation-for="UnitPrice" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CategoryId" class="control-label"></label>
+                        <input asp-for="CategoryId" class="form-control" />
+                        <span asp-validation-for="CategoryId" class="text-danger"></span>
                     </div>
                     <div class="form-check">
-                        <label asp-for="IsInStock"></label>
-                        <input asp-for="IsInStock">
-                    </div>
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                        <input asp-for="IsInStock" class="form-check-input">@Html.DisplayNameFor(model => model.IsInStock)
+                        <label class="form-check-label" />
                     </div>
                 </div>
                 <!-- /.card-body -->
@@ -39,4 +60,9 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
 

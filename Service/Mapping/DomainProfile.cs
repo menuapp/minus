@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Entity;
+using Microsoft.AspNetCore.Identity;
 using Service.Domains;
 using System;
 using System.Collections.Generic;
@@ -11,11 +12,11 @@ namespace Service.Mapping
     {
         public DomainProfile()
         {
-            CreateMap<RoleDomain, Role>();
-            CreateMap<Role, RoleDomain>();
+            CreateMap<IdentityRoleDomain, IdentityRole>();
+            CreateMap<IdentityRole, IdentityRoleDomain>();
 
-            CreateMap<UserDomain, User>();
-            CreateMap<User, UserDomain>();
+            CreateMap<UserDomain, Customer>();
+            CreateMap<Customer, UserDomain>();
 
             CreateMap<ProductDomain, Product>();
             CreateMap<Product, ProductDomain>();

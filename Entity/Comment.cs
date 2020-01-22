@@ -12,7 +12,7 @@ namespace Entity
         public string Content { get; set; }
         public DateTime PublishDate { get; set; }
         public bool IsVisible { get; set; }
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public int CustomerId { get; set; }
+        public Customer Customer { get; set; }
     }
 }
