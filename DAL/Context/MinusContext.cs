@@ -1,13 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MySql.Data.EntityFrameworkCore.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Entity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace DAL.Context
 {
-    public class MinusContext : DbContext
+    public class MinusContext : IdentityDbContext<IdentityUser>
     {
         //public MinusContext(DbContextOptions<MinusContext> options) : base(options) { }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -19,22 +18,47 @@ namespace DAL.Context
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderProduct> OrderProducts { get; set; }
         public DbSet<Partner> Partners { get; set; }
-        public DbSet<Permission> Permissions { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<RolePermission> RolePermissions { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
-        public DbSet<Role> Roles { get; set; }
-        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<IdentityUser>(entity => entity.Property(m => m.Id).HasMaxLength(85));
+            modelBuilder.Entity<IdentityUser>(entity => entity.Property(m => m.NormalizedEmail).HasMaxLength(85));
+            modelBuilder.Entity<IdentityUser>(entity => entity.Property(m => m.EmailConfirmed).HasColumnType("BIT(1)"));
+            modelBuilder.Entity<IdentityUser>(entity => entity.Property(m => m.PhoneNumberConfirmed).HasColumnType("BIT(1)"));
+            modelBuilder.Entity<IdentityUser>(entity => entity.Property(m => m.TwoFactorEnabled).HasColumnType("BIT(1)"));
+            modelBuilder.Entity<IdentityUser>(entity => entity.Property(m => m.LockoutEnabled).HasColumnType("BIT(1)"));
+            modelBuilder.Entity<IdentityUser>(entity => entity.Property(m => m.NormalizedUserName).HasMaxLength(85));
+
+            modelBuilder.Entity<IdentityRole>(entity => entity.Property(m => m.Id).HasMaxLength(85));
+            modelBuilder.Entity<IdentityRole>(entity => entity.Property(m => m.NormalizedName).HasMaxLength(85));
+
+            modelBuilder.Entity<IdentityUserLogin<string>>(entity => entity.Property(m => m.LoginProvider).HasMaxLength(85));
+            modelBuilder.Entity<IdentityUserLogin<string>>(entity => entity.Property(m => m.ProviderKey).HasMaxLength(85));
+            modelBuilder.Entity<IdentityUserLogin<string>>(entity => entity.Property(m => m.UserId).HasMaxLength(85));
+
+            modelBuilder.Entity<IdentityUserRole<string>>(entity => entity.Property(m => m.UserId).HasMaxLength(85));
+            modelBuilder.Entity<IdentityUserRole<string>>(entity => entity.Property(m => m.RoleId).HasMaxLength(85));
+
+            modelBuilder.Entity<IdentityUserToken<string>>(entity => entity.Property(m => m.UserId).HasMaxLength(85));
+            modelBuilder.Entity<IdentityUserToken<string>>(entity => entity.Property(m => m.LoginProvider).HasMaxLength(85));
+            modelBuilder.Entity<IdentityUserToken<string>>(entity => entity.Property(m => m.Name).HasMaxLength(85));
+
+            modelBuilder.Entity<IdentityUserClaim<string>>(entity => entity.Property(m => m.Id).HasMaxLength(85));
+            modelBuilder.Entity<IdentityUserClaim<string>>(entity => entity.Property(m => m.UserId).HasMaxLength(85));
+            modelBuilder.Entity<IdentityRoleClaim<string>>(entity => entity.Property(m => m.Id).HasMaxLength(85));
+            modelBuilder.Entity<IdentityRoleClaim<string>>(entity => entity.Property(m => m.RoleId).HasMaxLength(85));
+
             modelBuilder.Entity<Comment>(entity =>
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Content).IsRequired();
                 entity.Property(e => e.PublishDate).IsRequired();
                 entity.Property(e => e.IsVisible);
-                entity.HasOne(e => e.User).WithMany(src => src.Comments).HasForeignKey(e => e.UserId).IsRequired();
+                entity.HasOne(e => e.Customer).WithMany(src => src.Comments).HasForeignKey(e => e.CustomerId).IsRequired();
             });
 
             modelBuilder.Entity<Order>(entity =>
@@ -60,11 +84,6 @@ namespace DAL.Context
                 entity.Property(e => e.BannerUrl).IsRequired();
                 entity.Property(e => e.Address).IsRequired();
             });
-            modelBuilder.Entity<Permission>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Name).IsRequired();
-            });
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -80,30 +99,6 @@ namespace DAL.Context
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name).IsRequired();
                 entity.HasMany(e => e.Products).WithOne(t => t.Category).HasForeignKey(e => e.CategoryId);
-            });
-            modelBuilder.Entity<Role>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Name).IsRequired();
-            });
-            modelBuilder.Entity<User>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Name).IsRequired();
-                entity.Property(e => e.Surname).IsRequired();
-                entity.Property(e => e.Email).IsRequired();
-                entity.Property(e => e.Address);
-                entity.Property(e => e.PhotoUrl);
-                entity.Property(e => e.Age);
-                entity.Property(e => e.Password).IsRequired();
-                entity.Property(e => e.BirthDate).IsRequired();
-            });
-
-            modelBuilder.Entity<RolePermission>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-                entity.HasOne(e => e.Permission).WithMany(t => t.RolePermissions).IsRequired();
-                entity.HasOne(e => e.Role).WithMany(t => t.RolePermissions).IsRequired();
             });
         }
     }

@@ -10,7 +10,7 @@ using System.Text;
 
 namespace DAL.Repositories
 {
-    public class ProductCategoryRepository : RepositoryBase<ProductCategory>, IRepositoryEager<ProductCategory>
+    public class ProductCategoryRepository : RepositoryBase<ProductCategory>, IProductCategoryRepository, IRepositoryEager<ProductCategory>
     {
         public ProductCategoryRepository(MinusContext context) : base(context)
         {

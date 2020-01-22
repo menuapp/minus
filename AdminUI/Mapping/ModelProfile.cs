@@ -12,8 +12,8 @@ namespace AdminUI.Mapping
     {
         public ModelProfile()
         {
-            CreateMap<RoleViewModel, RoleDomain>();
-            CreateMap<RoleDomain, RoleViewModel>();
+            CreateMap<RoleViewModel, IdentityRoleDomain>();
+            CreateMap<IdentityRoleDomain, RoleViewModel>();
 
             CreateMap<UserViewModel, UserDomain>();
             CreateMap<UserDomain, UserViewModel>();

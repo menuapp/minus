@@ -26,12 +26,12 @@ namespace Service
 
         public IEnumerable<UserDomain> ListUsers()
         {
-            return mapper.Map<IEnumerable<User>, IEnumerable<UserDomain>>(userRepository.GetAll());
+            return mapper.Map<IEnumerable<Customer>, IEnumerable<UserDomain>>(userRepository.GetAll());
         }
 
         public bool CreateUser(UserDomain userToCreate)
         {
-            User newUser = mapper.Map<UserDomain, User>(userToCreate);
+            Customer newUser = mapper.Map<UserDomain, Customer>(userToCreate);
 
             try
             {
@@ -50,17 +50,17 @@ namespace Service
 
         public UserDomain GetUser(int id)
         {
-            return mapper.Map<User, UserDomain>(userRepository.GetById(id));
+            return mapper.Map<Customer, UserDomain>(userRepository.GetById(id));
         }
 
         public bool Delete(UserDomain userDomain)
         {
-            return userRepository.Delete(mapper.Map<UserDomain, User>(userDomain));
+            return userRepository.Delete(mapper.Map<UserDomain, Customer>(userDomain));
         }
 
         public void Update(UserDomain userDomain)
         {
-            userRepository.Update(mapper.Map<UserDomain, User>(userDomain));
+            userRepository.Update(mapper.Map<UserDomain, Customer>(userDomain));
         }
     }
 }

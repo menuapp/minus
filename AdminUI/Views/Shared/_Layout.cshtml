@@ -126,6 +126,11 @@
                         <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
                     </div>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#">
+                        <i class="fas fa-th-large"></i>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.navbar -->
@@ -190,8 +195,32 @@
 
                             </ul>
                         </li>
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-user-tag"></i>
+                                <p>
+                                    User Roles
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="/IdentityRole/Index" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>List Role</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="" data-ajax="true" data-ajax-url="/IdentityRole/Create" data-ajax-update="main" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Add New Role</p>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
                         <!-- Add icons to the links using the .nav-icon class
-    with font-awesome or any other icon font library -->
+                        with font-awesome or any other icon font library -->
 
                     </ul>
                 </nav>

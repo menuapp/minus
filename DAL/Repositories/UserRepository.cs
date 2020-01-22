@@ -10,7 +10,7 @@ using System.Text;
 
 namespace DAL.Repositories
 {
-    public class UserRepository : RepositoryBase<User>, IUserRepository, IRepositoryEager<User>
+    public class UserRepository : RepositoryBase<Customer>, IUserRepository, IRepositoryEager<Customer>
     {
         private MinusContext minusContext;
         public UserRepository(MinusContext context) : base(context)
@@ -18,17 +18,17 @@ namespace DAL.Repositories
             this.minusContext = context;
         }
 
-        public IEnumerable<User> GetAllEagerly()
+        public IEnumerable<Customer> GetAllEagerly()
         {
             throw new NotImplementedException();
         }
 
-        public User GetByIdEagerly(int id)
+        public Customer GetByIdEagerly(int id)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<User> GetManyEagerly(Expression<Func<User, bool>> where)
+        public IEnumerable<Customer> GetManyEagerly(Expression<Func<Customer, bool>> where)
         {
             throw new NotImplementedException();
         }
