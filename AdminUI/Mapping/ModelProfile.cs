@@ -15,6 +15,9 @@ namespace AdminUI.Mapping
             CreateMap<RoleViewModel, IdentityRoleDomain>();
             CreateMap<IdentityRoleDomain, RoleViewModel>();
 
+            CreateMap<ProductCategoryDomain, ProductCategoryViewModel>();
+            CreateMap<ProductCategoryViewModel, ProductCategoryDomain>();
+
             CreateMap<UserViewModel, UserDomain>();
             CreateMap<UserDomain, UserViewModel>();
 

@@ -15,6 +15,9 @@ namespace Service.Mapping
             CreateMap<IdentityRoleDomain, IdentityRole>();
             CreateMap<IdentityRole, IdentityRoleDomain>();
 
+            CreateMap<ProductCategory, ProductCategoryDomain>();
+            CreateMap<ProductCategoryDomain, ProductCategory>();
+
             CreateMap<UserDomain, Customer>();
             CreateMap<Customer, UserDomain>();
 

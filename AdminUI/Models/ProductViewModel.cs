@@ -7,7 +7,7 @@ namespace AdminUI.Models
 {
     public class ProductViewModel
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string Name { get; set; }
         public bool IsInStock { get; set; }
         public decimal TotalProductVolume { get; set; }
@@ -15,5 +15,6 @@ namespace AdminUI.Models
         public decimal UnitPrice { get; set; }
         public double Rating { get; set; }
         public int CategoryId { get; set; }
+        public ProductCategoryViewModel Category { get; set; }
     }
 }

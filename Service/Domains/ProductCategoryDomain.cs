@@ -6,5 +6,8 @@ namespace Service.Domains
 {
     public class ProductCategoryDomain
     {
+        public int? Id { get; set; }
+        public string Name { get; set; }
+        public IEnumerable<ProductDomain> Products { get; set; }
     }
 }
