@@ -1,0 +1,5 @@
+#carousel-item {
+    width: 100vw;
+    height: 200vh;
+    flex-shrink: 0;
+}

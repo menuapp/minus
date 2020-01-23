@@ -1,4 +1,4 @@
-#carousel{
-    width: 100vw;
-    height: 100vh;
+#carousel {
+    display: flex;
+    transition: margin-left 0.6s ease-out;
 }
