@@ -20,7 +20,7 @@ namespace Service
             this.productRepository = productRepository;
             this.unitOfWork = unitOfWork;
         }
-        public bool AddProduct(ProductDomain productDomain)
+        public bool Add(ProductDomain productDomain)
         {
             try
             {
@@ -41,12 +41,12 @@ namespace Service
             return productRepository.Delete(mapper.Map<Product>(productDomain));
         }
 
-        public ProductDomain GetProduct(int id)
+        public ProductDomain GetById(int id)
         {
             return mapper.Map<ProductDomain>(productRepository.GetById(id));
         }
 
-        public IEnumerable<ProductDomain> ListProducts()
+        public IEnumerable<ProductDomain> GetAll()
         {
             return mapper.Map<List<ProductDomain>>(productRepository.GetAll());
         }

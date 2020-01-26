@@ -16,13 +16,25 @@ namespace AdminUI.Mapping
             CreateMap<IdentityRoleDomain, RoleViewModel>();
 
             CreateMap<ProductCategoryDomain, ProductCategoryViewModel>();
-            CreateMap<ProductCategoryViewModel, ProductCategoryDomain>();
+            CreateMap<ProductCategoryViewModel, ProductCategoryDomain>();//.ForMember(x => x.Id, opt => opt.Ignore());
 
-            CreateMap<UserViewModel, UserDomain>();
-            CreateMap<UserDomain, UserViewModel>();
+            CreateMap<UserViewModel, PartnerUserDomain>();
+            CreateMap<PartnerUserDomain, UserViewModel>();
+
+            CreateMap<PartnerViewModel, PartnerDomain>();
+            CreateMap<PartnerDomain, PartnerViewModel>();
 
             CreateMap<ProductViewModel, ProductDomain>();
-            CreateMap<ProductDomain, ProductViewModel>();
+            CreateMap<ProductDomain, ProductViewModel>();//.ForMember(x => x.Id, opt => opt.Ignore());
+
+            CreateMap<CommentViewModel, CommentDomain>();
+            CreateMap<CommentDomain, CommentViewModel>();
+
+            CreateMap<ContentViewModel, ContentDomain>();
+            CreateMap<ContentDomain, ContentViewModel>();
+
+            CreateMap<OrderViewModel, OrderDomain>();
+            CreateMap<OrderDomain, OrderViewModel>();
         }
     }
 }

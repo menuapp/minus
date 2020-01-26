@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DAL.Interfaces
 {
-    public interface IIdentityRoleRepository : IRepository<IdentityRole>
+    public interface IIdentityRoleRepository : IRepository<IdentityRole>, IRepositoryEager<IdentityRole>
     {
     }
 }

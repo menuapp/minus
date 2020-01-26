@@ -23,6 +23,24 @@ namespace Service.Mapping
 
             CreateMap<ProductDomain, Product>();
             CreateMap<Product, ProductDomain>();
+
+            CreateMap<PartnerDomain, Partner>();
+            CreateMap<Partner, PartnerDomain>();
+
+            CreateMap<PartnerUserDomain, PartnerUser>();
+            CreateMap<PartnerUser, PartnerUserDomain>();
+
+            CreateMap<Content, ContentDomain>();
+            CreateMap<ContentDomain, Content>();
+
+            CreateMap<Comment, CommentDomain>();
+            CreateMap<CommentDomain, Comment>();
+
+            CreateMap<Order, OrderDomain>();
+            CreateMap<OrderDomain, Order>();
+
+            CreateMap<OrderProductDomain, OrderProduct>();
+            CreateMap<OrderProduct, OrderProductDomain>();
         }
     }
 }

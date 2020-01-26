@@ -22,18 +22,18 @@ namespace AdminUI.Controllers
         }
         public IActionResult Index()
         {
-            return View(mapper.Map<IEnumerable<RoleViewModel>>(identityRoleService.ListRoles()));
+            return View(mapper.Map<IEnumerable<RoleViewModel>>(identityRoleService.GetAll()));
         }
 
         public IActionResult Create()
         {
-            return PartialView();
+            return View();
         }
 
         [HttpPost]
         public IActionResult Create(RoleViewModel roleViewModel)
         {
-            identityRoleService.AddRole(mapper.Map<IdentityRoleDomain>(roleViewModel));
+            identityRoleService.Add(mapper.Map<IdentityRoleDomain>(roleViewModel));
             return RedirectToAction("Index");
         }
     }

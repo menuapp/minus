@@ -27,6 +27,11 @@ namespace DAL.Repositories
             return dbSet.Include(productCategory => productCategory.Products).Single(productCategory => productCategory.Id == id);
         }
 
+        public ProductCategory GetByIdEagerly(string id)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<ProductCategory> GetManyEagerly(Expression<Func<ProductCategory, bool>> where)
         {
             return dbSet.Include(productCategory => productCategory.Products).Where(where).ToList();

@@ -24,9 +24,13 @@ namespace DAL.Migrations
                     b.Property<string>("Content")
                         .IsRequired();
 
-                    b.Property<int>("CustomerId");
+                    b.Property<string>("CustomerId")
+                        .IsRequired();
 
-                    b.Property<bool>("IsVisible");
+                    b.Property<short>("IsVisible")
+                        .HasColumnType("BIT(1)");
+
+                    b.Property<int?>("ProductId");
 
                     b.Property<DateTime>("PublishDate");
 
@@ -34,33 +38,30 @@ namespace DAL.Migrations
 
                     b.HasIndex("CustomerId");
 
+                    b.HasIndex("ProductId");
+
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("Entity.Customer", b =>
+            modelBuilder.Entity("Entity.Content", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Address");
+                    b.Property<int?>("PartnerId");
 
-                    b.Property<int>("Age");
+                    b.Property<string>("PhysicalPath")
+                        .IsRequired();
 
-                    b.Property<DateTime>("BirthDate");
-
-                    b.Property<string>("Email");
-
-                    b.Property<string>("Name");
-
-                    b.Property<string>("Password");
-
-                    b.Property<string>("PhotoUrl");
-
-                    b.Property<string>("Surname");
+                    b.Property<int?>("ProductId");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customer");
+                    b.HasIndex("PartnerId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Contents");
                 });
 
             modelBuilder.Entity("Entity.Order", b =>
@@ -68,18 +69,25 @@ namespace DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("CustomerId");
+                    b.Property<string>("CustomerId");
 
-                    b.Property<string>("OrderStatus")
-                        .IsRequired();
+                    b.Property<DateTime>("OrderDate");
 
-                    b.Property<DateTime>("OrderTime");
+                    b.Property<int>("OrderStatus");
 
-                    b.Property<decimal>("TotalAmount");
+                    b.Property<int>("OrderTypeId");
+
+                    b.Property<int>("PaymentTypeId");
+
+                    b.Property<decimal>("TotalPrice");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
+
+                    b.HasIndex("OrderTypeId");
+
+                    b.HasIndex("PaymentTypeId");
 
                     b.ToTable("Orders");
                 });
@@ -90,8 +98,6 @@ namespace DAL.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("OrderId");
-
-                    b.Property<int>("ProductCount");
 
                     b.Property<int>("ProductId");
 
@@ -104,21 +110,32 @@ namespace DAL.Migrations
                     b.ToTable("OrderProducts");
                 });
 
+            modelBuilder.Entity("Entity.OrderType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OrderTypes");
+                });
+
             modelBuilder.Entity("Entity.Partner", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Address")
+                    b.Property<string>("AssociateAddress")
                         .IsRequired();
 
-                    b.Property<string>("BannerUrl")
+                    b.Property<string>("AssociateName")
                         .IsRequired();
 
-                    b.Property<string>("Name")
-                        .IsRequired();
-
-                    b.Property<string>("SiteUrl")
+                    b.Property<string>("AssociateUrl")
                         .IsRequired();
 
                     b.HasKey("Id");
@@ -126,10 +143,27 @@ namespace DAL.Migrations
                     b.ToTable("Partners");
                 });
 
+            modelBuilder.Entity("Entity.PaymentType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PaymentTypes");
+                });
+
             modelBuilder.Entity("Entity.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<short>("AwayOrderAvailable")
+                        .HasColumnType("BIT(1)");
 
                     b.Property<int>("CategoryId");
 
@@ -139,8 +173,7 @@ namespace DAL.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<string>("ProductVolumeUnit")
-                        .IsRequired();
+                    b.Property<string>("ProductVolumeUnit");
 
                     b.Property<double>("Rating");
 
@@ -160,10 +193,15 @@ namespace DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int?>("ContentId");
+
                     b.Property<string>("Name")
                         .IsRequired();
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ContentId")
+                        .IsUnique();
 
                     b.ToTable("ProductCategories");
                 });
@@ -224,6 +262,9 @@ namespace DAL.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
+
                     b.Property<string>("Email")
                         .HasMaxLength(256);
 
@@ -266,6 +307,8 @@ namespace DAL.Migrations
                         .HasName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -343,12 +386,52 @@ namespace DAL.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("Entity.Customer", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<string>("Address");
+
+                    b.Property<int>("ProfilePhotoId");
+
+                    b.HasIndex("ProfilePhotoId")
+                        .IsUnique();
+
+                    b.HasDiscriminator().HasValue("Customer");
+                });
+
+            modelBuilder.Entity("Entity.PartnerUser", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<int>("PartnerId");
+
+                    b.HasIndex("PartnerId");
+
+                    b.HasDiscriminator().HasValue("PartnerUser");
+                });
+
             modelBuilder.Entity("Entity.Comment", b =>
                 {
                     b.HasOne("Entity.Customer", "Customer")
                         .WithMany("Comments")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Entity.Product", "Product")
+                        .WithMany("Comments")
+                        .HasForeignKey("ProductId");
+                });
+
+            modelBuilder.Entity("Entity.Content", b =>
+                {
+                    b.HasOne("Entity.Partner", "Partner")
+                        .WithMany("Contents")
+                        .HasForeignKey("PartnerId");
+
+                    b.HasOne("Entity.Product", "Product")
+                        .WithMany("Contents")
+                        .HasForeignKey("ProductId");
                 });
 
             modelBuilder.Entity("Entity.Order", b =>
@@ -356,6 +439,16 @@ namespace DAL.Migrations
                     b.HasOne("Entity.Customer")
                         .WithMany("Orders")
                         .HasForeignKey("CustomerId");
+
+                    b.HasOne("Entity.OrderType", "OrderType")
+                        .WithMany("Orders")
+                        .HasForeignKey("OrderTypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Entity.PaymentType", "PaymentType")
+                        .WithMany("Orders")
+                        .HasForeignKey("PaymentTypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Entity.OrderProduct", b =>
@@ -377,6 +470,13 @@ namespace DAL.Migrations
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Entity.ProductCategory", b =>
+                {
+                    b.HasOne("Entity.Content", "Content")
+                        .WithOne("ProductCategory")
+                        .HasForeignKey("Entity.ProductCategory", "ContentId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -421,6 +521,22 @@ namespace DAL.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Entity.Customer", b =>
+                {
+                    b.HasOne("Entity.Content", "ProfilePhoto")
+                        .WithOne("Customer")
+                        .HasForeignKey("Entity.Customer", "ProfilePhotoId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Entity.PartnerUser", b =>
+                {
+                    b.HasOne("Entity.Partner", "Partner")
+                        .WithMany("Users")
+                        .HasForeignKey("PartnerId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

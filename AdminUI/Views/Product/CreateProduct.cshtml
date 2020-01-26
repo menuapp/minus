@@ -6,8 +6,7 @@
     <div class="col-md-4">
         <form asp-action="CreateProduct">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            <input asp-for="CategoryId" class="form-control" type="hidden" value="@ViewData["categoryId"]" />
+            <input asp-for="CategoryId" value="@ViewData["categoryId"]" type="hidden" />
 
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -17,6 +16,11 @@
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="IsInStock" /> @Html.DisplayNameFor(model => model.IsInStock)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="AwayOrderAvailable" /> @Html.DisplayNameFor(model => model.AwayOrderAvailable)
                 </label>
             </div>
             <div class="form-group">

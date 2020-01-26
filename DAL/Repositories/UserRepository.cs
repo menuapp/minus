@@ -12,10 +12,8 @@ namespace DAL.Repositories
 {
     public class UserRepository : RepositoryBase<Customer>, IUserRepository, IRepositoryEager<Customer>
     {
-        private MinusContext minusContext;
         public UserRepository(MinusContext context) : base(context)
         {
-            this.minusContext = context;
         }
 
         public IEnumerable<Customer> GetAllEagerly()
@@ -24,6 +22,11 @@ namespace DAL.Repositories
         }
 
         public Customer GetByIdEagerly(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Customer GetByIdEagerly(string id)
         {
             throw new NotImplementedException();
         }

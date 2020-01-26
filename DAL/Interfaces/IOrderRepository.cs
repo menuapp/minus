@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DAL.Interfaces
 {
-    public interface IOrderRepository : IRepository<Order>
+    public interface IOrderRepository : IRepository<Order>, IRepositoryEager<Order>
     {
     }
 }

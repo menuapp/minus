@@ -6,10 +6,12 @@ using System.Text;
 
 namespace Entity
 {
-    public class ProductCategory: IEntityBase
+    public class ProductCategory : IEntityBase
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public Content Content { get; set; }
+        public int? ContentId { get; set; }
         public ICollection<Product> Products { get; set; }
 
     }

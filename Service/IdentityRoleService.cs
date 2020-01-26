@@ -22,29 +22,29 @@ namespace Service
             this.unitOfWork = unitOfWork;
         }
 
-        public bool AddRole(IdentityRoleDomain identityRoleDomain)
+        public bool Add(IdentityRoleDomain identityRoleDomain)
         {
             identityRoleRepository.Add(mapper.Map<IdentityRole>(identityRoleDomain));
             unitOfWork.Commit();
             return true;
         }
 
-        public bool Delete(IdentityRoleDomain identityRoleDomain)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IdentityRoleDomain GetRole(int id)
-        {
-            return mapper.Map<IdentityRoleDomain>(identityRoleRepository.GetById(id));
-        }
-
-        public IEnumerable<IdentityRoleDomain> ListRoles()
+        public IEnumerable<IdentityRoleDomain> GetAll()
         {
             return mapper.Map<IEnumerable<IdentityRoleDomain>>(identityRoleRepository.GetAll());
         }
 
-        public void Update(IdentityRoleDomain identityRoleDomain)
+        public IdentityRoleDomain GetById(int id)
+        {
+            return mapper.Map<IdentityRoleDomain>(identityRoleRepository.GetByIdEagerly(id));
+        }
+
+        public bool Delete(IdentityRoleDomain domain)
+        {
+            return identityRoleRepository.Delete(mapper.Map<IdentityRole>(domain));
+        }
+
+        public void Update(IdentityRoleDomain domain)
         {
             throw new NotImplementedException();
         }

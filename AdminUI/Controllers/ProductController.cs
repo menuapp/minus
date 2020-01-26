@@ -23,13 +23,14 @@ namespace AdminUI.Controllers
         }
         public IActionResult Index()
         {
-            List<ProductCategoryViewModel> productCategoryViewModels = mapper.Map<List<ProductCategoryViewModel>>(productCategoryService.ListCategories());
+            List<ProductCategoryViewModel> productCategoryViewModels = mapper.Map<List<ProductCategoryViewModel>>(productCategoryService.GetAll());
             return View(productCategoryViewModels);
         }
 
         public IActionResult ListProducts(int id)
-        {
-            IEnumerable<ProductViewModel> productViewModels = mapper.Map<IEnumerable<ProductViewModel>>(productCategoryService.GetCategory(id).Products);
+        {            
+            IEnumerable<ProductViewModel> productViewModels = mapper.Map<IEnumerable<ProductViewModel>>(productCategoryService.GetById(id).Products);
+            ViewData["categoryId"] = id;
             return View(productViewModels);
         }
 
@@ -42,8 +43,9 @@ namespace AdminUI.Controllers
         [HttpPost]
         public IActionResult CreateProduct(ProductViewModel productViewModel)
         {
-            productViewModel.Category = mapper.Map<ProductCategoryViewModel>(productCategoryService.GetCategory(productViewModel.CategoryId));
-            productService.AddProduct(mapper.Map<ProductDomain>(productViewModel));
+            productViewModel.Id = null;
+            productViewModel.Category = mapper.Map<ProductCategoryViewModel>(productCategoryService.GetById(productViewModel.CategoryId));
+            productService.Add(mapper.Map<ProductDomain>(productViewModel));
             return RedirectToAction("ListProducts", new { id = productViewModel.Category.Id });
         }
 
@@ -55,7 +57,7 @@ namespace AdminUI.Controllers
         [HttpPost]
         public IActionResult CreateCategory(ProductCategoryViewModel productCategoryViewModel)
         {
-            productCategoryService.AddCategory(mapper.Map<ProductCategoryDomain>(productCategoryViewModel));
+            productCategoryService.Add(mapper.Map<ProductCategoryDomain>(productCategoryViewModel));
             return RedirectToAction("Index");
         }
     }

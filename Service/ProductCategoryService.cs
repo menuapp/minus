@@ -21,7 +21,7 @@ namespace Service
             this.mapper = mapper;
             this.unitOfWork = unitOfWork;
         }
-        public bool AddCategory(ProductCategoryDomain productCategoryDomain)
+        public bool Add(ProductCategoryDomain productCategoryDomain)
         {
             productCategoryRepository.Add(mapper.Map<ProductCategory>(productCategoryDomain));
             unitOfWork.Commit();
@@ -30,16 +30,15 @@ namespace Service
 
         public bool Delete(ProductCategoryDomain productCategoryDomain)
         {
-            productCategoryRepository.Delete(mapper.Map<ProductCategory>(productCategoryDomain));
-            return true;
+            return productCategoryRepository.Delete(mapper.Map<ProductCategory>(productCategoryDomain));
         }
 
-        public ProductCategoryDomain GetCategory(int id)
+        public ProductCategoryDomain GetById(int id)
         {
             return mapper.Map<ProductCategoryDomain>(productCategoryRepository.GetByIdEagerly(id));
         }
 
-        public IEnumerable<ProductCategoryDomain> ListCategories()
+        public IEnumerable<ProductCategoryDomain> GetAll()
         {
             return mapper.Map<IEnumerable<ProductCategoryDomain>>(productCategoryRepository.GetAll());
         }

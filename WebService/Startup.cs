@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using DAL.Context;
+using DAL.Infrastructure;
+using DAL.Interfaces;
+using DAL.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,6 +15,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Service;
+using Service.Interfaces;
+using Service.Mapping;
 
 namespace WebService
 {
@@ -27,6 +34,20 @@ namespace WebService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<MinusContext>();
+            services.AddTransient<IProductCategoryRepository, ProductCategoryRepository>();
+            services.AddTransient<IIdentityRoleRepository, IdentityRoleRepository>();
+            services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
+            //REGISTER SERVICE LAYER
+            services.AddTransient<IProductCategoryService, ProductCategoryService>();
+            services.AddTransient<IIdentityRoleService, IdentityRoleService>();
+            services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<IUserService, UserService>();
+
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+
+            services.AddAutoMapper(typeof(DomainProfile));
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -43,8 +64,11 @@ namespace WebService
                 app.UseHsts();
             }
 
+            app.UseCors();
+
             app.UseHttpsRedirection();
             app.UseMvc();
+           
         }
     }
 }

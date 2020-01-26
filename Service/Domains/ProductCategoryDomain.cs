@@ -8,6 +8,7 @@ namespace Service.Domains
     {
         public int? Id { get; set; }
         public string Name { get; set; }
-        public IEnumerable<ProductDomain> Products { get; set; }
+        public ContentDomain Content { get; set; }
+        public ICollection<ProductDomain> Products { get; set; }
     }
 }
