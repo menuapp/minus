@@ -5,12 +5,7 @@ using System.Text;
 
 namespace Service.Interfaces
 {
-    public interface IProductCategoryService
+    public interface IProductCategoryService : IService<ProductCategoryDomain>
     {
-        IEnumerable<ProductCategoryDomain> ListCategories();
-        bool AddProduct(ProductCategoryDomain productCategoryDomain);
-        ProductCategoryDomain GetProduct(int id);
-        bool Delete(ProductCategoryDomain productCategoryDomain);
-        void Update(ProductCategoryDomain productCategoryDomain);
     }
 }

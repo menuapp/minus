@@ -24,12 +24,12 @@ namespace Service
             this.unitOfWork = unitOfWork;
         }
 
-        public IEnumerable<UserDomain> ListUsers()
+        public IEnumerable<UserDomain> GetAll()
         {
-            return mapper.Map<IEnumerable<Customer>, IEnumerable<UserDomain>>(userRepository.GetAll());
+            return mapper.Map<IEnumerable<UserDomain>>(userRepository.GetAll());
         }
 
-        public bool CreateUser(UserDomain userToCreate)
+        public bool Add(UserDomain userToCreate)
         {
             Customer newUser = mapper.Map<UserDomain, Customer>(userToCreate);
 
@@ -48,7 +48,7 @@ namespace Service
             return true;
         }
 
-        public UserDomain GetUser(int id)
+        public UserDomain GetById(int id)
         {
             return mapper.Map<Customer, UserDomain>(userRepository.GetById(id));
         }

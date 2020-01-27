@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DAL.Context;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service;
+using Service.Interfaces;
 
 namespace WebService.Controllers
 {
@@ -12,10 +14,16 @@ namespace WebService.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        public ProductService productService { get; set; }
-        public ProductController(ProductService productService)
+        private IProductService productService { get; set; }
+        private MinusContext context { get; set; }
+        public ProductController(IProductService productService)
         {
             this.productService = productService;
+        }
+
+        public IActionResult Get()
+        {       
+            return Ok(productService.GetAll());
         }
     }
 }

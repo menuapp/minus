@@ -5,12 +5,7 @@ using System.Text;
 
 namespace Service.Interfaces
 {
-    public interface IUserService
+    public interface IUserService : IService<UserDomain>
     {
-        IEnumerable<UserDomain> ListUsers();
-        bool CreateUser(UserDomain userDomain);
-        UserDomain GetUser(int id);
-        bool Delete(UserDomain userDomain);
-        void Update(UserDomain userDomain);
     }
 }

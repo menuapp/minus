@@ -41,10 +41,16 @@ namespace AdminUI
 
             services.AddDbContext<MinusContext>(ServiceLifetime.Singleton);
             //REGISTER REPOSITORY LAYER
+            services.AddTransient<IPartnerUserRepository, PartnerUserRepository>();
+            services.AddTransient<IPartnerRepository, PartnerRepository>();
+            services.AddTransient<IProductCategoryRepository, ProductCategoryRepository>();
             services.AddTransient<IIdentityRoleRepository, IdentityRoleRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
             //REGISTER SERVICE LAYER
+            services.AddTransient<IPartnerService, PartnerService>();
+            services.AddTransient<IPartnerUserService, PartnerUserService>();
+            services.AddTransient<IProductCategoryService, ProductCategoryService>();
             services.AddTransient<IIdentityRoleService, IdentityRoleService>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IUserService, UserService>();

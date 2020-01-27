@@ -27,6 +27,11 @@ namespace DAL.Repositories
             return dbSet.Include(comment => comment.Customer).FirstOrDefault(comment => comment.Id == id);
         }
 
+        public Comment GetByIdEagerly(string id)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<Comment> GetManyEagerly(Expression<Func<Comment, bool>> where)
         {
             return dbSet.Include(comment => comment.Customer).Where(where).ToList();

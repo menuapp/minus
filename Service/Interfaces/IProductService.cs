@@ -5,12 +5,7 @@ using System.Text;
 
 namespace Service.Interfaces
 {
-    public interface IProductService
+    public interface IProductService : IService<ProductDomain>
     {
-        IEnumerable<ProductDomain> ListProducts();
-        bool AddProduct(ProductDomain ProductDomain);
-        ProductDomain GetProduct(int id);
-        bool Delete(ProductDomain ProductDomain);
-        void Update(ProductDomain ProductDomain);
     }
 }

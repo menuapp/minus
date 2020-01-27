@@ -15,57 +15,57 @@ namespace AdminUI.Controllers
     public class UserController : Controller
     {
         private readonly IMapper mapper;
-        private readonly IUserService userService;
+        private readonly IPartnerUserService partnerUserService;
 
-        public UserController(IUserService userService, IMapper mapper)
+        public UserController(IPartnerUserService partnerUserService, IMapper mapper)
         {
             this.mapper = mapper;
-            this.userService = userService;
+            this.partnerUserService = partnerUserService;
         }
 
         [Authorize]
         public IActionResult Index()
         {
-            List<UserViewModel> userViewModels = mapper.Map<List<UserDomain>, List<UserViewModel>>(userService.ListUsers().ToList());
+            List<UserViewModel> userViewModels = mapper.Map<List<UserViewModel>>(partnerUserService.GetAll().ToList());
 
             return View(userViewModels);
         }
 
         public IActionResult Create()
         {
-            return PartialView();
+            return View();
         }
 
         [HttpPost]
         public IActionResult Create(UserViewModel userToCreate)
         {
-            if (ModelState.IsValid && userService.CreateUser(mapper.Map<UserViewModel, UserDomain>(userToCreate)))
+            if (ModelState.IsValid && partnerUserService.Add(mapper.Map<UserViewModel, PartnerUserDomain>(userToCreate)))
             {
                 return RedirectToAction("index");
             }
 
-            return PartialView();
+            return View();
         }
 
-        public IActionResult Details(int id)
+        public IActionResult Details(string id)
         {
-            return PartialView(mapper.Map<UserDomain, UserViewModel>(userService.GetUser(id)));
+            return View(mapper.Map<PartnerUserDomain, UserViewModel>(partnerUserService.GetById(id)));
         }
 
         [HttpGet]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(string id)
         {
-            return PartialView(mapper.Map<UserDomain, UserViewModel>(userService.GetUser(id)));
+            return View(mapper.Map<PartnerUserDomain, UserViewModel>(partnerUserService.GetById(id)));
         }
-        public IActionResult Edit(int id)
+        public IActionResult Edit(string id)
         {
-            return PartialView(mapper.Map<UserDomain, UserViewModel>(userService.GetUser(id)));
+            return View(mapper.Map<PartnerUserDomain, UserViewModel>(partnerUserService.GetById(id)));
         }
 
         [HttpPost]
         public IActionResult Edit(UserViewModel userViewModel)
         {
-            userService.Update(mapper.Map<UserViewModel, UserDomain>(userViewModel));
+            partnerUserService.Update(mapper.Map<UserViewModel, PartnerUserDomain>(userViewModel));
             return RedirectToAction("index");
         }
     }
