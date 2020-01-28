@@ -4,10 +4,10 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="CreateProduct">
+        <form asp-action="CreateProduct" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input asp-for="CategoryId" value="@ViewData["categoryId"]" type="hidden" />
-
+            <input asp-for="Id" class="form-control" value="" hidden />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -43,6 +43,12 @@
                 <input asp-for="Rating" class="form-control" />
                 <span asp-validation-for="Rating" class="text-danger"></span>
             </div>
+            <div class="input-group">
+
+                <input asp-for="File" class="form-control custom-file-input" />
+                <label asp-for="File" class=" custom-file-label">Add Content</label>
+            </div>
+            <br/>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

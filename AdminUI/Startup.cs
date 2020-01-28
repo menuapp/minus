@@ -12,6 +12,7 @@ using DAL.Interfaces;
 using DAL.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -38,6 +39,8 @@ namespace AdminUI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddTransient<HostingEnvironment>();
 
             services.AddDbContext<MinusContext>(ServiceLifetime.Singleton);
             //REGISTER REPOSITORY LAYER
