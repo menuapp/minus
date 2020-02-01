@@ -1,0 +1,9 @@
+﻿/*.preview-item:hover {
+    transform: scale(2);
+    transition: transform 1s;
+    cursor: pointer;
+    z-index: 99999999999;
+}*/
+
+.preview-item img.zoom {
+}

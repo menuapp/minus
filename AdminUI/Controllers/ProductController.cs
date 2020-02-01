@@ -48,20 +48,23 @@ namespace AdminUI.Controllers
         [HttpPost]
         public IActionResult CreateProduct(ProductViewModel productViewModel)
         {
-            var fileName = Path.GetFileName(productViewModel.File.FileName);
-            var upload = Path.Combine(hostingEnvironment.ContentRootPath, "Uploads");
-            var filePath = Path.Combine(upload, fileName);
-
-            using (var fileStream = new FileStream(filePath, FileMode.CreateNew))
+            foreach (var content in productViewModel.Files)
             {
-                productViewModel.File.CopyTo(fileStream);
+                var fileName = Path.GetFileName(content.FileName);
+                var upload = Path.Combine(hostingEnvironment.ContentRootPath, "Uploads");
+                var filePath = Path.Combine(upload, fileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.CreateNew))
+                {
+                    content.CopyTo(fileStream);
+                }
+
+                productViewModel.Contents = new List<ContentViewModel>();
+                productViewModel.Contents.Add(new ContentViewModel
+                {
+                    PhysicalPath = filePath
+                });
             }
-
-            productViewModel.Contents = new List<ContentViewModel>();
-            productViewModel.Contents.Add(new ContentViewModel
-            {
-                PhysicalPath = filePath
-            });
 
             productViewModel.Category = mapper.Map<ProductCategoryViewModel>(productCategoryService.GetById(productViewModel.CategoryId));
             productService.Add(mapper.Map<ProductDomain>(productViewModel));

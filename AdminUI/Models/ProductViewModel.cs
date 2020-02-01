@@ -18,7 +18,7 @@ namespace AdminUI.Models
         public decimal UnitPrice { get; set; }
         public double Rating { get; set; }
         public int CategoryId { get; set; }
-        public IFormFile File { get; set; }
+        public List<IFormFile> Files { get; set; }
         public List<ContentViewModel> Contents { get; set; }
         public ProductCategoryViewModel Category { get; set; }
     }
