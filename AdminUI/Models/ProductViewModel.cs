@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ namespace AdminUI.Models
         public decimal UnitPrice { get; set; }
         public double Rating { get; set; }
         public int CategoryId { get; set; }
+        public List<IFormFile> Files { get; set; }
         public List<ContentViewModel> Contents { get; set; }
         public ProductCategoryViewModel Category { get; set; }
     }

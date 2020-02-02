@@ -1,0 +1,38 @@
+﻿@model AdminUI.Models.PartnerViewModel
+
+<h4>PartnerViewModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="Id" value="" class="form-control" hidden />
+            <div class="form-group">
+                <label asp-for="AssociateName" class="control-label"></label>
+                <input asp-for="AssociateName" class="form-control" />
+                <span asp-validation-for="AssociateName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AssociateUrl" class="control-label"></label>
+                <input asp-for="AssociateUrl" class="form-control" />
+                <span asp-validation-for="AssociateUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AssociateAddress" class="control-label"></label>
+                <input asp-for="AssociateAddress" class="form-control" />
+                <span asp-validation-for="AssociateAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

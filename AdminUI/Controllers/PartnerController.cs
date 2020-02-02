@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AdminUI.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Service.Domains;
 using Service.Interfaces;
 
 namespace AdminUI.Controllers
@@ -21,6 +22,22 @@ namespace AdminUI.Controllers
         public IActionResult Index()
         {
             return View(mapper.Map<List<PartnerViewModel>>(partnerService.GetAll()));
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(PartnerViewModel partnerViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                partnerService.Add(mapper.Map<PartnerDomain>(partnerViewModel));
+            }
+            
+            return RedirectToAction("index");
         }
     }
 }
