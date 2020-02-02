@@ -12,6 +12,7 @@ using Service.Interfaces;
 
 namespace AdminUI.Controllers
 {
+    [Authorize(Roles = "Administrator,Manager,ManagerAssistant")]
     public class UserController : Controller
     {
         private readonly IMapper mapper;

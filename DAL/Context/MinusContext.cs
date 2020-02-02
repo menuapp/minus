@@ -59,6 +59,16 @@ namespace DAL.Context
             //modelBuilder.Entity<Customer>().ToTable("Customers");
             //modelBuilder.Entity<Partner>().ToTable("Partners");
 
+            modelBuilder.Entity<PaymentType>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+            });
+
+            modelBuilder.Entity<OrderType>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+            });
+
             modelBuilder.Entity<Partner>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -85,6 +95,7 @@ namespace DAL.Context
             modelBuilder.Entity<Order>(entity =>
             {
                 entity.HasKey(e => e.Id);
+                entity.HasOne(e => e.Partner).WithMany(src => src.Orders).HasForeignKey(a => a.PartnerId).IsRequired();
                 entity.Property(e => e.OrderDate).IsRequired();
                 entity.Property(e => e.TotalPrice).IsRequired();
                 entity.Property(e => e.OrderStatus).IsRequired();
@@ -123,9 +134,67 @@ namespace DAL.Context
             modelBuilder.Entity<ProductCategory>(entity =>
             {
                 entity.HasKey(e => e.Id);
+                entity.HasOne(e => e.Partner).WithMany(src => src.ProductCategories).HasForeignKey(a => a.PartnerId).IsRequired();
                 entity.Property(e => e.Name).IsRequired();
                 entity.HasOne(e => e.Content).WithOne(t => t.ProductCategory).HasForeignKey<ProductCategory>(a => a.ContentId);
             });
+
+            modelBuilder.Entity<IdentityRole>().HasData(
+                new IdentityRole
+                {
+                    Name = "Administrator",
+                    NormalizedName = "ADMINISTRATOR"
+                },
+                new IdentityRole
+                {
+                    Name = "Manager",
+                    NormalizedName = "MANAGER"
+                },
+                new IdentityRole
+                {
+                    Name = "AssitantManager",
+                    NormalizedName = "ASSISTANTMANAGER"
+                },
+                new IdentityRole
+                {
+                    Name = "KitchenStaff",
+                    NormalizedName = "KITCHENSTAFF"
+                },
+                new IdentityRole
+                {
+                    Name = "Waitstaff",
+                    NormalizedName = "WAITSTAFF"
+                },
+                new IdentityRole
+                {
+                    Name = "Cashier",
+                    NormalizedName = "CASHIER"
+                },
+                new IdentityRole
+                {
+                    Name = "Customer",
+                    NormalizedName = "CUSTOMER"
+                }
+                );
+
+            var cashPayment = new PaymentType();
+            var mobilePayment = new PaymentType();
+            var cardPayment = new PaymentType();
+
+            cashPayment = PaymentTypeEnum.CASH;
+            mobilePayment = PaymentTypeEnum.MOBILE;
+            cardPayment = PaymentTypeEnum.CARD;
+
+            modelBuilder.Entity<PaymentType>().HasData(
+                cashPayment, mobilePayment, cardPayment);
+
+            var hereOrder = new OrderType();
+            var awayOrder = new OrderType();
+
+            hereOrder = OrderTypeEnum.HERE;
+            awayOrder = OrderTypeEnum.AWAY;
+
+            modelBuilder.Entity<OrderType>().HasData(hereOrder, awayOrder);
         }
     }
 }

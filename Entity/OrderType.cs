@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Entity
 {
-    public enum OrderTypeEnum { HERE, AWAY };
+    public enum OrderTypeEnum { HERE = 1, AWAY = 2 };
     public class OrderType
     {
         private OrderType(OrderTypeEnum @enum)

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Entity
 {
-    public enum PaymentTypeEnum { CARD, MOBILE, CASH };
+    public enum PaymentTypeEnum { CARD = 1, MOBILE = 2, CASH = 3 };
     public class PaymentType
     {
         private PaymentType(PaymentTypeEnum @enum)

@@ -18,7 +18,10 @@
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             @*<select asp-for="Input.PartnerId" asp-items="" class="form-control" />*@
-            @Html.DropDownListFor(model => model.Input.PartnerId, new SelectList((IEnumerable<SelectListItem>)ViewData["partners"], "Value", "Text"), new { @class = "form-control" })
+            <label asp-for="Input.PartnerId"></label>
+            @Html.DropDownListFor(model => model.Input.PartnerId, new SelectList((List<SelectListItem>)ViewData["Partners"], "Value", "Text"), new { @class = "form-control" })
+            <label asp-for="Input.RoleId"></label>
+            @Html.DropDownListFor(model => model.Input.RoleId, new SelectList((List<SelectListItem>)ViewData["Roles"], "Value", "Text"), new { @class = "form-control" })
             <div class="form-group">
                 <label asp-for="Input.Password"></label>
                 <input asp-for="Input.Password" class="form-control" />

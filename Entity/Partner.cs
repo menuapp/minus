@@ -12,5 +12,7 @@ namespace Entity
         public string AssociateAddress { get; set; }
         public ICollection<Content> Contents { get; set; }
         public ICollection<PartnerUser> Users { get; set; }
+        public ICollection<Order> Orders { get; set; }
+        public ICollection<ProductCategory> ProductCategories { get; set; }
     }
 }

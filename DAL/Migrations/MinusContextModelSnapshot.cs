@@ -77,6 +77,8 @@ namespace DAL.Migrations
 
                     b.Property<int>("OrderTypeId");
 
+                    b.Property<int>("PartnerId");
+
                     b.Property<int>("PaymentTypeId");
 
                     b.Property<decimal>("TotalPrice");
@@ -86,6 +88,8 @@ namespace DAL.Migrations
                     b.HasIndex("CustomerId");
 
                     b.HasIndex("OrderTypeId");
+
+                    b.HasIndex("PartnerId");
 
                     b.HasIndex("PaymentTypeId");
 
@@ -122,6 +126,20 @@ namespace DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("OrderTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "",
+                            Name = "HERE"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "",
+                            Name = "AWAY"
+                        });
                 });
 
             modelBuilder.Entity("Entity.Partner", b =>
@@ -155,6 +173,26 @@ namespace DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PaymentTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 3,
+                            Description = "",
+                            Name = "CASH"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "",
+                            Name = "MOBILE"
+                        },
+                        new
+                        {
+                            Id = 1,
+                            Description = "",
+                            Name = "CARD"
+                        });
                 });
 
             modelBuilder.Entity("Entity.Product", b =>
@@ -198,10 +236,14 @@ namespace DAL.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
+                    b.Property<int>("PartnerId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ContentId")
                         .IsUnique();
+
+                    b.HasIndex("PartnerId");
 
                     b.ToTable("ProductCategories");
                 });
@@ -228,6 +270,57 @@ namespace DAL.Migrations
                         .HasName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "2528f438-1362-4223-bd86-c221a3a56c8c",
+                            ConcurrencyStamp = "4d0ab2d8-c2be-4e57-af5e-c56bb49e79f8",
+                            Name = "Administrator",
+                            NormalizedName = "ADMINISTRATOR"
+                        },
+                        new
+                        {
+                            Id = "6b0884e5-4a54-4f24-8061-dea145f1ffa7",
+                            ConcurrencyStamp = "7ba47540-8fc3-4f43-be41-b01e1b7a9b9b",
+                            Name = "Manager",
+                            NormalizedName = "MANAGER"
+                        },
+                        new
+                        {
+                            Id = "62e35a76-83ad-4540-bb53-93aa8f7d9ba9",
+                            ConcurrencyStamp = "960b77e5-f8f4-4bc3-b881-c342353ccdfc",
+                            Name = "AssitantManager",
+                            NormalizedName = "ASSISTANTMANAGER"
+                        },
+                        new
+                        {
+                            Id = "308ebf8c-96e0-4566-ae5c-1a4dd3a1262c",
+                            ConcurrencyStamp = "8e2a8c60-6f1b-4ff6-bc0d-19ac47e859e4",
+                            Name = "KitchenStaff",
+                            NormalizedName = "KITCHENSTAFF"
+                        },
+                        new
+                        {
+                            Id = "29a53ef2-1d0b-4c64-b12f-65f9812c964c",
+                            ConcurrencyStamp = "402cf6f2-8166-4e47-bed8-ad9a6984144e",
+                            Name = "Waitstaff",
+                            NormalizedName = "WAITSTAFF"
+                        },
+                        new
+                        {
+                            Id = "40c848c0-cf5b-4439-ae49-ebf83f2644e6",
+                            ConcurrencyStamp = "34f16313-1c59-4385-aa45-4b5d39c38e2b",
+                            Name = "Cashier",
+                            NormalizedName = "CASHIER"
+                        },
+                        new
+                        {
+                            Id = "dfc3bd02-f3e6-41a7-9f47-56791e83f091",
+                            ConcurrencyStamp = "9fd4a46c-bd03-4fcc-98d7-7164a81cbaf7",
+                            Name = "Customer",
+                            NormalizedName = "CUSTOMER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -392,7 +485,7 @@ namespace DAL.Migrations
 
                     b.Property<string>("Address");
 
-                    b.Property<int>("ProfilePhotoId");
+                    b.Property<int?>("ProfilePhotoId");
 
                     b.HasIndex("ProfilePhotoId")
                         .IsUnique();
@@ -445,6 +538,11 @@ namespace DAL.Migrations
                         .HasForeignKey("OrderTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.HasOne("Entity.Partner", "Partner")
+                        .WithMany("Orders")
+                        .HasForeignKey("PartnerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("Entity.PaymentType", "PaymentType")
                         .WithMany("Orders")
                         .HasForeignKey("PaymentTypeId")
@@ -477,6 +575,11 @@ namespace DAL.Migrations
                     b.HasOne("Entity.Content", "Content")
                         .WithOne("ProductCategory")
                         .HasForeignKey("Entity.ProductCategory", "ContentId");
+
+                    b.HasOne("Entity.Partner", "Partner")
+                        .WithMany("ProductCategories")
+                        .HasForeignKey("PartnerId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -528,8 +631,7 @@ namespace DAL.Migrations
                 {
                     b.HasOne("Entity.Content", "ProfilePhoto")
                         .WithOne("Customer")
-                        .HasForeignKey("Entity.Customer", "ProfilePhotoId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("Entity.Customer", "ProfilePhotoId");
                 });
 
             modelBuilder.Entity("Entity.PartnerUser", b =>

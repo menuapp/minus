@@ -25,6 +25,7 @@ namespace AdminUI.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly IPartnerService _partnerService;
+        private readonly IIdentityRoleService _identityRoleService;
         private readonly IMapper _mapper;
 
         public RegisterModel(
@@ -33,8 +34,10 @@ namespace AdminUI.Areas.Identity.Pages.Account
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
             IPartnerService partnerService,
+            IIdentityRoleService identityRoleService,
             IMapper mapper)
         {
+            _identityRoleService = identityRoleService;
             _mapper = mapper;
             _partnerService = partnerService;
             _userManager = userManager;
@@ -59,6 +62,13 @@ namespace AdminUI.Areas.Identity.Pages.Account
             [Display(Name = "Partner")]
             public string PartnerId { get; set; }
 
+            public List<PartnerViewModel> Partners { get; set; }
+
+            [Required]
+            [Display(Name = "Role")]
+            public string RoleId { get; set; }
+            public List<RoleViewModel> Roles { get; set; }
+
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
@@ -75,6 +85,7 @@ namespace AdminUI.Areas.Identity.Pages.Account
         {
             var model = new InputModel();
             var partners = new List<SelectListItem> { };
+            var roles = new List<SelectListItem> { };
 
             _mapper.Map<List<PartnerViewModel>>(_partnerService.GetAll()).ForEach(partner =>
             {
@@ -85,7 +96,17 @@ namespace AdminUI.Areas.Identity.Pages.Account
                 });
             });
 
-            ViewData["partners"] = partners;
+            _mapper.Map<List<RoleViewModel>>(_identityRoleService.GetAll()).ForEach(role =>
+            {
+                roles.Add(new SelectListItem
+                {
+                    Text = role.Name,
+                    Value = role.Id.ToString()
+                });
+            });
+
+            ViewData["Roles"] = roles;
+            ViewData["Partners"] = partners;
 
             ReturnUrl = returnUrl;
         }
@@ -97,6 +118,11 @@ namespace AdminUI.Areas.Identity.Pages.Account
             {
                 var user = new PartnerUser { UserName = Input.Email, Email = Input.Email, PartnerId = Int32.Parse(Input.PartnerId) };
                 var result = await _userManager.CreateAsync(user, Input.Password);
+
+                var userRole = new IdentityUserRole<string>();
+                userRole.UserId = user.Id;
+                userRole.RoleId = Input.RoleId;
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");

@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using AdminUI.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Domains;
 using Service.Interfaces;
 
 namespace AdminUI.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     public class PartnerController : Controller
     {
         IMapper mapper;
@@ -36,7 +38,7 @@ namespace AdminUI.Controllers
             {
                 partnerService.Add(mapper.Map<PartnerDomain>(partnerViewModel));
             }
-            
+
             return RedirectToAction("index");
         }
     }

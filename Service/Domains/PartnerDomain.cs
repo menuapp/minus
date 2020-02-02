@@ -12,5 +12,7 @@ namespace Service.Domains
         public string AssociateAddress { get; set; }
         public ICollection<ContentDomain> Contents { get; set; }
         public ICollection<PartnerUserDomain> Users { get; set; }
+        public ICollection<ProductCategoryDomain> ProductCategories { get; set; }
+        public ICollection<OrderDomain> Orders { get; set; }
     }
 }

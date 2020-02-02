@@ -10,6 +10,8 @@ namespace Entity
     public class Order : IEntityBase
     {
         public int Id { get; set; }
+        public int PartnerId { get; set; }
+        public Partner Partner { get; set; }
         public DateTime OrderDate { get; set; }
         public decimal TotalPrice { get; set; }
         public int OrderStatus { get; set; }

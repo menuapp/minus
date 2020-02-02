@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DAL.Migrations
 {
-    public partial class initializeDb : Migration
+    public partial class updateDb_seeddata : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -169,6 +169,7 @@ namespace DAL.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySQL:AutoIncrement", true),
+                    PartnerId = table.Column<int>(nullable: false),
                     OrderDate = table.Column<DateTime>(nullable: false),
                     TotalPrice = table.Column<decimal>(nullable: false),
                     OrderStatus = table.Column<int>(nullable: false),
@@ -183,6 +184,12 @@ namespace DAL.Migrations
                         name: "FK_Orders_OrderTypes_OrderTypeId",
                         column: x => x.OrderTypeId,
                         principalTable: "OrderTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Orders_Partners_PartnerId",
+                        column: x => x.PartnerId,
+                        principalTable: "Partners",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -234,12 +241,19 @@ namespace DAL.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySQL:AutoIncrement", true),
+                    PartnerId = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: false),
                     ContentId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductCategories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductCategories_Partners_PartnerId",
+                        column: x => x.PartnerId,
+                        principalTable: "Partners",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -319,6 +333,39 @@ namespace DAL.Migrations
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "2528f438-1362-4223-bd86-c221a3a56c8c", "4d0ab2d8-c2be-4e57-af5e-c56bb49e79f8", "Administrator", "ADMINISTRATOR" },
+                    { "6b0884e5-4a54-4f24-8061-dea145f1ffa7", "7ba47540-8fc3-4f43-be41-b01e1b7a9b9b", "Manager", "MANAGER" },
+                    { "62e35a76-83ad-4540-bb53-93aa8f7d9ba9", "960b77e5-f8f4-4bc3-b881-c342353ccdfc", "AssitantManager", "ASSISTANTMANAGER" },
+                    { "308ebf8c-96e0-4566-ae5c-1a4dd3a1262c", "8e2a8c60-6f1b-4ff6-bc0d-19ac47e859e4", "KitchenStaff", "KITCHENSTAFF" },
+                    { "29a53ef2-1d0b-4c64-b12f-65f9812c964c", "402cf6f2-8166-4e47-bed8-ad9a6984144e", "Waitstaff", "WAITSTAFF" },
+                    { "40c848c0-cf5b-4439-ae49-ebf83f2644e6", "34f16313-1c59-4385-aa45-4b5d39c38e2b", "Cashier", "CASHIER" },
+                    { "dfc3bd02-f3e6-41a7-9f47-56791e83f091", "9fd4a46c-bd03-4fcc-98d7-7164a81cbaf7", "Customer", "CUSTOMER" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "OrderTypes",
+                columns: new[] { "Id", "Description", "Name" },
+                values: new object[,]
+                {
+                    { 1, "", "HERE" },
+                    { 2, "", "AWAY" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "PaymentTypes",
+                columns: new[] { "Id", "Description", "Name" },
+                values: new object[,]
+                {
+                    { 3, "", "CASH" },
+                    { 2, "", "MOBILE" },
+                    { 1, "", "CARD" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -410,6 +457,11 @@ namespace DAL.Migrations
                 column: "OrderTypeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Orders_PartnerId",
+                table: "Orders",
+                column: "PartnerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Orders_PaymentTypeId",
                 table: "Orders",
                 column: "PaymentTypeId");
@@ -419,6 +471,11 @@ namespace DAL.Migrations
                 table: "ProductCategories",
                 column: "ContentId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductCategories_PartnerId",
+                table: "ProductCategories",
+                column: "PartnerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
@@ -487,7 +544,7 @@ namespace DAL.Migrations
                 column: "ProfilePhotoId",
                 principalTable: "Contents",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_ProductCategories_Contents_ContentId",
@@ -544,13 +601,13 @@ namespace DAL.Migrations
                 name: "Contents");
 
             migrationBuilder.DropTable(
-                name: "Partners");
-
-            migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
                 name: "ProductCategories");
+
+            migrationBuilder.DropTable(
+                name: "Partners");
         }
     }
 }
