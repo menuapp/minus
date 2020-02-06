@@ -1,18 +1,18 @@
-﻿using Entity.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Entity.Interfaces;
-using System.ComponentModel.DataAnnotations;
 
 namespace Entity
 {
-    public class Partner : IEntityBase
+    public class Partner
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string SiteUrl { get; set; }
-        public string BannerUrl { get; set; }
-        public string Address { get; set; }
+        public string AssociateName { get; set; }
+        public string AssociateUrl { get; set; }
+        public string AssociateAddress { get; set; }
+        public ICollection<Content> Contents { get; set; }
+        public ICollection<PartnerUser> Users { get; set; }
+        public ICollection<Order> Orders { get; set; }
+        public ICollection<ProductCategory> ProductCategories { get; set; }
     }
 }

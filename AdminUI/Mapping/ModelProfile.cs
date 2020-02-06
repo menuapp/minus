@@ -8,12 +8,33 @@ using System.Threading.Tasks;
 
 namespace AdminUI.Mapping
 {
-    public class ModelProfile :Profile
+    public class ModelProfile : Profile
     {
         public ModelProfile()
         {
-            CreateMap<RoleViewModel, RoleDomain>();
-            CreateMap<RoleDomain, RoleViewModel>();
+            CreateMap<RoleViewModel, IdentityRoleDomain>();
+            CreateMap<IdentityRoleDomain, RoleViewModel>();
+
+            CreateMap<ProductCategoryDomain, ProductCategoryViewModel>();
+            CreateMap<ProductCategoryViewModel, ProductCategoryDomain>();//.ForMember(x => x.Id, opt => opt.Ignore());
+
+            CreateMap<UserViewModel, PartnerUserDomain>();
+            CreateMap<PartnerUserDomain, UserViewModel>();
+
+            CreateMap<PartnerViewModel, PartnerDomain>();
+            CreateMap<PartnerDomain, PartnerViewModel>();
+
+            CreateMap<ProductViewModel, ProductDomain>();
+            CreateMap<ProductDomain, ProductViewModel>();//.ForMember(x => x.Id, opt => opt.Ignore());
+
+            CreateMap<CommentViewModel, CommentDomain>();
+            CreateMap<CommentDomain, CommentViewModel>();
+
+            CreateMap<ContentViewModel, ContentDomain>();
+            CreateMap<ContentDomain, ContentViewModel>();
+
+            CreateMap<OrderViewModel, OrderDomain>();
+            CreateMap<OrderDomain, OrderViewModel>();
         }
     }
 }

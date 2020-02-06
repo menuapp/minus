@@ -24,17 +24,44 @@ namespace DAL.Migrations
                     b.Property<string>("Content")
                         .IsRequired();
 
-                    b.Property<bool>("IsVisible");
+                    b.Property<string>("CustomerId")
+                        .IsRequired();
+
+                    b.Property<short>("IsVisible")
+                        .HasColumnType("BIT(1)");
+
+                    b.Property<int?>("ProductId");
 
                     b.Property<DateTime>("PublishDate");
 
-                    b.Property<int>("UserId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("Entity.Content", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("PartnerId");
+
+                    b.Property<string>("PhysicalPath")
+                        .IsRequired();
+
+                    b.Property<int?>("ProductId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("PartnerId");
 
-                    b.ToTable("Comments");
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Contents");
                 });
 
             modelBuilder.Entity("Entity.Order", b =>
@@ -42,18 +69,29 @@ namespace DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("OrderStatus")
-                        .IsRequired();
+                    b.Property<string>("CustomerId");
 
-                    b.Property<DateTime>("OrderTime");
+                    b.Property<DateTime>("OrderDate");
 
-                    b.Property<decimal>("TotalAmount");
+                    b.Property<int>("OrderStatus");
 
-                    b.Property<int?>("UserId");
+                    b.Property<int>("OrderTypeId");
+
+                    b.Property<int>("PartnerId");
+
+                    b.Property<int>("PaymentTypeId");
+
+                    b.Property<decimal>("TotalPrice");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("OrderTypeId");
+
+                    b.HasIndex("PartnerId");
+
+                    b.HasIndex("PaymentTypeId");
 
                     b.ToTable("Orders");
                 });
@@ -64,8 +102,6 @@ namespace DAL.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("OrderId");
-
-                    b.Property<int>("ProductCount");
 
                     b.Property<int>("ProductId");
 
@@ -78,21 +114,46 @@ namespace DAL.Migrations
                     b.ToTable("OrderProducts");
                 });
 
+            modelBuilder.Entity("Entity.OrderType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OrderTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "",
+                            Name = "HERE"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "",
+                            Name = "AWAY"
+                        });
+                });
+
             modelBuilder.Entity("Entity.Partner", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Address")
+                    b.Property<string>("AssociateAddress")
                         .IsRequired();
 
-                    b.Property<string>("BannerUrl")
+                    b.Property<string>("AssociateName")
                         .IsRequired();
 
-                    b.Property<string>("Name")
-                        .IsRequired();
-
-                    b.Property<string>("SiteUrl")
+                    b.Property<string>("AssociateUrl")
                         .IsRequired();
 
                     b.HasKey("Id");
@@ -100,21 +161,38 @@ namespace DAL.Migrations
                     b.ToTable("Partners");
                 });
 
-            modelBuilder.Entity("Entity.Permission", b =>
+            modelBuilder.Entity("Entity.PaymentType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Name")
-                        .IsRequired();
+                    b.Property<string>("Description");
 
-                    b.Property<int?>("UserId");
+                    b.Property<string>("Name");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.ToTable("PaymentTypes");
 
-                    b.ToTable("Permissions");
+                    b.HasData(
+                        new
+                        {
+                            Id = 3,
+                            Description = "",
+                            Name = "CASH"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "",
+                            Name = "MOBILE"
+                        },
+                        new
+                        {
+                            Id = 1,
+                            Description = "",
+                            Name = "CARD"
+                        });
                 });
 
             modelBuilder.Entity("Entity.Product", b =>
@@ -122,15 +200,18 @@ namespace DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<short>("AwayOrderAvailable")
+                        .HasColumnType("BIT(1)");
+
                     b.Property<int>("CategoryId");
 
-                    b.Property<bool>("IsInStock");
+                    b.Property<short>("IsInStock")
+                        .HasColumnType("BIT(1)");
 
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<string>("ProductVolumeUnit")
-                        .IsRequired();
+                    b.Property<string>("ProductVolumeUnit");
 
                     b.Property<double>("Rating");
 
@@ -150,92 +231,322 @@ namespace DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int?>("ContentId");
+
                     b.Property<string>("Name")
                         .IsRequired();
 
+                    b.Property<int>("PartnerId");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ContentId")
+                        .IsUnique();
+
+                    b.HasIndex("PartnerId");
 
                     b.ToTable("ProductCategories");
                 });
 
-            modelBuilder.Entity("Entity.Role", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(85);
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(85);
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasName("RoleNameIndex");
+
+                    b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "2528f438-1362-4223-bd86-c221a3a56c8c",
+                            ConcurrencyStamp = "4d0ab2d8-c2be-4e57-af5e-c56bb49e79f8",
+                            Name = "Administrator",
+                            NormalizedName = "ADMINISTRATOR"
+                        },
+                        new
+                        {
+                            Id = "6b0884e5-4a54-4f24-8061-dea145f1ffa7",
+                            ConcurrencyStamp = "7ba47540-8fc3-4f43-be41-b01e1b7a9b9b",
+                            Name = "Manager",
+                            NormalizedName = "MANAGER"
+                        },
+                        new
+                        {
+                            Id = "62e35a76-83ad-4540-bb53-93aa8f7d9ba9",
+                            ConcurrencyStamp = "960b77e5-f8f4-4bc3-b881-c342353ccdfc",
+                            Name = "AssitantManager",
+                            NormalizedName = "ASSISTANTMANAGER"
+                        },
+                        new
+                        {
+                            Id = "308ebf8c-96e0-4566-ae5c-1a4dd3a1262c",
+                            ConcurrencyStamp = "8e2a8c60-6f1b-4ff6-bc0d-19ac47e859e4",
+                            Name = "KitchenStaff",
+                            NormalizedName = "KITCHENSTAFF"
+                        },
+                        new
+                        {
+                            Id = "29a53ef2-1d0b-4c64-b12f-65f9812c964c",
+                            ConcurrencyStamp = "402cf6f2-8166-4e47-bed8-ad9a6984144e",
+                            Name = "Waitstaff",
+                            NormalizedName = "WAITSTAFF"
+                        },
+                        new
+                        {
+                            Id = "40c848c0-cf5b-4439-ae49-ebf83f2644e6",
+                            ConcurrencyStamp = "34f16313-1c59-4385-aa45-4b5d39c38e2b",
+                            Name = "Cashier",
+                            NormalizedName = "CASHIER"
+                        },
+                        new
+                        {
+                            Id = "dfc3bd02-f3e6-41a7-9f47-56791e83f091",
+                            ConcurrencyStamp = "9fd4a46c-bd03-4fcc-98d7-7164a81cbaf7",
+                            Name = "Customer",
+                            NormalizedName = "CUSTOMER"
+                        });
                 });
 
-            modelBuilder.Entity("Entity.RolePermission", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(85);
 
-                    b.Property<int>("PermissionId");
+                    b.Property<string>("ClaimType");
 
-                    b.Property<int>("RoleId");
+                    b.Property<string>("ClaimValue");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasMaxLength(85);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PermissionId");
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("RolePermissions");
+                    b.ToTable("AspNetRoleClaims");
                 });
 
-            modelBuilder.Entity("Entity.User", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(85);
+
+                    b.Property<int>("AccessFailedCount");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256);
+
+                    b.Property<short>("EmailConfirmed")
+                        .HasColumnType("BIT(1)");
+
+                    b.Property<short>("LockoutEnabled")
+                        .HasColumnType("BIT(1)");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(85);
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(85);
+
+                    b.Property<string>("PasswordHash");
+
+                    b.Property<string>("PhoneNumber");
+
+                    b.Property<short>("PhoneNumberConfirmed")
+                        .HasColumnType("BIT(1)");
+
+                    b.Property<string>("SecurityStamp");
+
+                    b.Property<short>("TwoFactorEnabled")
+                        .HasColumnType("BIT(1)");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasName("UserNameIndex");
+
+                    b.ToTable("AspNetUsers");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(85);
+
+                    b.Property<string>("ClaimType");
+
+                    b.Property<string>("ClaimValue");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(85);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(85);
+
+                    b.Property<string>("ProviderKey")
+                        .HasMaxLength(85);
+
+                    b.Property<string>("ProviderDisplayName");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(85);
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasMaxLength(85);
+
+                    b.Property<string>("RoleId")
+                        .HasMaxLength(85);
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasMaxLength(85);
+
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(85);
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(85);
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("Entity.Customer", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
                     b.Property<string>("Address");
 
-                    b.Property<int>("Age");
+                    b.Property<int?>("ProfilePhotoId");
 
-                    b.Property<DateTime>("BirthDate");
+                    b.HasIndex("ProfilePhotoId")
+                        .IsUnique();
 
-                    b.Property<string>("Email")
-                        .IsRequired();
+                    b.HasDiscriminator().HasValue("Customer");
+                });
 
-                    b.Property<string>("Name")
-                        .IsRequired();
+            modelBuilder.Entity("Entity.PartnerUser", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
-                    b.Property<string>("Password")
-                        .IsRequired();
+                    b.Property<int>("PartnerId");
 
-                    b.Property<string>("PhotoUrl");
+                    b.HasIndex("PartnerId");
 
-                    b.Property<int?>("RoleId");
-
-                    b.Property<string>("Surname")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("Users");
+                    b.HasDiscriminator().HasValue("PartnerUser");
                 });
 
             modelBuilder.Entity("Entity.Comment", b =>
                 {
-                    b.HasOne("Entity.User", "User")
+                    b.HasOne("Entity.Customer", "Customer")
                         .WithMany("Comments")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Entity.Product", "Product")
+                        .WithMany("Comments")
+                        .HasForeignKey("ProductId");
+                });
+
+            modelBuilder.Entity("Entity.Content", b =>
+                {
+                    b.HasOne("Entity.Partner", "Partner")
+                        .WithMany("Contents")
+                        .HasForeignKey("PartnerId");
+
+                    b.HasOne("Entity.Product", "Product")
+                        .WithMany("Contents")
+                        .HasForeignKey("ProductId");
                 });
 
             modelBuilder.Entity("Entity.Order", b =>
                 {
-                    b.HasOne("Entity.User")
+                    b.HasOne("Entity.Customer")
                         .WithMany("Orders")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("CustomerId");
+
+                    b.HasOne("Entity.OrderType", "OrderType")
+                        .WithMany("Orders")
+                        .HasForeignKey("OrderTypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Entity.Partner", "Partner")
+                        .WithMany("Orders")
+                        .HasForeignKey("PartnerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Entity.PaymentType", "PaymentType")
+                        .WithMany("Orders")
+                        .HasForeignKey("PaymentTypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Entity.OrderProduct", b =>
@@ -251,13 +562,6 @@ namespace DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Entity.Permission", b =>
-                {
-                    b.HasOne("Entity.User")
-                        .WithMany("Permissions")
-                        .HasForeignKey("UserId");
-                });
-
             modelBuilder.Entity("Entity.Product", b =>
                 {
                     b.HasOne("Entity.ProductCategory", "Category")
@@ -266,24 +570,76 @@ namespace DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Entity.RolePermission", b =>
+            modelBuilder.Entity("Entity.ProductCategory", b =>
                 {
-                    b.HasOne("Entity.Permission", "Permission")
-                        .WithMany("RolePermissions")
-                        .HasForeignKey("PermissionId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.HasOne("Entity.Content", "Content")
+                        .WithOne("ProductCategory")
+                        .HasForeignKey("Entity.ProductCategory", "ContentId");
 
-                    b.HasOne("Entity.Role", "Role")
-                        .WithMany("RolePermissions")
+                    b.HasOne("Entity.Partner", "Partner")
+                        .WithMany("ProductCategories")
+                        .HasForeignKey("PartnerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
+                        .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Entity.User", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Entity.Role", "Role")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
                         .WithMany()
-                        .HasForeignKey("RoleId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Entity.Customer", b =>
+                {
+                    b.HasOne("Entity.Content", "ProfilePhoto")
+                        .WithOne("Customer")
+                        .HasForeignKey("Entity.Customer", "ProfilePhotoId");
+                });
+
+            modelBuilder.Entity("Entity.PartnerUser", b =>
+                {
+                    b.HasOne("Entity.Partner", "Partner")
+                        .WithMany("Users")
+                        .HasForeignKey("PartnerId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }
