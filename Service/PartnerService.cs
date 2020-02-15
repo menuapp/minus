@@ -55,5 +55,20 @@ namespace Service
         {
             throw new NotImplementedException();
         }
+
+        public IEnumerable<PartnerDomain> GetAllEagerly()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<PartnerDomain> GetManyEagerly(Expression<Func<PartnerDomain, bool>> where)
+        {
+            throw new NotImplementedException();
+        }
+
+        public PartnerDomain GetByIdEagerly(int id)
+        {
+            return mapper.Map<PartnerDomain>(partnerRepository.GetByIdEagerly(id));
+        }
     }
 }

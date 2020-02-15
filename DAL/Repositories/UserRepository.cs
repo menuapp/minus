@@ -10,28 +10,23 @@ using System.Text;
 
 namespace DAL.Repositories
 {
-    public class UserRepository : RepositoryBase<Customer>, IUserRepository, IRepositoryEager<Customer>
+    public class UserRepository : RepositoryBase<ApplicationUser, string>, IUserRepository, IRepositoryEager<ApplicationUser, string>
     {
         public UserRepository(MinusContext context) : base(context)
         {
         }
 
-        public IEnumerable<Customer> GetAllEagerly()
+        public IEnumerable<ApplicationUser> GetAllEagerly()
         {
             throw new NotImplementedException();
         }
 
-        public Customer GetByIdEagerly(int id)
+        public ApplicationUser GetByIdEagerly(string id)
         {
             throw new NotImplementedException();
         }
 
-        public Customer GetByIdEagerly(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Customer> GetManyEagerly(Expression<Func<Customer, bool>> where)
+        public IEnumerable<ApplicationUser> GetManyEagerly(Expression<Func<ApplicationUser, bool>> where)
         {
             throw new NotImplementedException();
         }

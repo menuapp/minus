@@ -31,6 +31,13 @@ namespace AdminUI.Controllers
             return View();
         }
 
+        public IActionResult Details(int id)
+        {
+            var partner = partnerService.GetByIdEagerly(id);
+            var model = mapper.Map<PartnerViewModel>(partner);
+            return View(model);
+        }
+
         [HttpPost]
         public IActionResult Create(PartnerViewModel partnerViewModel)
         {
@@ -40,6 +47,11 @@ namespace AdminUI.Controllers
             }
 
             return RedirectToAction("index");
+        }
+
+        public IActionResult Edit()
+        {
+            return View();
         }
     }
 }

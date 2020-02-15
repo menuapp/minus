@@ -5,13 +5,13 @@ using System.Text;
 
 namespace DAL.Interfaces
 {
-    public interface IRepository<T>
+    public interface IRepository<T, Tid>
     {
         void Add(T entity);
         void Update(T entity);
         bool Delete(T entity);
 
-        T GetById(int id);
+        T GetById(Tid id);
         IEnumerable<T> GetAll();
 
         IEnumerable<T> GetMany(Expression<Func<T, bool>> where);

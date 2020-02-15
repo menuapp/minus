@@ -32,7 +32,7 @@ namespace Service
 
         public bool Add(UserDomain userToCreate)
         {
-            Customer newUser = mapper.Map<UserDomain, Customer>(userToCreate);
+            ApplicationUser newUser = mapper.Map<UserDomain, ApplicationUser>(userToCreate);
 
             try
             {
@@ -49,19 +49,19 @@ namespace Service
             return true;
         }
 
-        public UserDomain GetById(int id)
+        public UserDomain GetById(string id)
         {
-            return mapper.Map<Customer, UserDomain>(userRepository.GetById(id));
+            return mapper.Map<ApplicationUser, UserDomain>(userRepository.GetById(id));
         }
 
         public bool Delete(UserDomain userDomain)
         {
-            return userRepository.Delete(mapper.Map<UserDomain, Customer>(userDomain));
+            return userRepository.Delete(mapper.Map<UserDomain, ApplicationUser>(userDomain));
         }
 
         public void Update(UserDomain userDomain)
         {
-            userRepository.Update(mapper.Map<UserDomain, Customer>(userDomain));
+            userRepository.Update(mapper.Map<UserDomain, ApplicationUser>(userDomain));
         }
 
         public IEnumerable<UserDomain> GetMany(Expression<Func<UserDomain, bool>> where)

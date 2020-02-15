@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace DAL.Interfaces
+namespace Service.Interfaces
 {
-    public interface IRepositoryEager<T,Tid>
+    public interface IServiceEager<T, Tid>
     {
         IEnumerable<T> GetAllEagerly();
         IEnumerable<T> GetManyEagerly(Expression<Func<T, bool>> where);

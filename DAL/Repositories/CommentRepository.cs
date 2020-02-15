@@ -10,7 +10,7 @@ using System.Text;
 
 namespace DAL.Repositories
 {
-    public class CommentRepository : RepositoryBase<Comment>, IRepositoryEager<Comment>
+    public class CommentRepository : RepositoryBase<Comment, int>, IRepositoryEager<Comment, int>
     {
         public CommentRepository(MinusContext context) : base(context)
         {

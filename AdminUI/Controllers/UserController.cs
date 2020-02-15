@@ -25,7 +25,6 @@ namespace AdminUI.Controllers
             this.userService = userService;
         }
 
-
         public IActionResult Index()
         {
             List<UserViewModel> userViewModels = mapper.Map<List<UserViewModel>>(userService.GetAll().ToList());
@@ -35,7 +34,7 @@ namespace AdminUI.Controllers
         [Authorize(Policy = "CreateAdminUserPolicy")]
         public IActionResult Create()
         {
-            return View();
+            return RedirectToPage("/Account/Register", new { area = "Identity" });
         }
         [Authorize(Policy = "CreateAdminUserPolicy")]
         [HttpPost]
@@ -49,20 +48,21 @@ namespace AdminUI.Controllers
             return View();
         }
 
-        //public IActionResult Details(string id)
-        //{
-        //    return View(mapper.Map<UserDomain, UserViewModel>(userService.GetById(id)));
-        //}
+        public IActionResult Details(string id)
+        {
+            return View(mapper.Map<UserDomain, UserViewModel>(userService.GetById(id)));
+        }
 
-        //[HttpGet]
-        //public IActionResult Delete(string id)
-        //{
-        //    return View(mapper.Map<UserDomain, UserViewModel>(userService.GetById(id)));
-        //}
-        //public IActionResult Edit(string id)
-        //{
-        //    return View(mapper.Map<UserDomain, UserViewModel>(userService.GetById(id)));
-        //}
+        [HttpGet]
+        public IActionResult Delete(string id)
+        {
+            return View(mapper.Map<UserDomain, UserViewModel>(userService.GetById(id)));
+        }
+        public IActionResult Edit(string id)
+        {
+            return View(mapper.Map<UserDomain, UserViewModel>(userService.GetById(id)));
+        }
+
         [Authorize(Policy = "CreateAdminUserPolicy")]
         [HttpPost]
         public IActionResult Edit(UserViewModel userViewModel)

@@ -31,6 +31,9 @@ namespace AdminUI.Mapping
             CreateMap<ContentViewModel, ContentDomain>();
             CreateMap<ContentDomain, ContentViewModel>();
 
+            CreateMap<UserViewModel, UserDomain>();
+            CreateMap<UserDomain, UserViewModel>();
+
             CreateMap<OrderViewModel, OrderDomain>();
             CreateMap<OrderDomain, OrderViewModel>();
         }

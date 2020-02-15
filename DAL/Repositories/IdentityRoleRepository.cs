@@ -8,7 +8,7 @@ using System.Text;
 
 namespace DAL.Repositories
 {
-    public class IdentityRoleRepository : RepositoryBase<IdentityRole>, IIdentityRoleRepository
+    public class IdentityRoleRepository : RepositoryBase<IdentityRole, int>, IIdentityRoleRepository
     {
         public IdentityRoleRepository(MinusContext context) : base(context)
         {

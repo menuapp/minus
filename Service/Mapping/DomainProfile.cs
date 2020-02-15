@@ -19,8 +19,8 @@ namespace Service.Mapping
             CreateMap<ProductCategory, ProductCategoryDomain>();
             CreateMap<ProductCategoryDomain, ProductCategory>();
 
-            CreateMap<UserDomain, Customer>();
-            CreateMap<Customer, UserDomain>();
+            CreateMap<UserDomain, ApplicationUser>();
+            CreateMap<ApplicationUser, UserDomain>();
 
             CreateMap<ProductDomain, Product>();
             CreateMap<Product, ProductDomain>();
