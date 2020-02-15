@@ -12,6 +12,7 @@ namespace DAL.Context
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseMySQL(@"server=localhost;database=minus;user=root;password=admin");
+            //optionsBuilder.UseMySQL(@"server=94.138.197.30;database=minus;user=rootkivi;password=menu731548%Kivi!;");
         }
 
         public DbSet<PaymentType> PaymentTypes { get; set; }

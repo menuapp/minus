@@ -14,7 +14,8 @@ namespace Service.Domains
         public string ProductVolumeUnit { get; set; }
         public decimal UnitPrice { get; set; }
         public double Rating { get; set; }
-        public ProductCategoryDomain Category { get; set; }
+        //public ProductCategoryDomain Category { get; set; }
+        public int CategoryId { get; set; }
         public ICollection<CommentDomain> Comments { get; set; }
         public ICollection<ContentDomain> Contents { get; set; }
 

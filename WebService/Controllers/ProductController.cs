@@ -15,15 +15,17 @@ namespace WebService.Controllers
     public class ProductController : ControllerBase
     {
         private IProductService productService { get; set; }
-        private MinusContext context { get; set; }
-        public ProductController(IProductService productService)
+        private IProductCategoryService productCategoryService { get; set; }
+        public ProductController(IProductService productService, IProductCategoryService productCategoryService)
         {
             this.productService = productService;
+            this.productCategoryService = productCategoryService;
         }
 
         public IActionResult Get()
-        {       
-            return Ok(productService.GetAll());
+        {
+            var categories = productCategoryService.GetMany(cat => cat.PartnerId == 3);
+            return Ok(categories);
         }
     }
 }

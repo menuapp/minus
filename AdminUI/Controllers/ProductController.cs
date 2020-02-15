@@ -53,7 +53,8 @@ namespace AdminUI.Controllers
         {
             foreach (var content in productViewModel.Files)
             {
-                var fileName = Path.GetFileName(content.FileName);
+
+                var fileName = System.Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(content.FileName);
                 var upload = Path.Combine(hostingEnvironment.ContentRootPath, "Uploads");
                 var filePath = Path.Combine(upload, fileName);
 
@@ -69,11 +70,10 @@ namespace AdminUI.Controllers
                 });
             }
 
-            productViewModel.Category = mapper.Map<ProductCategoryViewModel>(productCategoryService.GetById(productViewModel.CategoryId));
             productService.Add(mapper.Map<ProductDomain>(productViewModel));
             return RedirectToAction("ListProducts", new
             {
-                id = productViewModel.Category.Id
+                id = productViewModel.CategoryId
             });
         }
 

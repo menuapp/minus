@@ -51,7 +51,7 @@ namespace Service
 
         public IEnumerable<ProductCategoryDomain> GetMany(Expression<Func<ProductCategoryDomain, bool>> where)
         {
-            return mapper.Map<IEnumerable<ProductCategoryDomain>>(productCategoryRepository.GetMany(mapper.Map<Expression<Func<ProductCategory, bool>>>(where)));
+            return mapper.Map<IEnumerable<ProductCategoryDomain>>(productCategoryRepository.GetManyEagerly(mapper.Map<Expression<Func<ProductCategory, bool>>>(where)));
         }
     }
 }

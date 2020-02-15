@@ -34,7 +34,7 @@ namespace DAL.Repositories
 
         public IEnumerable<ProductCategory> GetManyEagerly(Expression<Func<ProductCategory, bool>> where)
         {
-            return dbSet.Include(productCategory => productCategory.Products).Where(where).ToList();
+            return dbSet.Include(productCategory => productCategory.Products).ThenInclude(p => p.Contents).Where(where).ToList();
         }
     }
 }

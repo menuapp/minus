@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.Extensions.ExpressionMapping;
 using DAL.Context;
 using DAL.Infrastructure;
 using DAL.Interfaces;
@@ -46,7 +47,10 @@ namespace WebService
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
-            services.AddAutoMapper(typeof(DomainProfile));
+            services.AddAutoMapper(cfg =>
+            {
+                cfg.AddExpressionMapping();
+            }, typeof(DomainProfile));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -68,7 +72,7 @@ namespace WebService
 
             app.UseHttpsRedirection();
             app.UseMvc();
-           
+
         }
     }
 }
