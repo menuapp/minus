@@ -11,7 +11,7 @@ using Service.Interfaces;
 
 namespace AdminUI.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Policy = "PartnerOperationsPolicy")]
     public class PartnerController : Controller
     {
         IMapper mapper;

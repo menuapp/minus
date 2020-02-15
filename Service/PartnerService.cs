@@ -5,6 +5,7 @@ using Service.Domains;
 using Service.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace Service
@@ -46,6 +47,11 @@ namespace Service
         }
 
         public void Update(PartnerDomain domain)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<PartnerDomain> GetMany(Expression<Func<PartnerDomain, bool>> where)
         {
             throw new NotImplementedException();
         }

@@ -18,8 +18,6 @@ namespace AdminUI.Mapping
             CreateMap<ProductCategoryDomain, ProductCategoryViewModel>();
             CreateMap<ProductCategoryViewModel, ProductCategoryDomain>();//.ForMember(x => x.Id, opt => opt.Ignore());
 
-            CreateMap<UserViewModel, PartnerUserDomain>();
-            CreateMap<PartnerUserDomain, UserViewModel>();
 
             CreateMap<PartnerViewModel, PartnerDomain>();
             CreateMap<PartnerDomain, PartnerViewModel>();

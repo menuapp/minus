@@ -16,6 +16,244 @@ namespace DAL.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
 
+            modelBuilder.Entity("Entity.ApplicationUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(85);
+
+                    b.Property<int>("AccessFailedCount");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256);
+
+                    b.Property<short>("EmailConfirmed")
+                        .HasColumnType("BIT(1)");
+
+                    b.Property<short>("LockoutEnabled")
+                        .HasColumnType("BIT(1)");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(85);
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(85);
+
+                    b.Property<string>("PasswordHash");
+
+                    b.Property<string>("PhoneNumber");
+
+                    b.Property<short>("PhoneNumberConfirmed")
+                        .HasColumnType("BIT(1)");
+
+                    b.Property<int?>("ProfilePhotoId");
+
+                    b.Property<string>("SecurityStamp");
+
+                    b.Property<short>("TwoFactorEnabled")
+                        .HasColumnType("BIT(1)");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasName("UserNameIndex");
+
+                    b.HasIndex("ProfilePhotoId")
+                        .IsUnique();
+
+                    b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("Entity.Claim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Type");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Claims");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Type = "RoleType",
+                            Value = "Administrative Role"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Type = "RoleType",
+                            Value = "Management Role"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Type = "RoleType",
+                            Value = "Customer Role"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Type = "Administrative Role",
+                            Value = "SuperAdmin"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Type = "Administrative Role",
+                            Value = "Admin"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Type = "Management Role",
+                            Value = "Manager"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Type = "Management Role",
+                            Value = "AssistantManager"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Type = "Management Role",
+                            Value = "WaitStaff"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Type = "Management Role",
+                            Value = "KitchenStaff"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Type = "Management Role",
+                            Value = "Cashier"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Type = "Customer Role",
+                            Value = "Customer"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Type = "Create Customer",
+                            Value = ""
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Type = "Edit Customer",
+                            Value = ""
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Type = "Customer Details",
+                            Value = ""
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Type = "Delete Customer",
+                            Value = ""
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Type = "Add Product",
+                            Value = ""
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Type = "Edit Product",
+                            Value = ""
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Type = "Product Details",
+                            Value = ""
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Type = "Delete Product",
+                            Value = ""
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Type = "Add Partner",
+                            Value = ""
+                        },
+                        new
+                        {
+                            Id = 21,
+                            Type = "Delete Partner",
+                            Value = ""
+                        },
+                        new
+                        {
+                            Id = 22,
+                            Type = "Edit Partner",
+                            Value = ""
+                        },
+                        new
+                        {
+                            Id = 23,
+                            Type = "Partner Details",
+                            Value = ""
+                        },
+                        new
+                        {
+                            Id = 24,
+                            Type = "Add User",
+                            Value = ""
+                        },
+                        new
+                        {
+                            Id = 25,
+                            Type = "Delete User",
+                            Value = ""
+                        },
+                        new
+                        {
+                            Id = 26,
+                            Type = "Edit User",
+                            Value = ""
+                        },
+                        new
+                        {
+                            Id = 27,
+                            Type = "Partner User",
+                            Value = ""
+                        });
+                });
+
             modelBuilder.Entity("Entity.Comment", b =>
                 {
                     b.Property<int>("Id")
@@ -69,7 +307,7 @@ namespace DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CustomerId");
+                    b.Property<string>("ApplicationUserId");
 
                     b.Property<DateTime>("OrderDate");
 
@@ -85,7 +323,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("OrderTypeId");
 
@@ -270,57 +508,6 @@ namespace DAL.Migrations
                         .HasName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "2528f438-1362-4223-bd86-c221a3a56c8c",
-                            ConcurrencyStamp = "4d0ab2d8-c2be-4e57-af5e-c56bb49e79f8",
-                            Name = "Administrator",
-                            NormalizedName = "ADMINISTRATOR"
-                        },
-                        new
-                        {
-                            Id = "6b0884e5-4a54-4f24-8061-dea145f1ffa7",
-                            ConcurrencyStamp = "7ba47540-8fc3-4f43-be41-b01e1b7a9b9b",
-                            Name = "Manager",
-                            NormalizedName = "MANAGER"
-                        },
-                        new
-                        {
-                            Id = "62e35a76-83ad-4540-bb53-93aa8f7d9ba9",
-                            ConcurrencyStamp = "960b77e5-f8f4-4bc3-b881-c342353ccdfc",
-                            Name = "AssitantManager",
-                            NormalizedName = "ASSISTANTMANAGER"
-                        },
-                        new
-                        {
-                            Id = "308ebf8c-96e0-4566-ae5c-1a4dd3a1262c",
-                            ConcurrencyStamp = "8e2a8c60-6f1b-4ff6-bc0d-19ac47e859e4",
-                            Name = "KitchenStaff",
-                            NormalizedName = "KITCHENSTAFF"
-                        },
-                        new
-                        {
-                            Id = "29a53ef2-1d0b-4c64-b12f-65f9812c964c",
-                            ConcurrencyStamp = "402cf6f2-8166-4e47-bed8-ad9a6984144e",
-                            Name = "Waitstaff",
-                            NormalizedName = "WAITSTAFF"
-                        },
-                        new
-                        {
-                            Id = "40c848c0-cf5b-4439-ae49-ebf83f2644e6",
-                            ConcurrencyStamp = "34f16313-1c59-4385-aa45-4b5d39c38e2b",
-                            Name = "Cashier",
-                            NormalizedName = "CASHIER"
-                        },
-                        new
-                        {
-                            Id = "dfc3bd02-f3e6-41a7-9f47-56791e83f091",
-                            ConcurrencyStamp = "9fd4a46c-bd03-4fcc-98d7-7164a81cbaf7",
-                            Name = "Customer",
-                            NormalizedName = "CUSTOMER"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -342,66 +529,6 @@ namespace DAL.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(85);
-
-                    b.Property<int>("AccessFailedCount");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256);
-
-                    b.Property<short>("EmailConfirmed")
-                        .HasColumnType("BIT(1)");
-
-                    b.Property<short>("LockoutEnabled")
-                        .HasColumnType("BIT(1)");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(85);
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(85);
-
-                    b.Property<string>("PasswordHash");
-
-                    b.Property<string>("PhoneNumber");
-
-                    b.Property<short>("PhoneNumberConfirmed")
-                        .HasColumnType("BIT(1)");
-
-                    b.Property<string>("SecurityStamp");
-
-                    b.Property<short>("TwoFactorEnabled")
-                        .HasColumnType("BIT(1)");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasName("UserNameIndex");
-
-                    b.ToTable("AspNetUsers");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -479,34 +606,16 @@ namespace DAL.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Entity.Customer", b =>
+            modelBuilder.Entity("Entity.ApplicationUser", b =>
                 {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
-
-                    b.Property<string>("Address");
-
-                    b.Property<int?>("ProfilePhotoId");
-
-                    b.HasIndex("ProfilePhotoId")
-                        .IsUnique();
-
-                    b.HasDiscriminator().HasValue("Customer");
-                });
-
-            modelBuilder.Entity("Entity.PartnerUser", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
-
-                    b.Property<int>("PartnerId");
-
-                    b.HasIndex("PartnerId");
-
-                    b.HasDiscriminator().HasValue("PartnerUser");
+                    b.HasOne("Entity.Content", "ProfilePhoto")
+                        .WithOne("Customer")
+                        .HasForeignKey("Entity.ApplicationUser", "ProfilePhotoId");
                 });
 
             modelBuilder.Entity("Entity.Comment", b =>
                 {
-                    b.HasOne("Entity.Customer", "Customer")
+                    b.HasOne("Entity.ApplicationUser", "Customer")
                         .WithMany("Comments")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -529,9 +638,9 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Entity.Order", b =>
                 {
-                    b.HasOne("Entity.Customer")
+                    b.HasOne("Entity.ApplicationUser")
                         .WithMany("Orders")
-                        .HasForeignKey("CustomerId");
+                        .HasForeignKey("ApplicationUserId");
 
                     b.HasOne("Entity.OrderType", "OrderType")
                         .WithMany("Orders")
@@ -592,7 +701,7 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
+                    b.HasOne("Entity.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -600,7 +709,7 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
+                    b.HasOne("Entity.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -613,7 +722,7 @@ namespace DAL.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
+                    b.HasOne("Entity.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -621,24 +730,9 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
+                    b.HasOne("Entity.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Entity.Customer", b =>
-                {
-                    b.HasOne("Entity.Content", "ProfilePhoto")
-                        .WithOne("Customer")
-                        .HasForeignKey("Entity.Customer", "ProfilePhotoId");
-                });
-
-            modelBuilder.Entity("Entity.PartnerUser", b =>
-                {
-                    b.HasOne("Entity.Partner", "Partner")
-                        .WithMany("Users")
-                        .HasForeignKey("PartnerId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

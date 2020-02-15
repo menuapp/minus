@@ -12,35 +12,36 @@ using Service.Interfaces;
 
 namespace AdminUI.Controllers
 {
-    [Authorize(Roles = "Administrator,Manager,ManagerAssistant")]
+    [Authorize(Roles = "Admin,SuperAdmin")]
+
     public class UserController : Controller
     {
         private readonly IMapper mapper;
-        private readonly IPartnerUserService partnerUserService;
+        private readonly IUserService userService;
 
-        public UserController(IPartnerUserService partnerUserService, IMapper mapper)
+        public UserController(IUserService userService, IMapper mapper)
         {
             this.mapper = mapper;
-            this.partnerUserService = partnerUserService;
+            this.userService = userService;
         }
 
-        [Authorize]
+
         public IActionResult Index()
         {
-            List<UserViewModel> userViewModels = mapper.Map<List<UserViewModel>>(partnerUserService.GetAll().ToList());
+            List<UserViewModel> userViewModels = mapper.Map<List<UserViewModel>>(userService.GetAll().ToList());
 
             return View(userViewModels);
         }
-
+        [Authorize(Policy = "CreateAdminUserPolicy")]
         public IActionResult Create()
         {
             return View();
         }
-
+        [Authorize(Policy = "CreateAdminUserPolicy")]
         [HttpPost]
         public IActionResult Create(UserViewModel userToCreate)
         {
-            if (ModelState.IsValid && partnerUserService.Add(mapper.Map<UserViewModel, PartnerUserDomain>(userToCreate)))
+            if (ModelState.IsValid && userService.Add(mapper.Map<UserViewModel, UserDomain>(userToCreate)))
             {
                 return RedirectToAction("index");
             }
@@ -48,26 +49,31 @@ namespace AdminUI.Controllers
             return View();
         }
 
-        public IActionResult Details(string id)
-        {
-            return View(mapper.Map<PartnerUserDomain, UserViewModel>(partnerUserService.GetById(id)));
-        }
+        //public IActionResult Details(string id)
+        //{
+        //    return View(mapper.Map<UserDomain, UserViewModel>(userService.GetById(id)));
+        //}
 
-        [HttpGet]
-        public IActionResult Delete(string id)
-        {
-            return View(mapper.Map<PartnerUserDomain, UserViewModel>(partnerUserService.GetById(id)));
-        }
-        public IActionResult Edit(string id)
-        {
-            return View(mapper.Map<PartnerUserDomain, UserViewModel>(partnerUserService.GetById(id)));
-        }
-
+        //[HttpGet]
+        //public IActionResult Delete(string id)
+        //{
+        //    return View(mapper.Map<UserDomain, UserViewModel>(userService.GetById(id)));
+        //}
+        //public IActionResult Edit(string id)
+        //{
+        //    return View(mapper.Map<UserDomain, UserViewModel>(userService.GetById(id)));
+        //}
+        [Authorize(Policy = "CreateAdminUserPolicy")]
         [HttpPost]
         public IActionResult Edit(UserViewModel userViewModel)
         {
-            partnerUserService.Update(mapper.Map<UserViewModel, PartnerUserDomain>(userViewModel));
+            userService.Update(mapper.Map<UserViewModel, UserDomain>(userViewModel));
             return RedirectToAction("index");
+        }
+
+        public IActionResult Logout()
+        {
+            return RedirectToPage("/Account/Logout", new { area = "Identity" });
         }
     }
 }

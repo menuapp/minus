@@ -7,6 +7,7 @@ using Service.Domains;
 using Service.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace Service
@@ -61,6 +62,11 @@ namespace Service
         public void Update(UserDomain userDomain)
         {
             userRepository.Update(mapper.Map<UserDomain, Customer>(userDomain));
+        }
+
+        public IEnumerable<UserDomain> GetMany(Expression<Func<UserDomain, bool>> where)
+        {
+            throw new NotImplementedException();
         }
     }
 }

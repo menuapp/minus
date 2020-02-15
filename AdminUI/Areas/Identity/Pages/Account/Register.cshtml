@@ -17,11 +17,14 @@
                 <input asp-for="Input.Email" class="form-control" />
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
-            @*<select asp-for="Input.PartnerId" asp-items="" class="form-control" />*@
-            <label asp-for="Input.PartnerId"></label>
-            @Html.DropDownListFor(model => model.Input.PartnerId, new SelectList((List<SelectListItem>)ViewData["Partners"], "Value", "Text"), new { @class = "form-control" })
-            <label asp-for="Input.RoleId"></label>
-            @Html.DropDownListFor(model => model.Input.RoleId, new SelectList((List<SelectListItem>)ViewData["Roles"], "Value", "Text"), new { @class = "form-control" })
+            <div class="form-group">
+                <label asp-for="Input.RoleId"></label>
+                <select asp-for="Input.RoleId" asp-items="Model.Input.Roles" class="form-control" onchange="update(event)"></select>
+            </div>
+            <div class="form-group" id="partnerid">
+                <label asp-for="Input.PartnerId"></label>
+                <select asp-for="Input.PartnerId" asp-items="Model.Input.Partners" class="form-control"></select>
+            </div>
             <div class="form-group">
                 <label asp-for="Input.Password"></label>
                 <input asp-for="Input.Password" class="form-control" />
@@ -36,7 +39,21 @@
         </form>
     </div>
 </div>
+<script>
+    function update(event) {
+        let partnerInput = document.querySelector("#partnerid");
+        if (event.target.innerText == "Customer" || event.target.innerText == "Admin") {
+            partnerInput.style.display = "none";
+        } else {
+            partnerInput.style.display = "block";
+        }
+    }
 
+    //update partner select on load
+    let roleInput = {};
+    roleInput.target = document.querySelector("#Input_RoleId");
+    update(roleInput);
+</script>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

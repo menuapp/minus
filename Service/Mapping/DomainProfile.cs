@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Service.Domains;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace Service.Mapping
@@ -26,9 +27,6 @@ namespace Service.Mapping
 
             CreateMap<PartnerDomain, Partner>();
             CreateMap<Partner, PartnerDomain>();
-
-            CreateMap<PartnerUserDomain, PartnerUser>();
-            CreateMap<PartnerUser, PartnerUserDomain>();
 
             CreateMap<Content, ContentDomain>();
             CreateMap<ContentDomain, Content>();

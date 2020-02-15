@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace DAL.Context
 {
-    public class MinusContext : IdentityDbContext<IdentityUser>
+    public class MinusContext : IdentityDbContext<ApplicationUser>
     {
         //public MinusContext(DbContextOptions<MinusContext> options) : base(options) { }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -23,19 +23,17 @@ namespace DAL.Context
         public DbSet<Partner> Partners { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
-
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<IdentityUser>(entity => entity.Property(m => m.Id).HasMaxLength(85));
-            modelBuilder.Entity<IdentityUser>(entity => entity.Property(m => m.NormalizedEmail).HasMaxLength(85));
-            modelBuilder.Entity<IdentityUser>(entity => entity.Property(m => m.EmailConfirmed).HasColumnType("BIT(1)"));
-            modelBuilder.Entity<IdentityUser>(entity => entity.Property(m => m.PhoneNumberConfirmed).HasColumnType("BIT(1)"));
-            modelBuilder.Entity<IdentityUser>(entity => entity.Property(m => m.TwoFactorEnabled).HasColumnType("BIT(1)"));
-            modelBuilder.Entity<IdentityUser>(entity => entity.Property(m => m.LockoutEnabled).HasColumnType("BIT(1)"));
-            modelBuilder.Entity<IdentityUser>(entity => entity.Property(m => m.NormalizedUserName).HasMaxLength(85));
+            modelBuilder.Entity<ApplicationUser>(entity => entity.Property(m => m.Id).HasMaxLength(85));
+            modelBuilder.Entity<ApplicationUser>(entity => entity.Property(m => m.NormalizedEmail).HasMaxLength(85));
+            modelBuilder.Entity<ApplicationUser>(entity => entity.Property(m => m.EmailConfirmed).HasColumnType("BIT(1)"));
+            modelBuilder.Entity<ApplicationUser>(entity => entity.Property(m => m.PhoneNumberConfirmed).HasColumnType("BIT(1)"));
+            modelBuilder.Entity<ApplicationUser>(entity => entity.Property(m => m.TwoFactorEnabled).HasColumnType("BIT(1)"));
+            modelBuilder.Entity<ApplicationUser>(entity => entity.Property(m => m.LockoutEnabled).HasColumnType("BIT(1)"));
+            modelBuilder.Entity<ApplicationUser>(entity => entity.Property(m => m.NormalizedUserName).HasMaxLength(85));
 
             modelBuilder.Entity<IdentityRole>(entity => entity.Property(m => m.Id).HasMaxLength(85));
             modelBuilder.Entity<IdentityRole>(entity => entity.Property(m => m.NormalizedName).HasMaxLength(85));
@@ -56,9 +54,6 @@ namespace DAL.Context
             modelBuilder.Entity<IdentityRoleClaim<string>>(entity => entity.Property(m => m.Id).HasMaxLength(85));
             modelBuilder.Entity<IdentityRoleClaim<string>>(entity => entity.Property(m => m.RoleId).HasMaxLength(85));
 
-            //modelBuilder.Entity<Customer>().ToTable("Customers");
-            //modelBuilder.Entity<Partner>().ToTable("Partners");
-
             modelBuilder.Entity<PaymentType>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -75,11 +70,6 @@ namespace DAL.Context
                 entity.Property(e => e.AssociateAddress).IsRequired();
                 entity.Property(e => e.AssociateName).IsRequired();
                 entity.Property(e => e.AssociateUrl).IsRequired();
-            });
-
-            modelBuilder.Entity<PartnerUser>(entity =>
-            {
-                entity.HasOne(e => e.Partner).WithMany(src => src.Users).HasForeignKey(a => a.PartnerId).IsRequired();
             });
 
             modelBuilder.Entity<Comment>(entity =>
@@ -138,44 +128,6 @@ namespace DAL.Context
                 entity.Property(e => e.Name).IsRequired();
                 entity.HasOne(e => e.Content).WithOne(t => t.ProductCategory).HasForeignKey<ProductCategory>(a => a.ContentId);
             });
-
-            modelBuilder.Entity<IdentityRole>().HasData(
-                new IdentityRole
-                {
-                    Name = "Administrator",
-                    NormalizedName = "ADMINISTRATOR"
-                },
-                new IdentityRole
-                {
-                    Name = "Manager",
-                    NormalizedName = "MANAGER"
-                },
-                new IdentityRole
-                {
-                    Name = "AssitantManager",
-                    NormalizedName = "ASSISTANTMANAGER"
-                },
-                new IdentityRole
-                {
-                    Name = "KitchenStaff",
-                    NormalizedName = "KITCHENSTAFF"
-                },
-                new IdentityRole
-                {
-                    Name = "Waitstaff",
-                    NormalizedName = "WAITSTAFF"
-                },
-                new IdentityRole
-                {
-                    Name = "Cashier",
-                    NormalizedName = "CASHIER"
-                },
-                new IdentityRole
-                {
-                    Name = "Customer",
-                    NormalizedName = "CUSTOMER"
-                }
-                );
 
             var cashPayment = new PaymentType();
             var mobilePayment = new PaymentType();

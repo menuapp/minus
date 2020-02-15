@@ -8,9 +8,11 @@ using AdminUI.Models;
 using Service;
 using Service.Domains;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AdminUI.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         public IMapper mapper { get; set; }

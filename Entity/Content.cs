@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -12,7 +13,7 @@ namespace Entity
         public int? PartnerId { get; set; }
         public Product Product { get; set; }
         public Partner Partner { get; set; }
-        public Customer Customer { get; set; }
+        public ApplicationUser Customer { get; set; }
         public ProductCategory ProductCategory { get; set; }
     }
 }

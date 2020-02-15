@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AdminUI.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,8 +15,9 @@ using Service.Interfaces;
 
 namespace AdminUI.Controllers
 {
+    [Authorize]
     public class ProductController : Controller
-    {
+    {   
         IMapper mapper;
         IProductService productService;
         IProductCategoryService productCategoryService;
