@@ -22,17 +22,30 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Claims",
+                name: "Counters",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySQL:AutoIncrement", true),
-                    Type = table.Column<string>(nullable: true),
-                    Value = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Claims", x => x.Id);
+                    table.PrimaryKey("PK_Counters", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrderStatuses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySQL:AutoIncrement", true),
+                    Name = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderStatuses", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -186,14 +199,27 @@ namespace DAL.Migrations
                     PartnerId = table.Column<int>(nullable: false),
                     OrderDate = table.Column<DateTime>(nullable: false),
                     TotalPrice = table.Column<decimal>(nullable: false),
-                    OrderStatus = table.Column<int>(nullable: false),
+                    OrderStatusId = table.Column<int>(nullable: false),
                     PaymentTypeId = table.Column<int>(nullable: false),
                     OrderTypeId = table.Column<int>(nullable: false),
-                    ApplicationUserId = table.Column<string>(nullable: true)
+                    CounterId = table.Column<int>(nullable: false),
+                    CustomerId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_Counters_CounterId",
+                        column: x => x.CounterId,
+                        principalTable: "Counters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Orders_OrderStatuses_OrderStatusId",
+                        column: x => x.OrderStatusId,
+                        principalTable: "OrderStatuses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Orders_OrderTypes_OrderTypeId",
                         column: x => x.OrderTypeId,
@@ -294,6 +320,7 @@ namespace DAL.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySQL:AutoIncrement", true),
                     PhysicalPath = table.Column<string>(nullable: false),
+                    RelativePath = table.Column<string>(nullable: true),
                     ProductId = table.Column<int>(nullable: true),
                     PartnerId = table.Column<int>(nullable: true)
                 },
@@ -321,7 +348,8 @@ namespace DAL.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySQL:AutoIncrement", true),
                     ProductId = table.Column<int>(nullable: false),
-                    OrderId = table.Column<int>(nullable: false)
+                    OrderId = table.Column<int>(nullable: false),
+                    Quantity = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -341,37 +369,16 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Claims",
-                columns: new[] { "Id", "Type", "Value" },
+                table: "OrderStatuses",
+                columns: new[] { "Id", "Description", "Name" },
                 values: new object[,]
                 {
-                    { 1, "RoleType", "Administrative Role" },
-                    { 27, "Partner User", "" },
-                    { 26, "Edit User", "" },
-                    { 25, "Delete User", "" },
-                    { 24, "Add User", "" },
-                    { 23, "Partner Details", "" },
-                    { 22, "Edit Partner", "" },
-                    { 21, "Delete Partner", "" },
-                    { 20, "Add Partner", "" },
-                    { 19, "Delete Product", "" },
-                    { 18, "Product Details", "" },
-                    { 17, "Edit Product", "" },
-                    { 15, "Delete Customer", "" },
-                    { 16, "Add Product", "" },
-                    { 13, "Edit Customer", "" },
-                    { 2, "RoleType", "Management Role" },
-                    { 3, "RoleType", "Customer Role" },
-                    { 4, "Administrative Role", "SuperAdmin" },
-                    { 5, "Administrative Role", "Admin" },
-                    { 14, "Customer Details", "" },
-                    { 7, "Management Role", "AssistantManager" },
-                    { 6, "Management Role", "Manager" },
-                    { 9, "Management Role", "KitchenStaff" },
-                    { 10, "Management Role", "Cashier" },
-                    { 11, "Customer Role", "Customer" },
-                    { 12, "Create Customer", "" },
-                    { 8, "Management Role", "WaitStaff" }
+                    { 1, "", "BASKET" },
+                    { 2, "", "CONFIRMED" },
+                    { 6, "", "CANCELLED" },
+                    { 3, "", "PREPARING" },
+                    { 4, "", "DELIVERY" },
+                    { 5, "", "COMPLETED" }
                 });
 
             migrationBuilder.InsertData(
@@ -388,8 +395,8 @@ namespace DAL.Migrations
                 columns: new[] { "Id", "Description", "Name" },
                 values: new object[,]
                 {
-                    { 2, "", "MOBILE" },
                     { 3, "", "CASH" },
+                    { 2, "", "MOBILE" },
                     { 1, "", "CARD" }
                 });
 
@@ -467,9 +474,19 @@ namespace DAL.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_ApplicationUserId",
+                name: "IX_Orders_CounterId",
                 table: "Orders",
-                column: "ApplicationUserId");
+                column: "CounterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_CustomerId",
+                table: "Orders",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_OrderStatusId",
+                table: "Orders",
+                column: "OrderStatusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_OrderTypeId",
@@ -551,9 +568,9 @@ namespace DAL.Migrations
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Orders_AspNetUsers_ApplicationUserId",
+                name: "FK_Orders_AspNetUsers_CustomerId",
                 table: "Orders",
-                column: "ApplicationUserId",
+                column: "CustomerId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
@@ -597,9 +614,6 @@ namespace DAL.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Claims");
-
-            migrationBuilder.DropTable(
                 name: "Comments");
 
             migrationBuilder.DropTable(
@@ -612,7 +626,13 @@ namespace DAL.Migrations
                 name: "Orders");
 
             migrationBuilder.DropTable(
+                name: "Counters");
+
+            migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "OrderStatuses");
 
             migrationBuilder.DropTable(
                 name: "OrderTypes");

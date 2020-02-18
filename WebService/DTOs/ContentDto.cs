@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AdminUI.Models
+namespace WebService.DTOs
 {
-    public class ContentViewModel
+    public class ContentDto
     {
-        public string PhysicalPath { get; set; }
         public string RelativePath { get; set; }
     }
 }

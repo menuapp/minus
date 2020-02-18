@@ -17,6 +17,7 @@ namespace DAL.Context
 
         public DbSet<PaymentType> PaymentTypes { get; set; }
         public DbSet<OrderType> OrderTypes { get; set; }
+        public DbSet<OrderStatus> OrderStatuses { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Content> Contents { get; set; }
@@ -24,6 +25,7 @@ namespace DAL.Context
         public DbSet<Partner> Partners { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
+        public DbSet<Counter> Counters { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -65,6 +67,17 @@ namespace DAL.Context
                 entity.HasKey(e => e.Id);
             });
 
+            modelBuilder.Entity<OrderStatus>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+            });
+
+            modelBuilder.Entity<Counter>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+            });
+
+
             modelBuilder.Entity<Partner>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -89,7 +102,9 @@ namespace DAL.Context
                 entity.HasOne(e => e.Partner).WithMany(src => src.Orders).HasForeignKey(a => a.PartnerId).IsRequired();
                 entity.Property(e => e.OrderDate).IsRequired();
                 entity.Property(e => e.TotalPrice).IsRequired();
-                entity.Property(e => e.OrderStatus).IsRequired();
+                entity.HasOne(e => e.Customer).WithMany(src => src.Orders).HasForeignKey(a => a.CustomerId);
+                entity.HasOne(e => e.Counter).WithMany(src => src.Orders).HasForeignKey(a => a.CounterId);
+                entity.HasOne(e => e.OrderStatus).WithMany(src => src.Orders).HasForeignKey(a => a.OrderStatusId).IsRequired();
                 entity.HasOne(e => e.PaymentType).WithMany(src => src.Orders).HasForeignKey(a => a.PaymentTypeId).IsRequired();
                 entity.HasOne(e => e.OrderType).WithMany(src => src.Orders).HasForeignKey(a => a.OrderTypeId).IsRequired();
             });
@@ -148,6 +163,22 @@ namespace DAL.Context
             awayOrder = OrderTypeEnum.AWAY;
 
             modelBuilder.Entity<OrderType>().HasData(hereOrder, awayOrder);
+
+            var basket = new OrderStatus();
+            var confirmed = new OrderStatus();
+            var canceled = new OrderStatus();
+            var preparing = new OrderStatus();
+            var delivery = new OrderStatus();
+            var completed = new OrderStatus();
+
+            basket = OrderStatusEnum.BASKET;
+            confirmed = OrderStatusEnum.CONFIRMED;
+            canceled = OrderStatusEnum.CANCELLED;
+            preparing = OrderStatusEnum.PREPARING;
+            delivery = OrderStatusEnum.DELIVERY;
+            completed = OrderStatusEnum.COMPLETED;
+
+            modelBuilder.Entity<OrderStatus>().HasData(basket, confirmed, canceled, preparing, delivery, completed);
         }
     }
 }

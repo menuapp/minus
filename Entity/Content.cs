@@ -9,6 +9,7 @@ namespace Entity
     {
         public int Id { get; set; }
         public string PhysicalPath { get; set; }
+        public string RelativePath { get; set; }
         public int? ProductId { get; set; }
         public int? PartnerId { get; set; }
         public Product Product { get; set; }

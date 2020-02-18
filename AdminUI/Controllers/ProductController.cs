@@ -55,7 +55,7 @@ namespace AdminUI.Controllers
             {
 
                 var fileName = System.Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(content.FileName);
-                var upload = Path.Combine(hostingEnvironment.ContentRootPath, "Uploads");
+                var upload = Path.Combine(hostingEnvironment.WebRootPath + "/", "uploads");
                 var filePath = Path.Combine(upload, fileName);
 
                 using (var fileStream = new FileStream(filePath, FileMode.CreateNew))
@@ -66,6 +66,7 @@ namespace AdminUI.Controllers
                 productViewModel.Contents = new List<ContentViewModel>();
                 productViewModel.Contents.Add(new ContentViewModel
                 {
+                    RelativePath = HttpContext.Request.Host + HttpContext.Request.PathBase + "/uploads/" + fileName ,
                     PhysicalPath = filePath
                 });
             }

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(MinusContext))]
-    [Migration("20200210194339_InitializeDb")]
+    [Migration("20200217222459_InitializeDb")]
     partial class InitializeDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -78,184 +78,6 @@ namespace DAL.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("Entity.Claim", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Type");
-
-                    b.Property<string>("Value");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Claims");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Type = "RoleType",
-                            Value = "Administrative Role"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Type = "RoleType",
-                            Value = "Management Role"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Type = "RoleType",
-                            Value = "Customer Role"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Type = "Administrative Role",
-                            Value = "SuperAdmin"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Type = "Administrative Role",
-                            Value = "Admin"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Type = "Management Role",
-                            Value = "Manager"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Type = "Management Role",
-                            Value = "AssistantManager"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Type = "Management Role",
-                            Value = "WaitStaff"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Type = "Management Role",
-                            Value = "KitchenStaff"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Type = "Management Role",
-                            Value = "Cashier"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Type = "Customer Role",
-                            Value = "Customer"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Type = "Create Customer",
-                            Value = ""
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Type = "Edit Customer",
-                            Value = ""
-                        },
-                        new
-                        {
-                            Id = 14,
-                            Type = "Customer Details",
-                            Value = ""
-                        },
-                        new
-                        {
-                            Id = 15,
-                            Type = "Delete Customer",
-                            Value = ""
-                        },
-                        new
-                        {
-                            Id = 16,
-                            Type = "Add Product",
-                            Value = ""
-                        },
-                        new
-                        {
-                            Id = 17,
-                            Type = "Edit Product",
-                            Value = ""
-                        },
-                        new
-                        {
-                            Id = 18,
-                            Type = "Product Details",
-                            Value = ""
-                        },
-                        new
-                        {
-                            Id = 19,
-                            Type = "Delete Product",
-                            Value = ""
-                        },
-                        new
-                        {
-                            Id = 20,
-                            Type = "Add Partner",
-                            Value = ""
-                        },
-                        new
-                        {
-                            Id = 21,
-                            Type = "Delete Partner",
-                            Value = ""
-                        },
-                        new
-                        {
-                            Id = 22,
-                            Type = "Edit Partner",
-                            Value = ""
-                        },
-                        new
-                        {
-                            Id = 23,
-                            Type = "Partner Details",
-                            Value = ""
-                        },
-                        new
-                        {
-                            Id = 24,
-                            Type = "Add User",
-                            Value = ""
-                        },
-                        new
-                        {
-                            Id = 25,
-                            Type = "Delete User",
-                            Value = ""
-                        },
-                        new
-                        {
-                            Id = 26,
-                            Type = "Edit User",
-                            Value = ""
-                        },
-                        new
-                        {
-                            Id = 27,
-                            Type = "Partner User",
-                            Value = ""
-                        });
-                });
-
             modelBuilder.Entity("Entity.Comment", b =>
                 {
                     b.Property<int>("Id")
@@ -295,6 +117,8 @@ namespace DAL.Migrations
 
                     b.Property<int?>("ProductId");
 
+                    b.Property<string>("RelativePath");
+
                     b.HasKey("Id");
 
                     b.HasIndex("PartnerId");
@@ -304,16 +128,30 @@ namespace DAL.Migrations
                     b.ToTable("Contents");
                 });
 
+            modelBuilder.Entity("Entity.Counter", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Counters");
+                });
+
             modelBuilder.Entity("Entity.Order", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ApplicationUserId");
+                    b.Property<int>("CounterId");
+
+                    b.Property<string>("CustomerId");
 
                     b.Property<DateTime>("OrderDate");
 
-                    b.Property<int>("OrderStatus");
+                    b.Property<int>("OrderStatusId");
 
                     b.Property<int>("OrderTypeId");
 
@@ -325,7 +163,11 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("CounterId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("OrderStatusId");
 
                     b.HasIndex("OrderTypeId");
 
@@ -345,6 +187,8 @@ namespace DAL.Migrations
 
                     b.Property<int>("ProductId");
 
+                    b.Property<int>("Quantity");
+
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
@@ -352,6 +196,58 @@ namespace DAL.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("OrderProducts");
+                });
+
+            modelBuilder.Entity("Entity.OrderStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OrderStatuses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "",
+                            Name = "BASKET"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "",
+                            Name = "CONFIRMED"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Description = "",
+                            Name = "CANCELLED"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "",
+                            Name = "PREPARING"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "",
+                            Name = "DELIVERY"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Description = "",
+                            Name = "COMPLETED"
+                        });
                 });
 
             modelBuilder.Entity("Entity.OrderType", b =>
@@ -640,9 +536,19 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Entity.Order", b =>
                 {
-                    b.HasOne("Entity.ApplicationUser")
+                    b.HasOne("Entity.Counter", "Counter")
                         .WithMany("Orders")
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("CounterId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Entity.ApplicationUser", "Customer")
+                        .WithMany("Orders")
+                        .HasForeignKey("CustomerId");
+
+                    b.HasOne("Entity.OrderStatus", "OrderStatus")
+                        .WithMany("Orders")
+                        .HasForeignKey("OrderStatusId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Entity.OrderType", "OrderType")
                         .WithMany("Orders")

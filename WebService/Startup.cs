@@ -19,6 +19,7 @@ using Microsoft.Extensions.Options;
 using Service;
 using Service.Interfaces;
 using Service.Mapping;
+using WebService.Mapping;
 
 namespace WebService
 {
@@ -39,7 +40,9 @@ namespace WebService
             services.AddTransient<IIdentityRoleRepository, IdentityRoleRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IBasketRepository, BasketRepository>();
             //REGISTER SERVICE LAYER
+            services.AddTransient<IBasketService, BasketService>();
             services.AddTransient<IProductCategoryService, ProductCategoryService>();
             services.AddTransient<IIdentityRoleService, IdentityRoleService>();
             services.AddTransient<IProductService, ProductService>();
@@ -50,7 +53,7 @@ namespace WebService
             services.AddAutoMapper(cfg =>
             {
                 cfg.AddExpressionMapping();
-            }, typeof(DomainProfile));
+            }, typeof(DtoProfile), typeof(DomainProfile));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
