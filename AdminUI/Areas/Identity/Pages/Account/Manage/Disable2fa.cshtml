@@ -4,7 +4,9 @@
     ViewData["Title"] = "Disable two-factor authentication (2FA)";
     ViewData["ActivePage"] = ManageNavPages.TwoFactorAuthentication;
 }
-
+@{
+    Layout = "_LoginLayout";
+}
 <partial name="_StatusMessage" for="StatusMessage" />
 <h1>@ViewData["Title"]</h1>
 

@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="~/css/all.min.css">
+    <link rel="icon" type="image/png" href="~/favicon.ico" />
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- overlayScrollbars -->
@@ -31,13 +32,17 @@
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
+                <li class="nav-item" style="padding-right:1.5rem;">
+                    <a asp-area="Identity" asp-page="/Account/Manage/Index" class="nav-link">
+                        <i class="fas fa-user-circle"></i>&nbsp;Account
+                    </a>
+                </li>
                 @{ if (User.Identity.IsAuthenticated)
                     {
                         <li class="nav-item">
                             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" method="post">
                                 <button type="submit" style="background: none;border: none;padding: 0;cursor: pointer;" class="nav-link"><i class="fas fa-sign-out-alt"></i>&nbsp;Logout</button>
                             </form>
-
                         </li>
                     }
                 }
@@ -59,13 +64,13 @@
             <div class="sidebar">
                 <!-- Sidebar user (optional) -->
                 @*<div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    @*<div class="image">
-                            <img src="../../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+                        @*<div class="image">
+                                <img src="../../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+                            </div>
+                        <div class="info">
+                            <a href="#" class="d-block">@User.Claims.FirstOrDefault(c => c.Type == "PartnerId").Value</a>
                         </div>
-                    <div class="info">
-                        <a href="#" class="d-block">@User.Claims.FirstOrDefault(c => c.Type == "PartnerId").Value</a>
-                    </div>
-                </div>*@
+                    </div>*@
 
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">

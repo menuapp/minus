@@ -20,12 +20,12 @@ namespace AdminUI.Areas.Identity
         {
             builder.ConfigureServices((context, services) =>
             {
-                services.AddIdentity<ApplicationUser, IdentityRole>().AddDefaultUI()
+                services.AddIdentity<ApplicationUser, IdentityRole>()
                     .AddEntityFrameworkStores<MinusContext>()
                     .AddDefaultTokenProviders();
             });
         }
     }
 
-    
+
 }

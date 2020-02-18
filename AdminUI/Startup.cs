@@ -146,7 +146,7 @@ namespace AdminUI
         public Task SendEmailAsync(string email, string subject, string message)
         {
             // Credentials
-            var credentials = new NetworkCredential("support@kivimenu.com", "menu731548.Kivi)");
+            var credentials = new NetworkCredential("support@kivimenu.com", "ob37%K3i");
             // Mail message
             var mail = new MailMessage()
             {
@@ -159,9 +159,10 @@ namespace AdminUI
             // Smtp client
             var client = new SmtpClient()
             {
-                Port = 587,
+                Port = 465,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 UseDefaultCredentials = true,
+                EnableSsl = true,
                 Host = "mail.kivimenu.com",
                 Credentials = credentials
             };
