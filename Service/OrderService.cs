@@ -43,14 +43,18 @@ namespace Service
         {
             try
             {
-                var order = orderRepository.GetById(product.OrderId);
+                var order = orderRepository.GetByIdEagerly(product.OrderId);
 
                 var productToAdd = mapper.Map<OrderProduct>(product);
                 var productInBasket = order.OrderProducts?.FirstOrDefault(op => op.ProductId == productToAdd.ProductId);
 
                 if (productInBasket == null)
                 {
-                    order.OrderProducts = new List<OrderProduct>();
+                    if (order.OrderProducts == null)
+                    {
+                        order.OrderProducts = new List<OrderProduct>();
+                    }
+
                     order.OrderProducts.Add(mapper.Map<OrderProduct>(product));
                 }
                 else
@@ -72,8 +76,8 @@ namespace Service
         {
             try
             {
-                var order = orderRepository.GetById(product.OrderId);
-                var orderProduct = order.OrderProducts.FirstOrDefault(op => op.ProductId == product.Id);
+                var order = orderRepository.GetByIdEagerly(product.OrderId);
+                var orderProduct = order.OrderProducts.FirstOrDefault(op => op.ProductId == product.ProductId);
 
                 orderProduct.Quantity = product.Quantity;
 
@@ -90,8 +94,8 @@ namespace Service
         {
             try
             {
-                var order = orderRepository.GetById(product.OrderId);
-                var orderProduct = order.OrderProducts.FirstOrDefault(op => op.ProductId == product.Id);
+                var order = orderRepository.GetByIdEagerly(product.OrderId);
+                var orderProduct = order.OrderProducts.FirstOrDefault(op => op.ProductId == product.ProductId);
 
                 order.OrderProducts.Remove(orderProduct);
                 unitOfWork.Commit();

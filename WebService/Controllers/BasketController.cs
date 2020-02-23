@@ -29,6 +29,7 @@ namespace WebService.Controllers
             var orders = basketService.GetAll();
             return Ok(mapper.Map<List<BasketDto>>(orders));
         }
+
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
@@ -57,7 +58,7 @@ namespace WebService.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateProduct(ProductDto product)
+        public IActionResult UpdateProduct(OrderProductDto product)
         {
             basketService.UpdateProduct(mapper.Map<OrderProductDomain>(product));
             return Ok();

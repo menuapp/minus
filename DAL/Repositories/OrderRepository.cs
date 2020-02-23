@@ -19,17 +19,12 @@ namespace DAL.Repositories
 
         public IEnumerable<Order> GetAllEagerly()
         {
-            return dbSet.Include(order => order.OrderProducts.Select(orderProducts => orderProducts.Product)).ToList();
+            return dbSet.Include(order => order.OrderProducts).ToList();
         }
 
         public Order GetByIdEagerly(int id)
         {
-            return dbSet.Include(order => order.OrderProducts.Select(orderProducts => orderProducts.Product)).Single(order => order.Id == id);
-        }
-
-        public Order GetByIdEagerly(string id)
-        {
-            throw new NotImplementedException();
+            return dbSet.Include(order => order.OrderProducts).Single(order => order.Id == id);
         }
 
         public IEnumerable<Order> GetManyEagerly(Expression<Func<Order, bool>> where)
