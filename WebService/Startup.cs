@@ -40,9 +40,9 @@ namespace WebService
             services.AddTransient<IIdentityRoleRepository, IdentityRoleRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
-            services.AddTransient<IBasketRepository, BasketRepository>();
+            services.AddTransient<IOrderRepository, OrderRepository>();
             //REGISTER SERVICE LAYER
-            services.AddTransient<IBasketService, BasketService>();
+            services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<IProductCategoryService, ProductCategoryService>();
             services.AddTransient<IIdentityRoleService, IdentityRoleService>();
             services.AddTransient<IProductService, ProductService>();

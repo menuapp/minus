@@ -27,6 +27,7 @@ namespace AdminUI.Models
         [Required]
         [Display(Name = "Role")]
         public string RoleId { get; set; }
+        public RoleViewModel Role { get; set; }
         public List<SelectListItem> Roles { get; set; }
 
         [Required]

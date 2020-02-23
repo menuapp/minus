@@ -12,8 +12,8 @@ namespace WebService.Mapping
     {
         public DtoProfile()
         {
-            CreateMap<ProductDomain, ProductDto>();
-            CreateMap<ProductDto, ProductDomain>();
+            CreateMap<OrderProductDomain, OrderProductDto>();
+            CreateMap<OrderProductDto, OrderProductDomain>();
 
             CreateMap<ProductCategoryDomain, ProductCategoryDto>();
             CreateMap<ProductCategoryDto, ProductCategoryDomain>();
@@ -27,8 +27,8 @@ namespace WebService.Mapping
             CreateMap<ContentDomain, ContentDto>();
             CreateMap<ContentDto, ContentDomain>();
 
-            CreateMap<BasketDomain, BasketDto>();
-            CreateMap<BasketDto, BasketDomain>();
+            CreateMap<OrderDomain, BasketDto>();
+            CreateMap<BasketDto, OrderDomain>();
         }
     }
 }

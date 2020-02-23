@@ -7,5 +7,8 @@ namespace Service.Interfaces
 {
     public interface IOrderService : IService<OrderDomain, int>
     {
+        bool AddProduct(OrderProductDomain product);
+        bool UpdateProduct(OrderProductDomain product);
+        bool RemoveProduct(OrderProductDomain product);
     }
 }

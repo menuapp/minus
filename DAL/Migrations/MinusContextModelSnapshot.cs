@@ -131,9 +131,14 @@ namespace DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.Property<int>("PartnerId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PartnerId");
 
                     b.ToTable("Counters");
                 });
@@ -145,7 +150,8 @@ namespace DAL.Migrations
 
                     b.Property<int>("CounterId");
 
-                    b.Property<string>("CustomerId");
+                    b.Property<string>("CustomerId")
+                        .IsRequired();
 
                     b.Property<DateTime>("OrderDate");
 
@@ -532,6 +538,14 @@ namespace DAL.Migrations
                         .HasForeignKey("ProductId");
                 });
 
+            modelBuilder.Entity("Entity.Counter", b =>
+                {
+                    b.HasOne("Entity.Partner", "Partner")
+                        .WithMany("Counters")
+                        .HasForeignKey("PartnerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Entity.Order", b =>
                 {
                     b.HasOne("Entity.Counter", "Counter")
@@ -541,7 +555,8 @@ namespace DAL.Migrations
 
                     b.HasOne("Entity.ApplicationUser", "Customer")
                         .WithMany("Orders")
-                        .HasForeignKey("CustomerId");
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Entity.OrderStatus", "OrderStatus")
                         .WithMany("Orders")

@@ -1,10 +1,19 @@
-﻿<li class="nav-item">
-    <a asp-controller="User" asp-action="Index" class="nav-link">
-        <i class="nav-icon fas fa-desktop"></i>
+﻿<li class="nav-item has-treeview">
+    <a href="#" class="nav-link">
+        <i class="nav-icon fas fa-tachometer-alt"></i>
         <p>
-            Overview
+            Dashboard
+            <i class="right fas fa-angle-left"></i>
         </p>
     </a>
+    <ul class="nav nav-treeview">
+        <li class="nav-item">
+            <a href="../../index.html" class="nav-link">
+                <i class="fas fa-shopping-basket nav-icon"></i>
+                <p>Orders</p>
+            </a>
+        </li>
+    </ul>
 </li>
 @{ if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
     {
@@ -31,18 +40,37 @@
         </li>
     }
 }
+
 @{ if (User.IsInRole("Manager"))
     {
-        <li class="nav-item">
-            <a asp-controller="Product" asp-action="Index" class="nav-link">
-                <i class="nav-icon fas fa-warehouse"></i>
+        <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-utensils"></i>
                 <p>
-                    Products
+                    Restaurant
+                    <i class="fas fa-angle-left right"></i>
                 </p>
             </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a asp-controller="Product" asp-action="Index" class="nav-link">
+                        <i class="fas fa-warehouse nav-icon"></i>
+                        <p>Products</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-action="List" asp-controller="Table" class="nav-link">
+                        <i class="fas fa-table nav-icon"></i>
+                        <p>Tables</p>
+                    </a>
+                </li>
+            </ul>
         </li>
     }
 }
+
+
+
 
 
 

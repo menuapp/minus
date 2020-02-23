@@ -12,47 +12,61 @@ using WebService.DTOs;
 
 namespace WebService.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class BasketController : ControllerBase
     {
-        private IBasketService basketService { get; set; }
-        private IProductService productService { get; set; }
+        private IOrderService basketService { get; set; }
         private IMapper mapper { get; set; }
-        public BasketController(IBasketService basketService, IProductService productService, IMapper mapper)
+        public BasketController(IOrderService basketService, IMapper mapper)
         {
-            this.productService = productService;
             this.basketService = basketService;
             this.mapper = mapper;
         }
 
-        //[HttpPost]
-        [HttpGet]
-        public IActionResult Get(/*ProductDto product*/)
+        public IActionResult Get()
         {
-            var basket = new BasketDto()
-            {
-                OrderDate = DateTime.Now.Date,
-            };
-            basket.Products = new List<ProductDto>();
-            basket.Products.Add(mapper.Map<ProductDto>(productService.GetById(1)));
-
-            basketService.Add(mapper.Map<BasketDomain>(basket));
-            return Ok();
+            var orders = basketService.GetAll();
+            return Ok(mapper.Map<List<BasketDto>>(orders));
+        }
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            return Ok(mapper.Map<BasketDto>(basketService.GetById(id)));
         }
 
-        public IActionResult Remove(ProductDto product)
+        [HttpPost]
+        public IActionResult Add(BasketDto basket)
         {
-            return Ok();
-        }
-        public IActionResult UpdateProduct(ProductDto product)
-        {
+            basket.OrderDate = DateTime.Now.Date;
+            basketService.Add(mapper.Map<OrderDomain>(basket));
             return Ok();
         }
 
         [HttpPost]
-        public IActionResult Delete(ProductDto product)
+        public IActionResult AddProduct(OrderProductDto product)
         {
+            basketService.AddProduct(mapper.Map<OrderProductDomain>(product));
+            return Ok();
+        }
+        [HttpPost]
+        public IActionResult RemoveProduct(OrderProductDto product)
+        {
+            basketService.RemoveProduct(mapper.Map<OrderProductDomain>(product));
+            return Ok();
+        }
+
+        [HttpPost]
+        public IActionResult UpdateProduct(ProductDto product)
+        {
+            basketService.UpdateProduct(mapper.Map<OrderProductDomain>(product));
+            return Ok();
+        }
+
+        [HttpPost]
+        public IActionResult Delete(BasketDto basket)
+        {
+            basketService.Delete(mapper.Map<OrderDomain>(basket));
             return Ok();
         }
 

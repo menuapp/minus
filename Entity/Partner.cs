@@ -13,6 +13,7 @@ namespace Entity
         public string AssociateAddress { get; set; }
         public ICollection<Content> Contents { get; set; }
         public ICollection<Order> Orders { get; set; }
+        public ICollection<Counter> Counters { get; set; }
         public ICollection<ProductCategory> ProductCategories { get; set; }
     }
 }

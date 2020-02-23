@@ -75,6 +75,8 @@ namespace DAL.Context
             modelBuilder.Entity<Counter>(entity =>
             {
                 entity.HasKey(e => e.Id);
+                entity.HasOne(e => e.Partner).WithMany(src => src.Counters).IsRequired();
+                entity.Property(e => e.Name).IsRequired();
             });
 
 
@@ -102,7 +104,7 @@ namespace DAL.Context
                 entity.HasOne(e => e.Partner).WithMany(src => src.Orders).HasForeignKey(a => a.PartnerId).IsRequired();
                 entity.Property(e => e.OrderDate).IsRequired();
                 entity.Property(e => e.TotalPrice).IsRequired();
-                entity.HasOne(e => e.Customer).WithMany(src => src.Orders).HasForeignKey(a => a.CustomerId);
+                entity.HasOne(e => e.Customer).WithMany(src => src.Orders).HasForeignKey(a => a.CustomerId).IsRequired();
                 entity.HasOne(e => e.Counter).WithMany(src => src.Orders).HasForeignKey(a => a.CounterId);
                 entity.HasOne(e => e.OrderStatus).WithMany(src => src.Orders).HasForeignKey(a => a.OrderStatusId).IsRequired();
                 entity.HasOne(e => e.PaymentType).WithMany(src => src.Orders).HasForeignKey(a => a.PaymentTypeId).IsRequired();

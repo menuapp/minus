@@ -8,23 +8,24 @@ using System.Text;
 
 namespace DAL.Repositories
 {
-    public class BasketRepository : RepositoryBase<Order, int>, IBasketRepository
+    public class TableRepository : RepositoryBase<Counter, int>, ITableRepository
     {
-        public BasketRepository(MinusContext context) : base(context)
+        public TableRepository(MinusContext context) : base(context)
         {
 
         }
-        public IEnumerable<Order> GetAllEagerly()
-        {
-            throw new NotImplementedException();
-        }
 
-        public Order GetByIdEagerly(int id)
+        public IEnumerable<Counter> GetAllEagerly()
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Order> GetManyEagerly(Expression<Func<Order, bool>> where)
+        public Counter GetByIdEagerly(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Counter> GetManyEagerly(Expression<Func<Counter, bool>> where)
         {
             throw new NotImplementedException();
         }

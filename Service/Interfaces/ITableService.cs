@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Service.Interfaces
 {
-    public interface IBasketService : IService<BasketDomain, int>
+    public interface ITableService : IService<TableDomain, int>
     {
     }
 }

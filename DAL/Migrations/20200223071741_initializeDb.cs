@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DAL.Migrations
 {
-    public partial class InitializeDb : Migration
+    public partial class initializeDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -19,19 +19,6 @@ namespace DAL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Counters",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
-                    Name = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Counters", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -108,6 +95,26 @@ namespace DAL.Migrations
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Counters",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySQL:AutoIncrement", true),
+                    PartnerId = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Counters", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Counters_Partners_PartnerId",
+                        column: x => x.PartnerId,
+                        principalTable: "Partners",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -203,7 +210,7 @@ namespace DAL.Migrations
                     PaymentTypeId = table.Column<int>(nullable: false),
                     OrderTypeId = table.Column<int>(nullable: false),
                     CounterId = table.Column<int>(nullable: false),
-                    CustomerId = table.Column<string>(nullable: true)
+                    CustomerId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -464,6 +471,11 @@ namespace DAL.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Counters_PartnerId",
+                table: "Counters",
+                column: "PartnerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrderProducts_OrderId",
                 table: "OrderProducts",
                 column: "OrderId");
@@ -573,7 +585,7 @@ namespace DAL.Migrations
                 column: "CustomerId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUsers_Contents_ProfilePhotoId",

@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 
 namespace WebService.DTOs
 {
-    public class ProductDto
+    public class OrderProductDto
     {
-        public int Id { get; set; }
+        public int Quantity { get; set; }
+        public int ProductId { get; set; }
         public int OrderId { get; set; }
     }
 }

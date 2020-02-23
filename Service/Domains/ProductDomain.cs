@@ -10,6 +10,7 @@ namespace Service.Domains
         public string Name { get; set; }
         public bool IsInStock { get; set; }
         public decimal TotalProductVolume { get; set; }
+        public int Quantity { get; set; }
         public bool AwayOrderAvailable { get; set; }
         public string ProductVolumeUnit { get; set; }
         public decimal UnitPrice { get; set; }
