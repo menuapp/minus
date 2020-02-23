@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(MinusContext))]
-    [Migration("20200223071741_initializeDb")]
+    [Migration("20200223084146_initializeDb")]
     partial class initializeDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -189,6 +189,8 @@ namespace DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Description");
+
                     b.Property<int>("OrderId");
 
                     b.Property<int>("ProductId");
@@ -346,6 +348,8 @@ namespace DAL.Migrations
                         .HasColumnType("BIT(1)");
 
                     b.Property<int>("CategoryId");
+
+                    b.Property<string>("Description");
 
                     b.Property<short>("IsInStock")
                         .HasColumnType("BIT(1)");

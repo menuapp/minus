@@ -114,6 +114,7 @@ namespace DAL.Context
             modelBuilder.Entity<OrderProduct>(entity =>
             {
                 entity.HasKey(e => e.Id);
+                entity.Property(e => e.Description);
                 entity.HasOne(e => e.Product).WithMany(src => src.OrderProducts).HasForeignKey(a => a.ProductId).IsRequired();
                 entity.HasOne(e => e.Order).WithMany(src => src.OrderProducts).HasForeignKey(a => a.OrderId).IsRequired();
             });
@@ -126,6 +127,7 @@ namespace DAL.Context
                 entity.Property(e => e.AwayOrderAvailable).IsRequired();
                 entity.Property(e => e.ProductVolumeUnit);
                 entity.Property(e => e.TotalProductVolume);
+                entity.Property(e => e.Description);
                 entity.Property(e => e.UnitPrice).IsRequired();
                 entity.Property(e => e.Rating);
                 entity.HasOne(e => e.Category).WithMany(e => e.Products).HasForeignKey(a => a.CategoryId).IsRequired();

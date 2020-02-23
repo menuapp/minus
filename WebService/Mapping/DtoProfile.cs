@@ -27,6 +27,9 @@ namespace WebService.Mapping
             CreateMap<ContentDomain, ContentDto>();
             CreateMap<ContentDto, ContentDomain>();
 
+            CreateMap<ProductDomain, ProductDto>();
+            CreateMap<ProductDto, ProductDomain>();
+
             CreateMap<OrderDomain, BasketDto>();
             CreateMap<BasketDto, OrderDomain>();
         }

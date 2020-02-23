@@ -187,6 +187,8 @@ namespace DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Description");
+
                     b.Property<int>("OrderId");
 
                     b.Property<int>("ProductId");
@@ -344,6 +346,8 @@ namespace DAL.Migrations
                         .HasColumnType("BIT(1)");
 
                     b.Property<int>("CategoryId");
+
+                    b.Property<string>("Description");
 
                     b.Property<short>("IsInStock")
                         .HasColumnType("BIT(1)");

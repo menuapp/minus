@@ -116,7 +116,7 @@ namespace Service
 
         public IEnumerable<OrderDomain> GetAll()
         {
-            var orders = orderRepository.GetAll();
+            var orders = orderRepository.GetAllEagerly();
             return mapper.Map<IEnumerable<OrderDomain>>(orders);
         }
 

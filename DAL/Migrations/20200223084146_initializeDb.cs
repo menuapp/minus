@@ -307,7 +307,8 @@ namespace DAL.Migrations
                     TotalProductVolume = table.Column<decimal>(nullable: false),
                     ProductVolumeUnit = table.Column<string>(nullable: true),
                     UnitPrice = table.Column<decimal>(nullable: false),
-                    Rating = table.Column<double>(nullable: false)
+                    Rating = table.Column<double>(nullable: false),
+                    Description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -356,7 +357,8 @@ namespace DAL.Migrations
                         .Annotation("MySQL:AutoIncrement", true),
                     ProductId = table.Column<int>(nullable: false),
                     OrderId = table.Column<int>(nullable: false),
-                    Quantity = table.Column<int>(nullable: false)
+                    Quantity = table.Column<int>(nullable: false),
+                    Description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
