@@ -392,6 +392,90 @@ namespace DAL.Migrations
                     b.ToTable("ProductCategories");
                 });
 
+            modelBuilder.Entity("Entity.ProductOption", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.Property<int?>("OrderId");
+
+                    b.Property<int>("ProductId");
+
+                    b.Property<int>("TypeId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("TypeId");
+
+                    b.ToTable("ProductOptions");
+                });
+
+            modelBuilder.Entity("Entity.ProductOptionItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<double>("AdditionalPrice");
+
+                    b.Property<string>("Description");
+
+                    b.Property<int>("ProductOptionId");
+
+                    b.Property<bool>("Selected");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductOptionId");
+
+                    b.ToTable("ProductOptionItems");
+                });
+
+            modelBuilder.Entity("Entity.ProductOptionType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProductOptionTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "",
+                            Name = "EXCLUDE"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "",
+                            Name = "RADIO"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "",
+                            Name = "SELECT"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "",
+                            Name = "CHECKBOX"
+                        });
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -613,6 +697,31 @@ namespace DAL.Migrations
                     b.HasOne("Entity.Partner", "Partner")
                         .WithMany("ProductCategories")
                         .HasForeignKey("PartnerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Entity.ProductOption", b =>
+                {
+                    b.HasOne("Entity.Order", "Order")
+                        .WithMany("ProductOptions")
+                        .HasForeignKey("OrderId");
+
+                    b.HasOne("Entity.Product")
+                        .WithMany("Options")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Entity.ProductOptionType", "Type")
+                        .WithMany("ProductOptions")
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Entity.ProductOptionItem", b =>
+                {
+                    b.HasOne("Entity.ProductOption", "ProductOption")
+                        .WithMany("Items")
+                        .HasForeignKey("ProductOptionId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

@@ -29,5 +29,6 @@ namespace AdminUI.Models
         public List<IFormFile> Files { get; set; }
         public List<ContentViewModel> Contents { get; set; }
         public ProductCategoryViewModel Category { get; set; }
+        public List<ProductOptionViewModel> ProductOptions { get; set; }
     }
 }

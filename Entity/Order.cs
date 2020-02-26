@@ -25,6 +25,6 @@ namespace Entity
         public ApplicationUser Customer { get; set; }
         public string CustomerId { get; set; }
         public ICollection<OrderProduct> OrderProducts { get; set; }
-
+        public ICollection<ProductOption> ProductOptions { get; set; }
     }
 }

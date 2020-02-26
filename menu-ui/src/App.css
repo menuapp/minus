@@ -1,6 +1,48 @@
 .App {
-  text-align: center;
   display: flex;
+  flex-direction: row;
+  font-family: 'Nunito';
+  background-color: #ffffff;
+  padding-top: 2vh;
+  overflow:hidden;
+}
+
+.page{
+  flex-shrink: 0;
+}
+
+.title {
+  text-align: left;
+}
+
+.menu-icon {
+  display: block;
+  width: 30%;
+  height: 100%;
+}
+
+.menu-icon span {
+  width: 10%;
+  height: 20%;
+  color: black;
+}
+
+.app-headline {
+  width: 100%;
+  box-shadow: 0.1rem 0.01rem 0.3rem grey;
+  color: black;
+  background-color: lavender;
+  /* font-family: 'Lobster'; */
+  position: fixed;
+  text-align: center;
+  font-size: 2rem;
+  padding-top: 2vh;
+  padding-bottom: 2vh;
+}
+
+
+.app-container {
+  margin-top: 13vh;
 }
 
 .App-logo {

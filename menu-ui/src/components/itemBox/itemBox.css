@@ -1,0 +1,47 @@
+.itemBox {
+    height: 30vh;
+    font-size: 0.9rem;
+    box-shadow: 0px 6px 20px rgba(13, 51, 32, 0.1);
+    border-radius: 0.2rem;
+}
+
+.itemBox .name {
+    font-size: 1.2rem;
+    display: flex;
+    height: 20%;
+    font-weight: bold;
+    /* padding-left: 5%; */
+    align-items: center;
+}
+
+.itemBox .details {
+    height: 25%;
+    /* padding-left: 5%; */
+    /* display: flex;
+    flex-direction: row;
+    align-items: center; */
+}
+
+.itemBox .details .detailsWrapper {
+    height: 100%;
+}
+
+.itemBox .details .duration {
+    /* margin-right: 10%; */
+}
+
+.itemBox .details .ingredients {
+    /* margin-right: 20%; */
+}
+
+.itemBox .details .button {
+    color: #30be76;
+    border: 1px solid #30be76;
+    background: none;
+}
+
+img {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    object-fit: cover;
+}

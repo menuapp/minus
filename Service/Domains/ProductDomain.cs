@@ -19,6 +19,7 @@ namespace Service.Domains
         public int CategoryId { get; set; }
         public ICollection<CommentDomain> Comments { get; set; }
         public ICollection<ContentDomain> Contents { get; set; }
+        public ICollection<ProductOptionDomain> ProductOptions { get; set; }
 
     }
 }

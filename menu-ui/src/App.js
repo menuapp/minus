@@ -1,17 +1,53 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import Product from './components/product/product';
-import Carousel from './components/carousel/carousel';
+import Slider from './components/slider/slider';
+import ProductService from './Service/productService';
+import SlidingPage from './components/slidingPage/slidingPage';
 
-function App() {
-  return (
-    <div className="App">
-      <Carousel color={"red"} />
-      <Carousel color={"blue"} />
-      <Carousel color={"yellow"} />
-    </div>
-  );
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { data: [], restaurantName: "agileaction" };
+
+    this.productService = new ProductService();
+    this.sendMessage = this.sendMessage.bind(this);
+    this.openConnection = this.openConnection.bind(this);
+  }
+
+  async componentDidMount() {
+    let json = await this.productService.getAll(this.state.restaurantName);
+    this.setState({ data: json });
+  }
+
+  openConnection() {
+    this.socket = new WebSocket("ws://localhost/webservice/api/basket/get");
+
+    this.socket.onopen = () => {
+      console.log("Connected...");
+      console.log("hello");
+    }
+
+    this.socket.onmessage = (event) => {
+      console.log(JSON.parse(event.data));
+    };
+  }
+
+  sendMessage() {
+    this.socket.send("hello");
+  }
+
+  render() {
+    return (
+      <div className="App">
+
+        {this.state.data.map((cards) => {
+          return (<div className="page container-fluid">
+            <SlidingPage cards={cards.products} />
+          </div>
+          );
+        })}
+
+      </div>
+    );
+  }
 }
-
-export default App;

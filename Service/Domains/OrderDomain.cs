@@ -19,5 +19,6 @@ namespace Service.Domains
         public OrderTypeEnum OrderType { get; set; }
         public PaymentTypeEnum PaymentType { get; set; }
         public ICollection<OrderProductDomain> OrderProducts { get; set; }
+        public ICollection<ProductOptionDomain> ProductOptions { get; set; }
     }
 }

@@ -42,6 +42,11 @@ namespace AdminUI.Controllers
             return View(productViewModels);
         }
 
+        public IActionResult ProductDetails(int id)
+        {
+            return View(mapper.Map<ProductViewModel>(productService.GetById(id)));
+        }
+
         public IActionResult CreateProduct(int id)
         {
             ViewData["categoryId"] = id;
@@ -66,7 +71,7 @@ namespace AdminUI.Controllers
                 productViewModel.Contents = new List<ContentViewModel>();
                 productViewModel.Contents.Add(new ContentViewModel
                 {
-                    RelativePath = HttpContext.Request.Host + HttpContext.Request.PathBase + "/uploads/" + fileName ,
+                    RelativePath = HttpContext.Request.Host + HttpContext.Request.PathBase + "/uploads/" + fileName,
                     PhysicalPath = filePath
                 });
             }

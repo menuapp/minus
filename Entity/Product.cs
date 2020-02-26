@@ -27,5 +27,6 @@ namespace Entity
         public ICollection<Comment> Comments { get; set; }
         public ICollection<Content> Contents { get; set; }
         public ICollection<OrderProduct> OrderProducts { get; set; }
+        public ICollection<ProductOption> Options { get; set; }
     }
 }

@@ -1,0 +1,4 @@
+.slidingPage{
+    height: 100vh;
+    overflow: scroll;
+}

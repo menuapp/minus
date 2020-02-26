@@ -79,6 +79,20 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProductOptionTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySQL:AutoIncrement", true),
+                    Name = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductOptionTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -377,6 +391,62 @@ namespace DAL.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ProductOptions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySQL:AutoIncrement", true),
+                    Name = table.Column<string>(nullable: true),
+                    ProductId = table.Column<int>(nullable: false),
+                    OrderId = table.Column<int>(nullable: true),
+                    TypeId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductOptions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductOptions_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ProductOptions_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductOptions_ProductOptionTypes_TypeId",
+                        column: x => x.TypeId,
+                        principalTable: "ProductOptionTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductOptionItems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySQL:AutoIncrement", true),
+                    ProductOptionId = table.Column<int>(nullable: false),
+                    AdditionalPrice = table.Column<double>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    Selected = table.Column<short>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductOptionItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductOptionItems_ProductOptions_ProductOptionId",
+                        column: x => x.ProductOptionId,
+                        principalTable: "ProductOptions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "OrderStatuses",
                 columns: new[] { "Id", "Description", "Name" },
@@ -407,6 +477,17 @@ namespace DAL.Migrations
                     { 3, "", "CASH" },
                     { 2, "", "MOBILE" },
                     { 1, "", "CARD" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "ProductOptionTypes",
+                columns: new[] { "Id", "Description", "Name" },
+                values: new object[,]
+                {
+                    { 1, "", "EXCLUDE" },
+                    { 2, "", "RADIO" },
+                    { 4, "", "SELECT" },
+                    { 3, "", "CHECKBOX" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -529,6 +610,26 @@ namespace DAL.Migrations
                 column: "PartnerId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProductOptionItems_ProductOptionId",
+                table: "ProductOptionItems",
+                column: "ProductOptionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductOptions_OrderId",
+                table: "ProductOptions",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductOptions_ProductId",
+                table: "ProductOptions",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductOptions_TypeId",
+                table: "ProductOptions",
+                column: "TypeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
                 table: "Products",
                 column: "CategoryId");
@@ -634,10 +735,19 @@ namespace DAL.Migrations
                 name: "OrderProducts");
 
             migrationBuilder.DropTable(
+                name: "ProductOptionItems");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "ProductOptions");
+
+            migrationBuilder.DropTable(
                 name: "Orders");
+
+            migrationBuilder.DropTable(
+                name: "ProductOptionTypes");
 
             migrationBuilder.DropTable(
                 name: "Counters");

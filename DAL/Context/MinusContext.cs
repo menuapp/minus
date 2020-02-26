@@ -15,6 +15,9 @@ namespace DAL.Context
             //optionsBuilder.UseMySQL(@"server=94.138.197.30;database=minus;user=rootkivi;password=menu731548%Kivi!;");
         }
 
+        public DbSet<ProductOptionType> ProductOptionTypes { get; set; }
+        public DbSet<ProductOptionItem> ProductOptionItems { get; set; }
+        public DbSet<ProductOption> ProductOptions { get; set; }
         public DbSet<PaymentType> PaymentTypes { get; set; }
         public DbSet<OrderType> OrderTypes { get; set; }
         public DbSet<OrderStatus> OrderStatuses { get; set; }
@@ -56,6 +59,24 @@ namespace DAL.Context
             modelBuilder.Entity<IdentityUserClaim<string>>(entity => entity.Property(m => m.UserId).HasMaxLength(85));
             modelBuilder.Entity<IdentityRoleClaim<string>>(entity => entity.Property(m => m.Id).HasMaxLength(85));
             modelBuilder.Entity<IdentityRoleClaim<string>>(entity => entity.Property(m => m.RoleId).HasMaxLength(85));
+
+            modelBuilder.Entity<ProductOptionType>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+            });
+
+            modelBuilder.Entity<ProductOptionItem>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.HasOne(e => e.ProductOption).WithMany(dest => dest.Items).IsRequired();
+            });
+
+            modelBuilder.Entity<ProductOption>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.HasOne(e => e.Order).WithMany(dest => dest.ProductOptions);
+                entity.HasOne(e => e.Type).WithMany(dest => dest.ProductOptions).IsRequired();
+            });
 
             modelBuilder.Entity<PaymentType>(entity =>
             {
@@ -183,6 +204,18 @@ namespace DAL.Context
             completed = OrderStatusEnum.COMPLETED;
 
             modelBuilder.Entity<OrderStatus>().HasData(basket, confirmed, canceled, preparing, delivery, completed);
+
+            var exclude = new ProductOptionType();
+            var radio = new ProductOptionType();
+            var select = new ProductOptionType();
+            var checkbox = new ProductOptionType();
+
+            exclude = ProductOptionTypeEnum.EXCLUDE;
+            radio = ProductOptionTypeEnum.RADIO;
+            select = ProductOptionTypeEnum.SELECT;
+            checkbox = ProductOptionTypeEnum.CHECKBOX;
+
+            modelBuilder.Entity<ProductOptionType>().HasData(exclude, radio, select, checkbox);
         }
     }
 }

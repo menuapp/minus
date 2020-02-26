@@ -1,0 +1,144 @@
+﻿@model AdminUI.Models.ProductViewModel
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Product Details</h3>
+
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip" title="Remove">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <div>
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Id)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Id)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.IsInStock)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.IsInStock)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.TotalProductVolume)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.TotalProductVolume)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.AwayOrderAvailable)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.AwayOrderAvailable)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.ProductVolumeUnit)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.ProductVolumeUnit)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.UnitPrice)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.UnitPrice)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.CategoryId)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.CategoryId)
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <!-- /.card-body -->
+    <div class="card-footer">
+        <div>
+            @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </div>
+    <!-- /.card-footer-->
+</div>
+
+
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Product Options</h3>
+
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip" title="Remove">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <p>
+            <a asp-action="Create" asp-controller="ProductOption" asp-route-id="@Model.Id">Create New Option</a>
+        </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ProductOptions.FirstOrDefault().Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ProductOptions.FirstOrDefault().Type)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ProductOptions.FirstOrDefault().Items)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.ProductOptions)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Type)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Items)
+                        </td>
+
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                            @Html.ActionLink("Details", "ProductDetails", new { id = item.Id }) |
+                            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <!-- /.card-body -->
+    <div class="card-footer">
+    </div>
+    <!-- /.card-footer-->
+</div>
+
+

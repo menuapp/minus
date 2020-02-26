@@ -26,6 +26,7 @@ namespace WebService.Controllers
             this.mapper = mapper;
         }
 
+        [HttpGet("{name}")]
         public IActionResult Get(string name)
         {
             var categories = mapper.Map<List<ProductCategoryDto>>(productCategoryService.GetMany(cat => cat.Partner.AssociateName == name));
