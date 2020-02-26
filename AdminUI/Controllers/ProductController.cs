@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AdminUI.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +15,7 @@ using Service.Interfaces;
 
 namespace AdminUI.Controllers
 {
+    [Authorize]
     public class ProductController : Controller
     {
         IMapper mapper;
@@ -28,7 +31,7 @@ namespace AdminUI.Controllers
         }
         public IActionResult Index()
         {
-            List<ProductCategoryViewModel> productCategoryViewModels = mapper.Map<List<ProductCategoryViewModel>>(productCategoryService.GetAll());
+            List<ProductCategoryViewModel> productCategoryViewModels = mapper.Map<List<ProductCategoryViewModel>>(productCategoryService.GetMany(cat => cat.PartnerId == Int32.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "PartnerId").Value)));
             return View(productCategoryViewModels);
         }
 
@@ -37,6 +40,11 @@ namespace AdminUI.Controllers
             IEnumerable<ProductViewModel> productViewModels = mapper.Map<IEnumerable<ProductViewModel>>(productCategoryService.GetById(id).Products);
             ViewData["categoryId"] = id;
             return View(productViewModels);
+        }
+
+        public IActionResult ProductDetails(int id)
+        {
+            return View(mapper.Map<ProductViewModel>(productService.GetById(id)));
         }
 
         public IActionResult CreateProduct(int id)
@@ -50,8 +58,9 @@ namespace AdminUI.Controllers
         {
             foreach (var content in productViewModel.Files)
             {
-                var fileName = Path.GetFileName(content.FileName);
-                var upload = Path.Combine(hostingEnvironment.ContentRootPath, "Uploads");
+
+                var fileName = System.Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(content.FileName);
+                var upload = Path.Combine(hostingEnvironment.WebRootPath + "/", "uploads");
                 var filePath = Path.Combine(upload, fileName);
 
                 using (var fileStream = new FileStream(filePath, FileMode.CreateNew))
@@ -62,16 +71,38 @@ namespace AdminUI.Controllers
                 productViewModel.Contents = new List<ContentViewModel>();
                 productViewModel.Contents.Add(new ContentViewModel
                 {
+                    RelativePath = HttpContext.Request.Host + HttpContext.Request.PathBase + "/uploads/" + fileName,
                     PhysicalPath = filePath
                 });
             }
 
-            productViewModel.Category = mapper.Map<ProductCategoryViewModel>(productCategoryService.GetById(productViewModel.CategoryId));
             productService.Add(mapper.Map<ProductDomain>(productViewModel));
             return RedirectToAction("ListProducts", new
             {
-                id = productViewModel.Category.Id
+                id = productViewModel.CategoryId
             });
+        }
+
+        public IActionResult EditProduct()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult EditProduct(ProductViewModel model)
+        {
+            return View();
+        }
+
+        public IActionResult DeleteProduct()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult DeleteProduct(ProductViewModel model)
+        {
+            return View();
         }
 
         public IActionResult CreateCategory()
@@ -82,8 +113,31 @@ namespace AdminUI.Controllers
         [HttpPost]
         public IActionResult CreateCategory(ProductCategoryViewModel productCategoryViewModel)
         {
+            productCategoryViewModel.PartnerId = Int32.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "PartnerId").Value);
             productCategoryService.Add(mapper.Map<ProductCategoryDomain>(productCategoryViewModel));
             return RedirectToAction("Index");
+        }
+
+        public IActionResult EditCategory()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult EditCategory(ProductCategoryViewModel model)
+        {
+            return View();
+        }
+
+        public IActionResult DeleteCategory(int id)
+        {
+            var model = mapper.Map<ProductCategoryViewModel>(productCategoryService.GetById(id));
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult DeleteCategory(ProductCategoryViewModel model)
+        {
+            return View();
         }
     }
 }

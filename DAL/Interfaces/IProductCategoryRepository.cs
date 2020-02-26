@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DAL.Interfaces
 {
-    public interface IProductCategoryRepository : IRepository<ProductCategory>, IRepositoryEager<ProductCategory>
+    public interface IProductCategoryRepository : IRepository<ProductCategory, int>, IRepositoryEager<ProductCategory, int>
     {
     }
 }

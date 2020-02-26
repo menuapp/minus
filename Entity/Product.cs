@@ -23,8 +23,10 @@ namespace Entity
         public string ProductVolumeUnit { get; set; }
         public decimal UnitPrice { get; set; }
         public double Rating { get; set; }
+        public string Description { get; set; }
         public ICollection<Comment> Comments { get; set; }
         public ICollection<Content> Contents { get; set; }
         public ICollection<OrderProduct> OrderProducts { get; set; }
+        public ICollection<ProductOption> Options { get; set; }
     }
 }

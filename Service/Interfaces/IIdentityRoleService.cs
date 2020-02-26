@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Service.Interfaces
 {
-    public interface IIdentityRoleService : IService<IdentityRoleDomain>
+    public interface IIdentityRoleService : IService<IdentityRoleDomain, int>
     {
     }
 }

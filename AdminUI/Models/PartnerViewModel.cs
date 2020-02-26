@@ -13,5 +13,7 @@ namespace AdminUI.Models
         public string AssociateAddress { get; set; }
         public List<ContentViewModel> Contents { get; set; }
         public List<UserViewModel> Users { get; set; }
+        public List<ProductCategoryViewModel> ProductCategories { get; set; }
+        public List<OrderViewModel> Orders { get; set; }
     }
 }

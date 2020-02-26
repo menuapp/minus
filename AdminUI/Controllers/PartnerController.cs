@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using AdminUI.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Domains;
 using Service.Interfaces;
 
 namespace AdminUI.Controllers
 {
+    [Authorize(Policy = "PartnerOperationsPolicy")]
     public class PartnerController : Controller
     {
         IMapper mapper;
@@ -29,6 +31,13 @@ namespace AdminUI.Controllers
             return View();
         }
 
+        public IActionResult Details(int id)
+        {
+            var partner = partnerService.GetByIdEagerly(id);
+            var model = mapper.Map<PartnerViewModel>(partner);
+            return View(model);
+        }
+
         [HttpPost]
         public IActionResult Create(PartnerViewModel partnerViewModel)
         {
@@ -36,8 +45,13 @@ namespace AdminUI.Controllers
             {
                 partnerService.Add(mapper.Map<PartnerDomain>(partnerViewModel));
             }
-            
+
             return RedirectToAction("index");
+        }
+
+        public IActionResult Edit()
+        {
+            return View();
         }
     }
 }

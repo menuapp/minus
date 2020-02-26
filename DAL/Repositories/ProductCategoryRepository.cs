@@ -10,7 +10,7 @@ using System.Text;
 
 namespace DAL.Repositories
 {
-    public class ProductCategoryRepository : RepositoryBase<ProductCategory>, IProductCategoryRepository, IRepositoryEager<ProductCategory>
+    public class ProductCategoryRepository : RepositoryBase<ProductCategory, int>, IProductCategoryRepository, IRepositoryEager<ProductCategory, int>
     {
         public ProductCategoryRepository(MinusContext context) : base(context)
         {
@@ -34,7 +34,7 @@ namespace DAL.Repositories
 
         public IEnumerable<ProductCategory> GetManyEagerly(Expression<Func<ProductCategory, bool>> where)
         {
-            return dbSet.Include(productCategory => productCategory.Products).Where(where).ToList();
+            return dbSet.Include(productCategory => productCategory.Products).ThenInclude(p => p.Contents).Where(where).ToList();
         }
     }
 }

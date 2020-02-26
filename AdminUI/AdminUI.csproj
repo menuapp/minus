@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.ExpressionMapping" Version="3.0.6" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
@@ -24,5 +25,14 @@
   <ItemGroup>
     <ProjectReference Include="..\Service\Service.csproj" />
   </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="wwwroot\lib\login-extension\" />
+    <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+
+
+  <ProjectExtensions><VisualStudio><UserProperties wwwroot_4lib_4login-extension_4vendor_4bootstrap_4css_4bootstrap_1min_1css_1map__JsonSchema="" wwwroot_4lib_4login-extension_4vendor_4bootstrap_4css_4bootstrap_1css_1map__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>

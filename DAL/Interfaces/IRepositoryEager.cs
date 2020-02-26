@@ -5,11 +5,10 @@ using System.Text;
 
 namespace DAL.Interfaces
 {
-    public interface IRepositoryEager<T>
+    public interface IRepositoryEager<T,Tid>
     {
         IEnumerable<T> GetAllEagerly();
         IEnumerable<T> GetManyEagerly(Expression<Func<T, bool>> where);
-        T GetByIdEagerly(int id);
-        T GetByIdEagerly(string id);
+        T GetByIdEagerly(Tid id);
     }
 }

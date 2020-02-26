@@ -5,6 +5,7 @@ using Service.Domains;
 using Service.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace Service
@@ -54,6 +55,26 @@ namespace Service
         public void Update(ProductDomain ProductDomain)
         {
             throw new NotImplementedException();
+        }
+
+        public IEnumerable<ProductDomain> GetMany(Expression<Func<ProductDomain, bool>> where)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<ProductDomain> GetAllEagerly()
+        {
+            return mapper.Map<List<ProductDomain>>(productRepository.GetAllEagerly());
+        }
+
+        public IEnumerable<ProductDomain> GetManyEagerly(Expression<Func<ProductDomain, bool>> where)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ProductDomain GetByIdEagerly(int id)
+        {
+            return mapper.Map<ProductDomain>(productRepository.GetByIdEagerly(id));
         }
     }
 }

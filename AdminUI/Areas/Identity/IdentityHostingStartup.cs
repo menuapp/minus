@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using AdminUI.Models;
 using DAL.Context;
 using Entity;
@@ -19,10 +20,12 @@ namespace AdminUI.Areas.Identity
         {
             builder.ConfigureServices((context, services) =>
             {
-                services.AddIdentity<PartnerUser, IdentityRole>().AddDefaultUI()
+                services.AddIdentity<ApplicationUser, IdentityRole>()
                     .AddEntityFrameworkStores<MinusContext>()
                     .AddDefaultTokenProviders();
             });
         }
     }
+
+
 }

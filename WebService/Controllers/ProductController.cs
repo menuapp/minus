@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using DAL.Context;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service;
 using Service.Interfaces;
+using WebService.DTOs;
 
 namespace WebService.Controllers
 {
@@ -15,15 +17,20 @@ namespace WebService.Controllers
     public class ProductController : ControllerBase
     {
         private IProductService productService { get; set; }
-        private MinusContext context { get; set; }
-        public ProductController(IProductService productService)
+        private IProductCategoryService productCategoryService { get; set; }
+        private IMapper mapper { get; set; }
+        public ProductController(IProductService productService, IProductCategoryService productCategoryService, IMapper mapper)
         {
             this.productService = productService;
+            this.productCategoryService = productCategoryService;
+            this.mapper = mapper;
         }
 
-        public IActionResult Get()
-        {       
-            return Ok(productService.GetAll());
+        [HttpGet("{name}")]
+        public IActionResult Get(string name)
+        {
+            var categories = mapper.Map<List<ProductCategoryDto>>(productCategoryService.GetMany(cat => cat.Partner.AssociateName == name));
+            return Ok(categories);
         }
     }
 }

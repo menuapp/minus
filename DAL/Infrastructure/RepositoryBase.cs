@@ -10,21 +10,20 @@ using System.Text;
 
 namespace DAL.Repositories
 {
-    public class RepositoryBase<T> where T : class
+    public class RepositoryBase<T, Tid> where T : class
     {
         internal DbSet<T> dbSet { get; set; }
         public RepositoryBase(MinusContext context)
         {
             this.dbSet = context.Set<T>();
         }
-        public T GetById(int id)
+        public T GetById(Tid id)
         {
             return dbSet.Find(id);
         }
 
         public IEnumerable<T> GetAll()
         {
-            var a = dbSet.ToList();
             return dbSet.ToList();
         }
 
@@ -35,7 +34,7 @@ namespace DAL.Repositories
 
         public void Update(T entity)
         {
-            EntityEntry result = dbSet.Attach(entity);
+            dbSet.Update(entity);
         }
 
         public bool Delete(T entity)

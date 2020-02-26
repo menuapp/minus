@@ -1,4 +1,5 @@
 ﻿using Entity.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -16,7 +17,7 @@ namespace Entity
         [Column(TypeName = "BIT(1)")]
         public bool IsVisible { get; set; }
         public string CustomerId { get; set; }
-        public Customer Customer { get; set; }
+        public ApplicationUser Customer { get; set; }
         public int? ProductId { get; set; }
         public Product Product { get; set; }
     }

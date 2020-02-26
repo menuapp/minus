@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Service.Interfaces
 {
-    public interface IPartnerService : IService<PartnerDomain>
+    public interface IPartnerService : IService<PartnerDomain, int>, IServiceEager<PartnerDomain, int>
     {
     }
 }

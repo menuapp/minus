@@ -1,14 +1,16 @@
 ﻿using DAL.Context;
 using DAL.Interfaces;
 using Entity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
 namespace DAL.Repositories
 {
-    public class PartnerRepository : RepositoryBase<Partner>, IPartnerRepository
+    public class PartnerRepository : RepositoryBase<Partner, int>, IPartnerRepository
     {
         public PartnerRepository(MinusContext context) : base(context)
         {
@@ -22,7 +24,7 @@ namespace DAL.Repositories
 
         public Partner GetByIdEagerly(int id)
         {
-            throw new NotImplementedException();
+            return dbSet.Include(p => p.ProductCategories).FirstOrDefault(p => p.Id == id);
         }
 
         public Partner GetByIdEagerly(string id)

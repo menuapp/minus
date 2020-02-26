@@ -6,7 +6,7 @@ using System.Text;
 
 namespace DAL.Interfaces
 {
-    public interface IUserRepository : IRepository<Customer>
+    public interface IUserRepository : IRepository<ApplicationUser, string>
     {
     }
 }

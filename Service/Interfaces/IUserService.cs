@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Service.Interfaces
 {
-    public interface IUserService : IService<UserDomain>
+    public interface IUserService : IService<UserDomain, string>
     {
     }
 }
