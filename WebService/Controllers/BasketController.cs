@@ -14,6 +14,7 @@ using Service;
 using Service.Domains;
 using Service.Interfaces;
 using WebService.DTOs;
+using static WebService.Startup;
 
 namespace WebService.Controllers
 {
@@ -29,23 +30,11 @@ namespace WebService.Controllers
             this.mapper = mapper;
         }
 
-        public async void Get()
+        public async Task<IActionResult> Get()
         {
-            if (HttpContext.WebSockets.IsWebSocketRequest)
-            {
-                var wSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
-                var socketFinishedTcs = new TaskCompletionSource<object>();
-                OrderChecker.wSocket = wSocket;
-                await OrderChecker.Talk(basketService);
+            await Talk(BackgroundSocketProcessor.wSockets[0].WebSocket);
 
-                await socketFinishedTcs.Task;
-            }
-            else
-            {
-                HttpContext.Response.StatusCode = 400;
-            }
-
-            
+            return Ok(mapper.Map<List<BasketDto>>(basketService.GetAll()));
         }
 
         [HttpGet("{id}")]
@@ -59,7 +48,6 @@ namespace WebService.Controllers
         {
             basket.OrderDate = DateTime.Now.Date;
             basketService.Add(mapper.Map<OrderDomain>(basket));
-            OrderChecker.Talk(basketService);
 
             return Ok();
         }
@@ -97,27 +85,22 @@ namespace WebService.Controllers
             return Ok();
         }
 
-        public static class OrderChecker
+        public async Task Talk(WebSocket wSocket)
         {
-            public static WebSocket wSocket { get; set; }
-
-            public static async Task Talk(IOrderService basketService)
+            using (var ms = new MemoryStream())
             {
-                using (var ms = new MemoryStream())
+                try
                 {
-                    try
-                    {
-                        var orders = basketService.GetAll();
-                        var serializer = new System.Runtime.Serialization.Json.DataContractJsonSerializer(typeof(IEnumerable<OrderDomain>));
-                        serializer.WriteObject(ms, orders);
-                        byte[] response = ms.ToArray();
-                        ms.Close();
-                        await wSocket.SendAsync(new ArraySegment<byte>(response, 0, response.Length), WebSocketMessageType.Text, true, CancellationToken.None);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
+                    var orders = basketService.GetAll();
+                    var serializer = new System.Runtime.Serialization.Json.DataContractJsonSerializer(typeof(IEnumerable<OrderDomain>));
+                    serializer.WriteObject(ms, orders);
+                    byte[] response = ms.ToArray();
+                    ms.Close();
+                    await wSocket.SendAsync(new ArraySegment<byte>(response, 0, response.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
                 }
             }
         }
