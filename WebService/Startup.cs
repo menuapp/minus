@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
@@ -23,6 +24,7 @@ using Microsoft.Extensions.Options;
 using Service;
 using Service.Interfaces;
 using Service.Mapping;
+using WebService.BackgroundServices;
 using WebService.Mapping;
 
 namespace WebService
@@ -73,6 +75,9 @@ namespace WebService
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            //services.AddHostedService<OrdersBackgroundService>();
+            //services.AddScoped<IScopedProcessingService, ScopedProcessingService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -93,32 +98,58 @@ namespace WebService
                 KeepAliveInterval = TimeSpan.FromSeconds(120)
             };
 
-            app.UseWebSockets(webSocketOptions);
-            //app.Use(async (ctx, nextMsg) =>
-            //{
-            //    if (ctx.Request.Path == "/connect")
-            //    {
-            //        if (ctx.WebSockets.IsWebSocketRequest)
-            //        {
-            //            var wSocket = await ctx.WebSockets.AcceptWebSocketAsync();
-            //            await Talk(wSocket);
-            //        }
-            //        else
-            //        {
-            //            ctx.Response.StatusCode = 400;
-            //        }
-            //    }
-            //    else
-            //    {
-            //        await nextMsg();
-            //    }
-            //});
 
+            app.UseWebSockets(webSocketOptions);
+            app.Use(async (ctx, nextMsg) =>
+            {
+                if (ctx.Request.Path == "/connect")
+                {
+                    if (ctx.WebSockets.IsWebSocketRequest)
+                    {
+                        var wSocket = await ctx.WebSockets.AcceptWebSocketAsync();
+                        var socketFinishedTcs = new TaskCompletionSource<object>();
+
+                        BackgroundSocketProcessor.AddSocket(wSocket, socketFinishedTcs);
+
+                        await socketFinishedTcs.Task;
+                    }
+                    else
+                    {
+                        ctx.Response.StatusCode = 400;
+                    }
+                }
+                else
+                {
+                    await nextMsg();
+                }
+            });
 
             app.UseCors("AllowAll");
             app.UseHttpsRedirection();
             app.UseMvc();
+     
+        }
 
+        public static class BackgroundSocketProcessor
+        {
+            public static List<SocketWrapper> wSockets = new List<SocketWrapper>();
+            public static void AddSocket(WebSocket wSocket, TaskCompletionSource<object> taskCompletionSource)
+            {
+                var newSocket = new SocketWrapper(wSocket, taskCompletionSource);
+                wSockets.Add(newSocket);
+            }
+        }
+
+        public class SocketWrapper
+        {
+            public TaskCompletionSource<object> TaskCompletionSource { get; set; }
+            public WebSocket WebSocket { get; set; }
+
+            public SocketWrapper(WebSocket _wSocket, TaskCompletionSource<object> _taskCompletionSource)
+            {
+                TaskCompletionSource = _taskCompletionSource;
+                WebSocket = _wSocket;
+            }
         }
     }
 }

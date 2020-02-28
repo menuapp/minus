@@ -20,7 +20,7 @@ export default class App extends React.Component {
   }
 
   openConnection() {
-    this.socket = new WebSocket("ws://localhost/webservice/api/basket/get");
+    this.socket = new WebSocket("ws://localhost/webservice/connect");
 
     this.socket.onopen = () => {
       console.log("Connected...");
@@ -29,6 +29,7 @@ export default class App extends React.Component {
 
     this.socket.onmessage = (event) => {
       console.log(JSON.parse(event.data));
+      // console.log("order came...");
     };
   }
 
@@ -40,13 +41,13 @@ export default class App extends React.Component {
     return (
       <div className="App">
 
-        {this.state.data.map((cards) => {
+        {/* {this.state.data.map((cards) => {
           return (<div className="page container-fluid">
             <SlidingPage cards={cards.products} />
           </div>
           );
-        })}
-
+        })} */}
+        <button className="btn btn-danger" onClick={this.openConnection}>Connect</button>
       </div>
     );
   }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace WebService
@@ -19,7 +20,11 @@ namespace WebService
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseUrls("http://localhost:5556/")
+                //.UseUrls("http://localhost:5556/")
                 .UseStartup<Startup>();
+            //.ConfigureServices(services =>
+            //{
+            //    services.AddHostedService<OrderService>();
+            //});
     }
 }
