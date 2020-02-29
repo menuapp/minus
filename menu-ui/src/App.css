@@ -1,14 +1,17 @@
 .App {
-  display: flex;
   flex-direction: row;
-  font-family: 'Nunito';
-  background-color: #ffffff;
-  padding-top: 2vh;
-  overflow:hidden;
+  font-family: Montserrat-Medium;
+  background-color: #f8f9fa;
+  overflow: auto;
+  height: 100vh;
 }
 
-.page{
+.page {
+  position: absolute;
+  top: 145px;
   flex-shrink: 0;
+  overflow: auto;
+  height: 80vh;
 }
 
 .title {
