@@ -7,6 +7,7 @@ import NavigationBar from './components/navigationBar/navigationBar';
 import CategoryBar from './components/categoryBar/categoryBar';
 import { Route, Switch } from 'react-router-dom';
 import SignIn from './components/signIn/signIn';
+import ItemDetails from './components/itemDetails/itemDetails';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -50,6 +51,9 @@ export default class App extends React.Component {
     return (
       <div className="App">
         <Switch>
+          <Route path='/itemDetails/:id'>
+            <ItemDetails data={(this.state.data[this.state.currentCategoryIndex] || {}).products} />
+          </Route>
           <Route path="/signin">
             <SignIn />
           </Route>

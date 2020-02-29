@@ -1,6 +1,7 @@
 import React from 'react';
 
 import "./itemBox.css";
+import { Link } from 'react-router-dom';
 
 export default class ItemBox extends React.Component {
     constructor(props) {
@@ -10,8 +11,10 @@ export default class ItemBox extends React.Component {
 
     render() {
         return (
-            <div className="itemBox mb-4">
+
+            <div className="itemBox mb-4"><Link to={'/itemDetails/' + this.props.card.id}>
                 <img src={"http://" + this.props.card.contents[0].relativePath.replace("localhost", "192.168.1.174")} width="100%" height="55%" />
+            </Link>
                 <div className="container name">{this.props.card.name}</div>
                 <div className="container details">
                     <div className="d-flex flex-row detailsWrapper align-items-center">
@@ -22,6 +25,7 @@ export default class ItemBox extends React.Component {
 
                 </div>
             </div>
+
         );
     }
 }
