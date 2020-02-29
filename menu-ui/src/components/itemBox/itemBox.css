@@ -1,6 +1,7 @@
 .itemBox {
     height: 30vh;
     font-size: 0.9rem;
+    background-color: white;
     box-shadow: 0px 6px 20px rgba(13, 51, 32, 0.1);
     border-radius: 0.2rem;
 }
@@ -9,7 +10,6 @@
     font-size: 1.2rem;
     display: flex;
     height: 20%;
-    font-weight: bold;
     /* padding-left: 5%; */
     align-items: center;
 }
@@ -27,7 +27,7 @@
 }
 
 .itemBox .details .duration {
-    /* margin-right: 10%; */
+    margin-right: 10%;
 }
 
 .itemBox .details .ingredients {
@@ -35,6 +35,8 @@
 }
 
 .itemBox .details .button {
+    padding-left: 10px;
+    padding-right: 10px;
     color: #30be76;
     border: 1px solid #30be76;
     background: none;

@@ -3,15 +3,20 @@ import './App.css';
 import Slider from './components/slider/slider';
 import ProductService from './Service/productService';
 import SlidingPage from './components/slidingPage/slidingPage';
+import NavigationBar from './components/navigationBar/navigationBar';
+import CategoryBar from './components/categoryBar/categoryBar';
+import { Route, Switch } from 'react-router-dom';
+import SignIn from './components/signIn/signIn';
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: [], restaurantName: "agileaction" };
+    this.state = { data: [], restaurantName: "agileaction", currentCategoryIndex: 0 };
 
     this.productService = new ProductService();
     this.sendMessage = this.sendMessage.bind(this);
     this.openConnection = this.openConnection.bind(this);
+    this.updateCategoryItems = this.updateCategoryItems.bind(this);
   }
 
   async componentDidMount() {
@@ -37,18 +42,33 @@ export default class App extends React.Component {
     this.socket.send("hello");
   }
 
+  updateCategoryItems(index) {
+    this.setState({ currentCategoryIndex: index });
+  }
+
   render() {
     return (
       <div className="App">
-
-        {/* {this.state.data.map((cards) => {
-          return (<div className="page container-fluid">
-            <SlidingPage cards={cards.products} />
-          </div>
-          );
-        })} */}
-        <button className="btn btn-danger" onClick={this.openConnection}>Connect</button>
-      </div>
+        <Switch>
+          <Route path="/signin">
+            <SignIn />
+          </Route>
+          <Route path="/register">
+          </Route>
+          <Route path="/">
+            <NavigationBar />
+            <CategoryBar updateCategoryItems={this.updateCategoryItems} categoryName={this.state.data.map(category => category.name)} />;
+            {this.state.data.map((cards, index) => {
+              if (index === this.state.currentCategoryIndex) {
+                return (<div key={index} data-key={index} className="page container-fluid">
+                  <SlidingPage cards={cards.products} />
+                </div>
+                );
+              }
+            })}
+          </Route>
+        </Switch>
+      </div >
     );
   }
 }
