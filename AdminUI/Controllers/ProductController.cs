@@ -83,26 +83,37 @@ namespace AdminUI.Controllers
             });
         }
 
-        public IActionResult EditProduct()
+        public IActionResult EditProduct(int id)
         {
-            return View();
+            var product = productService.GetById(id);
+
+            return View(mapper.Map<ProductViewModel>(product));
         }
 
         [HttpPost]
         public IActionResult EditProduct(ProductViewModel model)
         {
-            return View();
+            productService.Update(mapper.Map<ProductDomain>(model));
+            return RedirectToAction("ListProducts", new
+            {
+                id = model.CategoryId
+            });
         }
 
-        public IActionResult DeleteProduct()
+        public IActionResult DeleteProduct(int id)
         {
-            return View();
+            var product = productService.GetById(id);
+            return View(mapper.Map<ProductViewModel>(product));
         }
 
         [HttpPost]
         public IActionResult DeleteProduct(ProductViewModel model)
         {
-            return View();
+            productService.Delete(mapper.Map<ProductDomain>(model));
+            return RedirectToAction("ListProducts", new
+            {
+                id = model.CategoryId
+            });
         }
 
         public IActionResult CreateCategory()
@@ -118,15 +129,17 @@ namespace AdminUI.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult EditCategory()
+        public IActionResult EditCategory(int id)
         {
-            return View();
+            var productCategory = productCategoryService.GetById(id);
+            return View(mapper.Map<ProductCategoryViewModel>(productCategory));
         }
 
         [HttpPost]
-        public IActionResult EditCategory(ProductCategoryViewModel model)
+        public IActionResult EditCategory(ProductCategoryViewModel productCategoryViewModel)
         {
-            return View();
+            productCategoryService.Update(mapper.Map<ProductCategoryDomain>(productCategoryViewModel));
+            return RedirectToAction("Index");
         }
 
         public IActionResult DeleteCategory(int id)
@@ -134,10 +147,12 @@ namespace AdminUI.Controllers
             var model = mapper.Map<ProductCategoryViewModel>(productCategoryService.GetById(id));
             return View(model);
         }
+
         [HttpPost]
         public IActionResult DeleteCategory(ProductCategoryViewModel model)
         {
-            return View();
+            productCategoryService.Delete(mapper.Map<ProductCategoryDomain>(model));
+            return RedirectToAction("Index");
         }
     }
 }

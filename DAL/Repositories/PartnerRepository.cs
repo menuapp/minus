@@ -24,7 +24,7 @@ namespace DAL.Repositories
 
         public Partner GetByIdEagerly(int id)
         {
-            return dbSet.Include(p => p.ProductCategories).FirstOrDefault(p => p.Id == id);
+            return dbSet.Include(p => p.ProductCategories).Include(p => p.Orders).Include(p => p.Counters).Include(p => p.Contents).FirstOrDefault(p => p.Id == id);
         }
 
         public Partner GetByIdEagerly(string id)

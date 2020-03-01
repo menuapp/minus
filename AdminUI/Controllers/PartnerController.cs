@@ -49,9 +49,28 @@ namespace AdminUI.Controllers
             return RedirectToAction("index");
         }
 
-        public IActionResult Edit()
+        public IActionResult Edit(int id)
         {
-            return View();
+            return View(mapper.Map<PartnerViewModel>(partnerService.GetById(id)));
+        }
+
+        [HttpPost]
+        public IActionResult Edit(PartnerViewModel partnerViewModel)
+        {
+            partnerService.Update(mapper.Map<PartnerDomain>(partnerViewModel));
+            return RedirectToAction("index");
+        }
+
+        public IActionResult Delete(int id)
+        {
+            return View(mapper.Map<PartnerViewModel>(partnerService.GetById(id)));
+        }
+
+        [HttpPost]
+        public IActionResult Delete(PartnerViewModel partnerViewModel)
+        {
+            partnerService.Delete(mapper.Map<PartnerDomain>(partnerViewModel));
+            return RedirectToAction("index");
         }
     }
 }

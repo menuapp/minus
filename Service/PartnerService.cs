@@ -13,11 +13,15 @@ namespace Service
     public class PartnerService : IPartnerService
     {
         private IPartnerRepository partnerRepository { get; set; }
+        private IProductCategoryRepository productCategoryRepository { get; set; }
+        private IProductRepository productRepository { get; set; }
         private IMapper mapper { get; set; }
         private IUnitOfWork unitOfWork;
 
-        public PartnerService(IPartnerRepository partnerRepository, IMapper mapper, IUnitOfWork unitOfWork)
+        public PartnerService(IPartnerRepository partnerRepository, IProductCategoryRepository productCategoryRepository, IProductRepository productRepository, IMapper mapper, IUnitOfWork unitOfWork)
         {
+            this.productRepository = productRepository;
+            this.productCategoryRepository = productCategoryRepository;
             this.partnerRepository = partnerRepository;
             this.mapper = mapper;
             this.unitOfWork = unitOfWork;
@@ -32,7 +36,20 @@ namespace Service
 
         public bool Delete(PartnerDomain domain)
         {
-            return partnerRepository.Delete(mapper.Map<Partner>(domain));
+            try
+            {
+                var partner = partnerRepository.GetByIdEagerly((int)domain.Id);
+
+                partnerRepository.Delete(partner);
+
+                unitOfWork.Commit();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
         }
 
         public IEnumerable<PartnerDomain> GetAll()
@@ -48,7 +65,14 @@ namespace Service
 
         public void Update(PartnerDomain domain)
         {
-            throw new NotImplementedException();
+            var updatedPartner = mapper.Map<Partner>(domain);
+            var partner = partnerRepository.GetById((int)domain.Id);
+
+            partner.AssociateAddress = updatedPartner.AssociateAddress;
+            partner.AssociateName = updatedPartner.AssociateName;
+            partner.AssociateUrl = updatedPartner.AssociateUrl;
+
+            unitOfWork.Commit();
         }
 
         public IEnumerable<PartnerDomain> GetMany(Expression<Func<PartnerDomain, bool>> where)

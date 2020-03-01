@@ -39,7 +39,19 @@ namespace Service
 
         public bool Delete(ProductDomain productDomain)
         {
-            return productRepository.Delete(mapper.Map<Product>(productDomain));
+            try
+            {
+                var product = productRepository.GetById((int)productDomain.Id);
+                productRepository.Delete(product);
+
+                unitOfWork.Commit();
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public ProductDomain GetById(int id)
@@ -52,9 +64,19 @@ namespace Service
             return mapper.Map<List<ProductDomain>>(productRepository.GetAll());
         }
 
-        public void Update(ProductDomain ProductDomain)
+        public void Update(ProductDomain productDomain)
         {
-            throw new NotImplementedException();
+            var updatedProduct = mapper.Map<Product>(productDomain);
+            var product = productRepository.GetById((int)productDomain.Id);
+
+            product.IsInStock = updatedProduct.IsInStock;
+            product.Name = updatedProduct.Name;
+            product.OrderProducts = updatedProduct.OrderProducts;
+            product.ProductVolumeUnit = updatedProduct.ProductVolumeUnit;
+            product.TotalProductVolume = updatedProduct.TotalProductVolume;
+            product.UnitPrice = updatedProduct.UnitPrice;
+
+            unitOfWork.Commit();
         }
 
         public IEnumerable<ProductDomain> GetMany(Expression<Func<ProductDomain, bool>> where)
