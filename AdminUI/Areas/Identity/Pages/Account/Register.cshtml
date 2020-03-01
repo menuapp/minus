@@ -8,7 +8,7 @@
 
 <div class="row">
     <div class="col-md-4">
-        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+        <form id="registeryForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <h4>Create a new account.</h4>
             <hr />
             <div asp-validation-summary="All" class="text-danger"></div>
@@ -19,12 +19,15 @@
             </div>
             <div class="form-group">
                 <label asp-for="Input.RoleId"></label>
-                <select asp-for="Input.RoleId" asp-items="Model.Input.Roles" class="form-control"  onchange="update(event)"></select>
+                <select asp-for="Input.RoleId" asp-items="Model.Input.Roles" class="form-control" onchange="update(event)"></select>
             </div>
+            @if (Model.Input.Partners != null)
+            {
                 <div class="form-group" id="partnerid">
                     <label asp-for="Input.PartnerId"></label>
                     <select asp-for="Input.PartnerId" asp-items="Model.Input.Partners" class="form-control"></select>
                 </div>
+            }
             <div class="form-group">
                 <label asp-for="Input.Password"></label>
                 <input asp-for="Input.Password" class="form-control" />
@@ -35,7 +38,8 @@
                 <input asp-for="Input.ConfirmPassword" class="form-control" />
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-            <button type="reset">Reset</button>
+            <a id="getUserDetails" asp-action="GetUserDetails" asp-controller="User"></a>
+            <button id="updateForm" type="submit" hidden asp-page-handler="update"></button>
             <button type="submit" class="btn btn-primary">Register</button>
         </form>
     </div>
@@ -48,13 +52,21 @@
         //} else {
         //    partnerInput.style.display = "block";
         //}
-        $('[type="submit"]').click();
+
+
+        //let form = $("form#registeryForm");
+        //let url = $('a#getUserDetails').attr("href");
+
+        //form.attr("method", "get");
+        //form.submit();
+        $('#updateForm').click();
+
     }
 
-    //update partner select on load
-    let roleInput = {};
-    roleInput.target = document.querySelector("#Input_RoleId");
-    update(roleInput);
+////update partner select on load
+//let roleInput = {};
+//roleInput.target = document.querySelector("#Input_RoleId");
+//update(roleInput);
 </script>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

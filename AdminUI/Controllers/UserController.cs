@@ -77,5 +77,11 @@ namespace AdminUI.Controllers
         {
             return RedirectToPage("/Account/Logout", new { area = "Identity" });
         }
+
+        [HttpPost]
+        public IActionResult GetUserDetails(UserViewModel model)
+        {
+            return RedirectToPage("/Account/Register", new { area = "Identity" });
+        }
     }
 }

@@ -1,32 +1,19 @@
 import React from 'react';
 
-import "./itemDetails.css";
+import './itemDetails.css';
 import { useParams } from 'react-router-dom';
 
 export default function ItemDetails(props) {
-    let { id } = new useParams();
-    let selectedProduct;
+  let { id } = new useParams();
 
-    if (props && props.data) {
-        props.data.forEach(product => {
-            if (product.id == id) {
-                selectedProduct = product;
-            }
-        });
-
-        return (
-            <div id="itemDetails">
-                <div className="imagesContainer">
-                    {selectedProduct.contents.map((content) => {
-                        return <img src={content.relativePath} />
-                    })}
-                </div>
-                <div>
-                    Details
-                </div>
-            </div>
-        );
-    } else return '';
+  return (
+    <div id="itemDetails">
+      <div className="imagesContainer">
+        {id}
+      </div>
+      <div>Details</div>
+    </div>
+  );
 }
 
 // export default class ItemDetails extends React.Component {

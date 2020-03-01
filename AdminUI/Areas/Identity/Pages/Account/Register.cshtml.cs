@@ -66,10 +66,33 @@ namespace AdminUI.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
         }
 
+        public async void OnPostUpdateAsync(string returnUrl = null)
+        {
+            var adminRole = _roleManager.Roles.FirstOrDefault(role => role.Name == "Admin");
+
+            addRolesAndPartners(Input);
+
+            if (Input.RoleId == adminRole.Id)
+            {
+                Input.Partners = null;
+            }
+
+            ModelState.Clear();
+
+            ReturnUrl = returnUrl;
+        }
+
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            var nonAdminRoles = _roleManager.Roles.Where(role => role.Name != "Admin").ToList();
+
             returnUrl = returnUrl ?? Url.Content("~/");
             addRolesAndPartners(Input);
+
+            if ((nonAdminRoles.FirstOrDefault(role => role.Id == Input.RoleId) != null) && Input.PartnerId == null)
+            {
+                ModelState.AddModelError("PartnerId", "Partner is required");
+            }
 
             if (ModelState.IsValid)
             {
@@ -99,8 +122,8 @@ namespace AdminUI.Areas.Identity.Pages.Account
                             values: new { userId = user.Id, code = code },
                             protocol: Request.Scheme);
 
-                        await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                        //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                        //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                         //await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
@@ -116,6 +139,8 @@ namespace AdminUI.Areas.Identity.Pages.Account
             return Page();
         }
 
+
+
         public void addRolesAndPartners(UserViewModel model)
         {
             var roles = _roleManager.Roles.ToList();
@@ -130,7 +155,7 @@ namespace AdminUI.Areas.Identity.Pages.Account
 
             foreach (var role in roles)
             {
-                if (role.Name != "SuperAdmin")
+                if (role.Name != "SuperAdmin" && role.Name != "Customer")
                 {
                     SelectListItem selectListItem = new SelectListItem
                     {

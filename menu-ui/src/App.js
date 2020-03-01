@@ -12,7 +12,11 @@ import ItemDetails from './components/itemDetails/itemDetails';
 export default class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: [], restaurantName: "agileaction", currentCategoryIndex: 0 };
+    this.state = {
+      data: [],
+      restaurantName: 'agileaction',
+      currentCategoryIndex: 0
+    };
 
     this.productService = new ProductService();
     this.sendMessage = this.sendMessage.bind(this);
@@ -26,21 +30,21 @@ export default class App extends React.Component {
   }
 
   openConnection() {
-    this.socket = new WebSocket("ws://localhost/webservice/connect");
+    this.socket = new WebSocket('ws://localhost/webservice/connect');
 
     this.socket.onopen = () => {
-      console.log("Connected...");
-      console.log("hello");
-    }
+      console.log('Connected...');
+      console.log('hello');
+    };
 
-    this.socket.onmessage = (event) => {
+    this.socket.onmessage = event => {
       console.log(JSON.parse(event.data));
       // console.log("order came...");
     };
   }
 
   sendMessage() {
-    this.socket.send("hello");
+    this.socket.send('hello');
   }
 
   updateCategoryItems(index) {
@@ -51,28 +55,39 @@ export default class App extends React.Component {
     return (
       <div className="App">
         <Switch>
-          <Route path='/itemDetails/:id'>
-            <ItemDetails data={(this.state.data[this.state.currentCategoryIndex] || {}).products} />
+          <Route path="/itemDetails/:id">
+            <ItemDetails data={this.state.data} />
           </Route>
           <Route path="/signin">
             <SignIn />
           </Route>
-          <Route path="/register">
-          </Route>
+          <Route path="/register"></Route>
           <Route path="/">
             <NavigationBar />
-            <CategoryBar updateCategoryItems={this.updateCategoryItems} categoryName={this.state.data.map(category => category.name)} />;
-            {this.state.data.map((cards, index) => {
-              if (index === this.state.currentCategoryIndex) {
-                return (<div key={index} data-key={index} className="page container-fluid">
-                  <SlidingPage cards={cards.products} />
-                </div>
-                );
-              }
-            })}
+            <CategoryBar
+              updateCategoryItems={this.updateCategoryItems}
+              categoryName={this.state.data.map(category => category.name)}
+            />
+            <Switch>
+              <Route>
+                {this.state.data.map((cards, index) => {
+                  if (index === this.state.currentCategoryIndex) {
+                    return (
+                      <div
+                        key={index}
+                        data-key={index}
+                        className="page container-fluid"
+                      >
+                        <SlidingPage cards={cards.products} />
+                      </div>
+                    );
+                  }
+                })}
+              </Route>
+            </Switch>
           </Route>
         </Switch>
-      </div >
+      </div>
     );
   }
 }

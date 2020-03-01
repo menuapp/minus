@@ -13,12 +13,10 @@ namespace AdminUI.Models
     {
         public string Id { get; set; }
 
-        [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Required]
         [Display(Name = "Partner")]
         public string PartnerId { get; set; }
 
