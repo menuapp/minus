@@ -68,23 +68,19 @@ export default class App extends React.Component {
               updateCategoryItems={this.updateCategoryItems}
               categoryName={this.state.data.map(category => category.name)}
             />
-            <Switch>
-              <Route>
-                {this.state.data.map((cards, index) => {
-                  if (index === this.state.currentCategoryIndex) {
-                    return (
-                      <div
-                        key={index}
-                        data-key={index}
-                        className="page container-fluid"
-                      >
-                        <SlidingPage cards={cards.products} />
-                      </div>
-                    );
-                  }
-                })}
-              </Route>
-            </Switch>
+            {this.state.data.map((cards, index) => {
+              if (index === this.state.currentCategoryIndex) {
+                return (
+                  <div
+                    key={index}
+                    data-key={index}
+                    className="page container-fluid"
+                  >
+                    <SlidingPage cards={cards.products} />
+                  </div>
+                );
+              }
+            })}
           </Route>
         </Switch>
       </div>
