@@ -14,6 +14,7 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       data: [],
+      products: [],
       restaurantName: 'agileaction',
       currentCategoryIndex: 0
     };
@@ -26,7 +27,12 @@ export default class App extends React.Component {
 
   async componentDidMount() {
     let json = await this.productService.getAll(this.state.restaurantName);
-    this.setState({ data: json });
+
+    let products = [];
+    json.forEach(category => {
+      products.push(...category.products);
+    });
+    this.setState({ data: json, products: products });
   }
 
   openConnection() {
@@ -54,33 +60,26 @@ export default class App extends React.Component {
   render() {
     return (
       <div className="App">
+        <NavigationBar />
         <Switch>
           <Route path="/itemDetails/:id">
-            <ItemDetails data={this.state.data} />
+            <ItemDetails products={this.state.products || []} />
           </Route>
           <Route path="/signin">
             <SignIn />
           </Route>
           <Route path="/register"></Route>
           <Route path="/">
-            <NavigationBar />
             <CategoryBar
               updateCategoryItems={this.updateCategoryItems}
               categoryName={this.state.data.map(category => category.name)}
             />
-            {this.state.data.map((cards, index) => {
-              if (index === this.state.currentCategoryIndex) {
-                return (
-                  <div
-                    key={index}
-                    data-key={index}
-                    className="page container-fluid"
-                  >
-                    <SlidingPage cards={cards.products} />
-                  </div>
-                );
+            <SlidingPage
+              category={
+                (this.state.data[this.state.currentCategoryIndex] || {})
+                  .products || []
               }
-            })}
+            />
           </Route>
         </Switch>
       </div>

@@ -1,0 +1,15 @@
+#itemDetails{
+    padding-top: 100px;
+}
+
+.product-name{
+    font-size: 1.7rem;
+}
+
+.product-details-container{
+    padding-top: 15px;
+}
+
+.order-btn{
+    background-color: palegreen;
+}
