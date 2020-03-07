@@ -8,6 +8,8 @@ import CategoryBar from './components/categoryBar/categoryBar';
 import { Route, Switch } from 'react-router-dom';
 import SignIn from './components/signIn/signIn';
 import ItemDetails from './components/itemDetails/itemDetails';
+import Register from './components/register/register';
+import Basket from './components/basket/basket';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -15,6 +17,8 @@ export default class App extends React.Component {
     this.state = {
       data: [],
       products: [],
+      backlightDim: false,
+      clickOutsideNavbar: true,
       restaurantName: 'agileaction',
       currentCategoryIndex: 0
     };
@@ -23,6 +27,16 @@ export default class App extends React.Component {
     this.sendMessage = this.sendMessage.bind(this);
     this.openConnection = this.openConnection.bind(this);
     this.updateCategoryItems = this.updateCategoryItems.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.dimBacklight = this.dimBacklight.bind(this);
+  }
+
+  handleClick() {
+    this.setState({ clickOutsideNavbar: true, backlightDim: false });
+  }
+
+  dimBacklight(state) {
+    this.setState({ backlightDim: state, clickOutsideNavbar: false });
   }
 
   async componentDidMount() {
@@ -59,11 +73,17 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <div className="App">
-        <NavigationBar />
+      <div className={"App" + (this.state.backlightDim ? " backlightDim" : "")} onClick={this.handleClick}>
+        <NavigationBar clickOutsideNavbar={this.state.clickOutsideNavbar} dimBacklight={this.dimBacklight} />
         <Switch>
           <Route path="/itemDetails/:id">
             <ItemDetails products={this.state.products || []} />
+          </Route>
+          <Route path="/basket">
+            <Basket />
+          </Route>
+          <Route path="/register">
+            <Register />
           </Route>
           <Route path="/signin">
             <SignIn />

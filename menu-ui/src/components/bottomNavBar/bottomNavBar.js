@@ -2,7 +2,7 @@ import './bottomNavBar.css';
 
 import React from 'react';
 
-export default class BottomNavnBar extends React.Component {
+export default class BottomNavBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = { isExpand: false };
@@ -21,13 +21,13 @@ export default class BottomNavnBar extends React.Component {
   render() {
     return (
       <div>
-        <nav className="bottom-nav" role="navigation">
+        <div className="bottom-nav" role="navigation">
           <div className="container h-100">
             <div className="row h-100 align-items-center">
               {this.props.children}
             </div>
           </div>
-        </nav>
+        </div>
       </div>
     );
   }

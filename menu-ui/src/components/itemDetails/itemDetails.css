@@ -1,15 +1,22 @@
-#itemDetails{
+#itemDetails {
     padding-top: 100px;
 }
 
-.product-name{
+.product-name {
     font-size: 1.7rem;
 }
 
-.product-details-container{
+.product-desc {
+    /* text-align: justify; */
+    padding-top: 15px;
+    font-size: 1.2rem;
+}
+
+.product-details-container {
     padding-top: 15px;
 }
 
-.order-btn{
-    background-color: palegreen;
+.order-btn {
+    color: white;
+    background-color: #30be76;
 }

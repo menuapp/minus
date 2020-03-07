@@ -1,5 +1,5 @@
 import './navigationBar.css';
-import logo from '../../food.svg';
+import logo from '../../dish (1).svg';
 
 import React from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
@@ -9,17 +9,34 @@ import App from '../../App';
 export default class NavigationBar extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { isExpand: false };
+    this.state = {
+      isExpand: false,
+      transitionNone: false
+    };
     this.updateNavigation = this.updateNavigation.bind(this);
     this.toggleMenu = this.toggleMenu.bind(this);
+    this.stopPropagation = this.stopPropagation.bind(this);
+  }
+
+  stopPropagation(event, dimState) {
+    this.props.dimBacklight(dimState);
+    event.stopPropagation();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.clickOutsideNavbar) {
+      this.setState({ isExpand: false, transitionNone: false });
+    }
   }
 
   updateNavigation() {
-    this.setState({ isExpand: false });
+    this.setState({ isExpand: false, transitionNone: true }, () => this.props.dimBacklight(false));
   }
 
   toggleMenu() {
-    this.setState({ isExpand: !this.state.isExpand });
+    this.setState({ isExpand: !this.state.isExpand, transitionNone: false }, () => {
+      this.props.dimBacklight(this.state.isExpand);
+    });
   }
 
   render() {
@@ -28,14 +45,15 @@ export default class NavigationBar extends React.Component {
         <nav role="navigation">
           <div id="menuToggle">
             <input
+              className={(this.state.isExpand) ? "checked" : ""}
               type="checkbox"
-              checked={this.state.isExpand}
-              onClick={this.toggleMenu}
+              onClick={this.stopPropagation}
+              onChange={this.toggleMenu}
             />
-            <span></span>
-            <span></span>
-            <span></span>
-            <ul id="menu">
+            <span className={this.state.transitionNone ? "transition-none" : ""}></span>
+            <span className={this.state.transitionNone ? "transition-none" : ""}></span>
+            <span className={this.state.transitionNone ? "transition-none" : ""}></span>
+            <ul id="menu" className={this.state.transitionNone ? "transition-none" : ""} onClick={(e) => this.stopPropagation(e, true)}>
               <li>
                 <Link to="/signin" onClick={this.updateNavigation}>
                   Sign in
@@ -58,7 +76,12 @@ export default class NavigationBar extends React.Component {
               </li>
             </ul>
           </div>
-          <img src={logo} />
+          <Link to="/basket">
+            <div id="basket-link">
+              <img src={logo} />
+              <span>99</span>
+            </div>
+          </Link>
         </nav>
       </div>
     );

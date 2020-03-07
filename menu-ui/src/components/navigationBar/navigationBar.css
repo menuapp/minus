@@ -8,10 +8,6 @@ a {
     transition: 200ms;
 }
 
-a:hover {
-    opacity: 0.5;
-}
-
 ul {
     padding: 0;
     list-style-type: none;
@@ -20,21 +16,20 @@ ul {
 [role="navigation"] img {
     position: absolute;
     width: 40px;
-    top: 13px;
-    right: 25px;
 }
 
 nav {
     box-shadow: 0px 0px 6px grey;
     position: fixed;
     width: 100%;
-    z-index: 2;
+    z-index: 10;
     background-color: white;
     height: 65px;
 }
 
 #menuToggle {
     display: flex;
+    width: 100px;
     flex-direction: column;
     position: relative;
     top: 25px;
@@ -69,6 +64,10 @@ nav {
         opacity 0.55s ease;
 }
 
+#menuToggle span.transition-none {
+    transition: none !important;
+}
+
 #menuToggle span:first-child {
     transform-origin: 0% 0%;
 }
@@ -77,18 +76,18 @@ nav {
     transform-origin: 0% 100%;
 }
 
-#menuToggle input:checked~span {
+#menuToggle input.checked~span {
     opacity: 1;
     transform: rotate(45deg) translate(-3px, -1px);
     background: #36383F;
 }
 
-#menuToggle input:checked~span:nth-last-child(3) {
+#menuToggle input.checked~span:nth-last-child(3) {
     opacity: 0;
     transform: rotate(0deg) scale(0.2, 0.2);
 }
 
-#menuToggle input:checked~span:nth-last-child(2) {
+#menuToggle input.checked~span:nth-last-child(2) {
     transform: rotate(-45deg) translate(0, -1px);
 }
 
@@ -109,11 +108,41 @@ nav {
     transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0);
 }
 
+#menu.transition-none {
+    transition: none !important;
+}
+
 #menu li {
     padding: 10px 0;
     transition-delay: 2s;
 }
 
-#menuToggle input:checked~ul {
+#menuToggle input.checked~ul {
     transform: none;
+}
+
+#basket-link {
+    position: absolute;
+    width: 40px;
+    top: 13px;
+    right: 22px;
+}
+
+#basket-link span {
+    width: 27px;
+    height: 27px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    top: -10px;
+    right: -32px;
+    border-radius: 25%;
+    background-color: orangered;
+    color: white;
+    font-size: 16px;
+}
+
+* {
+    outline: none;
 }
