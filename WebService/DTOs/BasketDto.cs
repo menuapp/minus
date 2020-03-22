@@ -16,6 +16,7 @@ namespace WebService.DTOs
         public int CounterId { get; set; }
         public string CustomerId { get; set; }
         public int PartnerId { get; set; }
+        public string  SessionId { get; set; }
         public List<OrderProductDto> OrderProducts { get; set; }
     }
 }

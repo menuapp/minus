@@ -6,6 +6,10 @@
   height: 100vh;
 }
 
+.App.backlightDim{
+  overflow: hidden;
+}
+
 .backlightDim::after {
   content: '';
   z-index: 2;

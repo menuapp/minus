@@ -32,6 +32,11 @@ namespace DAL.Repositories
             throw new NotImplementedException();
         }
 
+        public Comment GetByProp(Expression<Func<Comment, bool>> where)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<Comment> GetManyEagerly(Expression<Func<Comment, bool>> where)
         {
             return dbSet.Include(comment => comment.Customer).Where(where).ToList();

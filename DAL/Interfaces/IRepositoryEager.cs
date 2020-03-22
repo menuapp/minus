@@ -10,5 +10,6 @@ namespace DAL.Interfaces
         IEnumerable<T> GetAllEagerly();
         IEnumerable<T> GetManyEagerly(Expression<Func<T, bool>> where);
         T GetByIdEagerly(Tid id);
+        T GetByProp(Expression<Func<T, bool>> where);
     }
 }

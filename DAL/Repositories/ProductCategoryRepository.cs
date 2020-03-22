@@ -32,6 +32,11 @@ namespace DAL.Repositories
             throw new NotImplementedException();
         }
 
+        public ProductCategory GetByProp(Expression<Func<ProductCategory, bool>> where)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<ProductCategory> GetManyEagerly(Expression<Func<ProductCategory, bool>> where)
         {
             return dbSet.Include(productCategory => productCategory.Products).ThenInclude(p => p.Contents).Where(where).ToList();

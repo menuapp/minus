@@ -6,6 +6,12 @@ import ItemBox from '../itemBox/itemBox';
 export default class SlidingPage extends React.Component {
   constructor(props) {
     super(props);
+
+    this.updateBasket = this.updateBasket.bind(this);
+  }
+
+  updateBasket() {
+    this.props.updateBasket();
   }
 
   render() {
@@ -15,7 +21,7 @@ export default class SlidingPage extends React.Component {
           {this.props.category.map((card, index) => {
             return (
               <div key={index} className="col-xs-12 col-md-4 col-xl-3">
-                <ItemBox card={card} />
+                <ItemBox updateBasket={this.updateBasket} card={card} />
               </div>
             );
           })}

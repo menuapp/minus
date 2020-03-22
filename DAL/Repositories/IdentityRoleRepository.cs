@@ -30,6 +30,11 @@ namespace DAL.Repositories
             throw new NotImplementedException();
         }
 
+        public IdentityRole GetByProp(Expression<Func<IdentityRole, bool>> where)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<IdentityRole> GetManyEagerly(Expression<Func<IdentityRole, bool>> where)
         {
             throw new NotImplementedException();

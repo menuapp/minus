@@ -21,10 +21,11 @@ namespace Entity
         public OrderType OrderType { get; set; }
         public int OrderTypeId { get; set; }
         public Counter Counter { get; set; }
-        public int CounterId { get; set; }
+        public int? CounterId { get; set; }
         public ApplicationUser Customer { get; set; }
         public string CustomerId { get; set; }
         public ICollection<OrderProduct> OrderProducts { get; set; }
         public ICollection<ProductOption> ProductOptions { get; set; }
+        public string SessionId { get; set; }
     }
 }

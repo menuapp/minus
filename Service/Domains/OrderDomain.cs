@@ -20,5 +20,6 @@ namespace Service.Domains
         public PaymentTypeEnum PaymentType { get; set; }
         public ICollection<OrderProductDomain> OrderProducts { get; set; }
         public ICollection<ProductOptionDomain> ProductOptions { get; set; }
+        public string SessionId { get; set; }
     }
 }

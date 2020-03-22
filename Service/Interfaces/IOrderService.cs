@@ -10,5 +10,6 @@ namespace Service.Interfaces
         bool AddProduct(OrderProductDomain product);
         bool UpdateProduct(OrderProductDomain product);
         bool RemoveProduct(OrderProductDomain product);
+        OrderDomain GetBySession(string sessionId);
     }
 }

@@ -10,7 +10,7 @@ using System.Text;
 
 namespace DAL.Repositories
 {
-    public class OrderRepository : RepositoryBase<Order, int>, IOrderRepository, IRepositoryEager<Order, int>
+    public class OrderRepository : RepositoryBase<Order, int>, IOrderRepository
     {
         public OrderRepository(MinusContext context) : base(context)
         {
@@ -30,6 +30,11 @@ namespace DAL.Repositories
         public IEnumerable<Order> GetManyEagerly(Expression<Func<Order, bool>> where)
         {
             return dbSet.Include(order => order.OrderProducts.Select(orderProducts => orderProducts.Product)).Where(where).ToList();
+        }
+
+        public Order GetByProp(Expression<Func<Order, bool>> where)
+        {
+            return dbSet.Include(basket => basket.OrderProducts).FirstOrDefault(where);
         }
     }
 }

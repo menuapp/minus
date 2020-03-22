@@ -7,16 +7,74 @@ export default class OrderRepository extends RepositoryBase {
         this.endPoint += '/basket';
     }
 
-    async addToBasket() {
+    async createBasket() {
         let response = await fetch(this.endPoint + '/add', {
             method: 'POST',
-            body: {
-                CounterId: 1,
-                PartnerId: 1
-            }
+            headers: new Headers({
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+            }),
+            body: JSON.stringify({
+                orderStatus: 1,
+                orderType: 1,
+                paymentType: 1
+            })
         });
-        let data = await response.json();
 
-        return data;
+        if (response.status === 200) {
+            return true;
+        }
+
+        return false;
+    }
+
+    async addToBasket(productId, quantity) {
+        let response = await fetch(this.endPoint + '/addproduct', {
+            method: 'POST',
+            headers: new Headers({
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+            }),
+            body: JSON.stringify({
+                productId,
+                quantity
+            })
+        });
+
+        if (response.status === 200) {
+            return true;
+        }
+
+        return false;
+    }
+
+    async getBasket() {
+        let response = await fetch(this.endPoint + '/getbasket', {
+            method: 'POST',
+            headers: new Headers({
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+            })
+        });
+        let basket;
+
+        if (response.status === 200) {
+            basket = await response.json();
+
+            return basket;
+        }
+
+        return null;
+    }
+
+    async updateProduct() {
+
+    }
+
+    async removeProduct() {
+
     }
 }

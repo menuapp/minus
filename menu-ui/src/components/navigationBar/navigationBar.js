@@ -5,6 +5,7 @@ import React from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 import SignIn from '../signIn/signIn';
 import App from '../../App';
+import OrderService from '../../Service/orderService';
 
 export default class NavigationBar extends React.Component {
   constructor(props) {
@@ -13,6 +14,7 @@ export default class NavigationBar extends React.Component {
       isExpand: false,
       transitionNone: false
     };
+
     this.updateNavigation = this.updateNavigation.bind(this);
     this.toggleMenu = this.toggleMenu.bind(this);
     this.stopPropagation = this.stopPropagation.bind(this);
@@ -79,7 +81,7 @@ export default class NavigationBar extends React.Component {
           <Link to="/basket">
             <div id="basket-link">
               <img src={logo} />
-              <span>99</span>
+              {this.props.basketQuantity ? <span>{this.props.basketQuantity}</span> : ""}
             </div>
           </Link>
         </nav>

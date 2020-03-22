@@ -32,6 +32,11 @@ namespace DAL.Repositories
             throw new NotImplementedException();
         }
 
+        public Partner GetByProp(Expression<Func<Partner, bool>> where)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<Partner> GetManyEagerly(Expression<Func<Partner, bool>> where)
         {
             throw new NotImplementedException();

@@ -2,11 +2,19 @@ import React from 'react';
 
 import "./itemBox.css";
 import { Link } from 'react-router-dom';
+import OrderService from '../../Service/orderService';
 
 export default class ItemBox extends React.Component {
     constructor(props) {
         super(props);
 
+        this.addToBasket = this.addToBasket.bind(this);
+        this.orderService = new OrderService();
+    }
+
+    async addToBasket() {
+        await this.orderService.addToBasket(this.props.card.id, 1);
+        this.props.updateBasket();
     }
 
     render() {
@@ -19,7 +27,7 @@ export default class ItemBox extends React.Component {
                     <div className="d-flex flex-row detailsWrapper align-items-center">
                         <div className="duration text-left">45 mins</div>
                         <div className="ingredients  text-left">4 ingredients</div>
-                        <button className="button text-center ml-auto rounded-sm">+  Order</button>
+                        <button onClick={this.addToBasket} className="button text-center ml-auto rounded-sm">+  Order</button>
                     </div>
 
                 </div>

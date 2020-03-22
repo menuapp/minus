@@ -125,6 +125,11 @@ namespace Service
             return mapper.Map<OrderDomain>(orderRepository.GetByIdEagerly(id));
         }
 
+        public OrderDomain GetBySession(string sessionId)
+        {
+            return mapper.Map<OrderDomain>(orderRepository.GetByProp(order => order.SessionId == sessionId));
+        }
+
         public void Update(OrderDomain domain)
         {
             throw new NotImplementedException();

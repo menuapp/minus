@@ -12,6 +12,7 @@ using DAL.Context;
 using DAL.Infrastructure;
 using DAL.Interfaces;
 using DAL.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -21,6 +22,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Service;
 using Service.Interfaces;
 using Service.Mapping;
@@ -41,6 +43,15 @@ namespace WebService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+
+            });
+
             services.AddDbContext<MinusContext>();
             services.AddTransient<IProductCategoryRepository, ProductCategoryRepository>();
             services.AddTransient<IIdentityRoleRepository, IdentityRoleRepository>();
@@ -76,6 +87,19 @@ namespace WebService
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("kivimenu, all rights reserved")),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.FromMinutes(5)
+                };
+            });
             //services.AddHostedService<OrdersBackgroundService>();
             //services.AddScoped<IScopedProcessingService, ScopedProcessingService>();
         }
@@ -98,7 +122,8 @@ namespace WebService
                 KeepAliveInterval = TimeSpan.FromSeconds(120)
             };
 
-
+            app.UseAuthentication();
+            app.UseSession();
             app.UseWebSockets(webSocketOptions);
             app.Use(async (ctx, nextMsg) =>
             {
@@ -127,7 +152,7 @@ namespace WebService
             app.UseCors("AllowAll");
             app.UseHttpsRedirection();
             app.UseMvc();
-     
+
         }
 
         public static class BackgroundSocketProcessor

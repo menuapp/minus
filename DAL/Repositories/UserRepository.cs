@@ -26,6 +26,11 @@ namespace DAL.Repositories
             throw new NotImplementedException();
         }
 
+        public ApplicationUser GetByProp(Expression<Func<ApplicationUser, bool>> where)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<ApplicationUser> GetManyEagerly(Expression<Func<ApplicationUser, bool>> where)
         {
             throw new NotImplementedException();

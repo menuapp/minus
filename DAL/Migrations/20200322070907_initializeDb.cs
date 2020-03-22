@@ -223,8 +223,9 @@ namespace DAL.Migrations
                     OrderStatusId = table.Column<int>(nullable: false),
                     PaymentTypeId = table.Column<int>(nullable: false),
                     OrderTypeId = table.Column<int>(nullable: false),
-                    CounterId = table.Column<int>(nullable: false),
-                    CustomerId = table.Column<string>(nullable: false)
+                    CounterId = table.Column<int>(nullable: true),
+                    CustomerId = table.Column<string>(nullable: true),
+                    SessionId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -234,7 +235,7 @@ namespace DAL.Migrations
                         column: x => x.CounterId,
                         principalTable: "Counters",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Orders_OrderStatuses_OrderStatusId",
                         column: x => x.OrderStatusId,
@@ -688,7 +689,7 @@ namespace DAL.Migrations
                 column: "CustomerId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUsers_Contents_ProfilePhotoId",

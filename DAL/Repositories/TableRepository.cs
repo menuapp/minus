@@ -25,6 +25,11 @@ namespace DAL.Repositories
             throw new NotImplementedException();
         }
 
+        public Counter GetByProp(Expression<Func<Counter, bool>> where)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<Counter> GetManyEagerly(Expression<Func<Counter, bool>> where)
         {
             throw new NotImplementedException();

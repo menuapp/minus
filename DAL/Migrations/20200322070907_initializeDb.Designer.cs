@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(MinusContext))]
-    [Migration("20200223122340_initializeDb")]
+    [Migration("20200322070907_initializeDb")]
     partial class initializeDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -150,10 +150,9 @@ namespace DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("CounterId");
+                    b.Property<int?>("CounterId");
 
-                    b.Property<string>("CustomerId")
-                        .IsRequired();
+                    b.Property<string>("CustomerId");
 
                     b.Property<DateTime>("OrderDate");
 
@@ -164,6 +163,9 @@ namespace DAL.Migrations
                     b.Property<int>("PartnerId");
 
                     b.Property<int>("PaymentTypeId");
+
+                    b.Property<string>("SessionId")
+                        .IsRequired();
 
                     b.Property<decimal>("TotalPrice");
 
@@ -640,13 +642,11 @@ namespace DAL.Migrations
                 {
                     b.HasOne("Entity.Counter", "Counter")
                         .WithMany("Orders")
-                        .HasForeignKey("CounterId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CounterId");
 
                     b.HasOne("Entity.ApplicationUser", "Customer")
                         .WithMany("Orders")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CustomerId");
 
                     b.HasOne("Entity.OrderStatus", "OrderStatus")
                         .WithMany("Orders")
