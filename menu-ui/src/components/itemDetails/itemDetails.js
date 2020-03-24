@@ -21,7 +21,7 @@ export default function ItemDetails(props) {
           {(product.contents || []).map((item, index) => {
             return (
               <div>
-                <img src={'http://' + item.relativePath} width="100%" />
+                <img src={'http://' + item.relativePath} width="100%" height="20%" />
               </div>
             );
           })}

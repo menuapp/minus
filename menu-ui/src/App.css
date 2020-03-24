@@ -6,7 +6,7 @@
   height: 100vh;
 }
 
-.App.backlightDim{
+.App.backlightDim {
   overflow: hidden;
 }
 
@@ -24,11 +24,18 @@
 }
 
 .page {
-  position: absolute;
-  top: 145px;
+  /* position: absolute;
+  top: 145px; */
+  padding-top: 20px;
   flex-shrink: 0;
   overflow: auto;
   height: 80vh;
+}
+
+.page-container {
+  width: 100%;
+  position: absolute;
+  top: 65px;
 }
 
 .title {

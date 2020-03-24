@@ -1,0 +1,21 @@
+.payment-options {
+    padding-top: 100px;
+}
+
+.payment-title {
+    font-size: 1.5rem;
+    text-align: center;
+    padding-bottom: 50px;
+}
+
+.payment-link {
+    background-color: white;
+    font-size: 1.3rem;
+    display: block;
+    width: 100%;
+    padding-left: 2%;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}

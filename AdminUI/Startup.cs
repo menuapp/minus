@@ -54,6 +54,7 @@ namespace AdminUI
             services.AddTransient<IIdentityRoleRepository, IdentityRoleRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IOrderRepository, OrderRepository>();
             //REGISTER SERVICE LAYER
             services.AddTransient<ITableService, TableService>();
             services.AddTransient<IPartnerService, PartnerService>();
@@ -61,6 +62,7 @@ namespace AdminUI
             services.AddTransient<IIdentityRoleService, IdentityRoleService>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IOrderService, OrderService>();
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 

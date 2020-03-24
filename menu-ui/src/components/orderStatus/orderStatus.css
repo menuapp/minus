@@ -1,0 +1,20 @@
+.order-state {}
+
+.order-state .message {
+    line-height: 2.5rem;   
+}
+
+.order-state .message span{
+    padding-left: 10px;
+}
+
+.order-state .message a{
+    float: right;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+    line-height: 3rem;
+    z-index: 3;
+}

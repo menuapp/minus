@@ -34,7 +34,7 @@ namespace DAL.Repositories
 
         public Order GetByProp(Expression<Func<Order, bool>> where)
         {
-            return dbSet.Include(basket => basket.OrderProducts).FirstOrDefault(where);
+            return dbSet.Include(basket => basket.OrderProducts).ThenInclude(order => order.Product).FirstOrDefault(where);
         }
     }
 }

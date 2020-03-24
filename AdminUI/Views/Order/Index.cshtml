@@ -1,0 +1,103 @@
+﻿@model IEnumerable<AdminUI.Models.OrderViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Orders</h1>
+
+@*<p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OrderDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CounterId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CustomerId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TotalPrice)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OrderStatus)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OrderType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PaymentType)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <div class="card text-white bg-info mb-3" style="max-width: 18rem;">
+                <div class="card-header">Header</div>
+                <div class="card-body">
+                    <h5 class="card-title">Info card title</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Cras justo odio</li>
+                    <li class="list-group-item">Dapibus ac facilisis in</li>
+                    <li class="list-group-item">Vestibulum at eros</li>
+                </ul>
+            </div>
+        </tbody>
+    </table>*@
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col col-6 kitchen-orders"></div>
+        <div class="col col-6 waiter-orders"></div>
+    </div>
+</div>
+
+<script>
+    setInterval(async () => {
+        var response = await fetch("http://localhost/AdminUI/api/Orders");
+        var data = await response.json();
+
+        let container = document.querySelector(".kitchen-orders .row");
+        container && container.remove();
+        container = document.createElement("div");
+        container.classList.add("row");
+
+        let innerHTML = "";
+        data.forEach((item, index) => {
+            let products = item.orderProducts.map((orderProduct) => {
+                return `<li class="list-group-item"><span>${orderProduct.product.name}</span><span style="float:right;">x${orderProduct.quantity}</span></li>`;
+            }).reduce((acc, item) => acc + item);
+            let element = `
+                <div class="col col-3">
+                    <div class="card bg-light mb-3" style="max-width: 18rem;">
+                        <div class="card-header">Table ${item.counterId}</div>
+                        <div class="card-body">
+                            <h5 class="card-title">Light card title</h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            ${products}
+                       </ul>
+                    </div>
+                </div>`;
+            innerHTML += element;
+        });
+        container.innerHTML = innerHTML;
+        document.querySelector(".kitchen-orders").appendChild(container);
+        $(function () {
+            $(".col-3").draggable();
+        });
+        //debugger;
+        console.log(data);
+    }, 1000);
+</script>

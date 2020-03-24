@@ -1,4 +1,42 @@
 .pay-btn {
     color: white;
     background-color: #30be76;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+}
+
+.order-list {
+    width: 100%;
+    display: block;
+    padding-top: 100px;
+}
+
+.order-list tbody tr:nth-child(even) {
+    /* background-color: rgba(0, 0, 0, 0.1); */
+}
+
+.order-list tbody tr:nth-child(odd) {
+    background-color: white;
+}
+
+tbody,
+thead {
+    display: block;
+    width: 100%;
+}
+
+tr,
+th {
+    height: 50px;
+    display: flex;
+    width: 100%;
+}
+
+td {
+    display: flex;
+    align-items: center;
+    width: 33.33%;
+    justify-content: center;
 }

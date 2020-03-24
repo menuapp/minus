@@ -12,6 +12,10 @@ import Register from './components/register/register';
 import Basket from './components/basket/basket';
 import AuthenticationService from './Service/authenticationService';
 import OrderService from './Service/orderService';
+import Payment from './components/payment/payment';
+import OrderStatus from './components/orderStatus/orderStatus';
+import orderStates from './Extensions/orderStates';
+import Confirm from './components/confirmation/confirmation';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -32,7 +36,9 @@ export default class App extends React.Component {
       data: [],
       products: [],
       backlightDim: false,
+      basket: null,
       basketQuantity: null,
+      orderState: orderStates.DELIVERED,
       clickOutsideNavbar: true,
       restaurantName: 'agileaction',
       currentCategoryIndex: 0
@@ -83,21 +89,20 @@ export default class App extends React.Component {
   }
 
   updateBasket() {
-    this.setState({ basketQuantity: this.state.basketQuantity + 1 });
+    this.getBasketStatus();
   }
 
   async getBasketStatus() {
-    let basket = await this.orderService.getBasket();
-    if (basket) {
-      let quantities = basket.orderProducts.map(product => product.quantity);
+    let basketData = await this.orderService.getBasket();
+    if (basketData) {
+      let quantities = basketData.orderProducts.map(product => product.quantity);
       let sum = quantities.length > 0 && quantities.reduce(((sum, quantity) => sum += quantity));
 
       this.setState({
-        basket: basket,
+        basket: basketData,
         basketQuantity: sum
       });
     }
-
   }
 
   render() {
@@ -105,11 +110,17 @@ export default class App extends React.Component {
       <div className={"App" + (this.state.backlightDim ? " backlightDim" : "")} onClick={this.handleClick}>
         <NavigationBar basketQuantity={this.state.basketQuantity} clickOutsideNavbar={this.state.clickOutsideNavbar} dimBacklight={this.dimBacklight} />
         <Switch>
+          <Route path="/payment">
+            <Payment />
+          </Route>
+          <Route path="/confirmation">
+            <Confirm basket={this.state.basket} />
+          </Route>
           <Route path="/itemDetails/:id">
             <ItemDetails products={this.state.products || []} />
           </Route>
           <Route path="/basket">
-            <Basket />
+            <Basket basket={this.state.basket} />
           </Route>
           <Route path="/register">
             <Register />
@@ -119,16 +130,19 @@ export default class App extends React.Component {
           </Route>
           <Route path="/register"></Route>
           <Route path="/">
-            <CategoryBar
-              updateCategoryItems={this.updateCategoryItems}
-              categoryName={this.state.data.map(category => category.name)}
-            />
-            <SlidingPage updateBasket={this.updateBasket}
-              category={
-                (this.state.data[this.state.currentCategoryIndex] || {})
-                  .products || []
-              }
-            />
+            <div className="page-container">
+              <OrderStatus orderState={this.state.orderState} />
+              <CategoryBar
+                updateCategoryItems={this.updateCategoryItems}
+                categoryName={this.state.data.map(category => category.name)}
+              />
+              <SlidingPage updateBasket={this.updateBasket}
+                category={
+                  (this.state.data[this.state.currentCategoryIndex] || {})
+                    .products || []
+                }
+              />
+            </div>
           </Route>
         </Switch>
       </div>
