@@ -132,7 +132,18 @@ namespace Service
 
         public void Update(OrderDomain domain)
         {
-            throw new NotImplementedException();
+            var updatedOrder = mapper.Map<Order>(domain);
+            var order = orderRepository.GetById(domain.Id);
+
+            order.OrderProducts = updatedOrder.OrderProducts;
+            order.OrderStatusId = updatedOrder.OrderStatusId;
+            order.OrderTypeId = updatedOrder.OrderTypeId;
+            order.PaymentTypeId = updatedOrder.PaymentTypeId;
+            order.ProductOptions = updatedOrder.ProductOptions;
+            order.TotalPrice = updatedOrder.TotalPrice;
+            order.CounterId = updatedOrder.CounterId;
+
+            orderRepository.Update(order);
         }
 
         public IEnumerable<OrderDomain> GetMany(Expression<Func<OrderDomain, bool>> where)

@@ -1,18 +1,22 @@
-import ServiceBase from "./serviceBase";
-import OrderRepository from "../DAL/orderRepository";
+import ServiceBase from './serviceBase';
+import OrderRepository from '../DAL/orderRepository';
 
 export default class OrderService extends ServiceBase {
-    constructor() {
-        super();
+  constructor() {
+    super();
 
-        this.orderRepository = new OrderRepository();
-    }
+    this.orderRepository = new OrderRepository();
+  }
 
-    async addToBasket(productId, quantity) {
-        return await this.orderRepository.addToBasket(productId, quantity);
-    }
+  async addToBasket(productId, quantity) {
+    return await this.orderRepository.addToBasket(productId, quantity);
+  }
 
-    async getBasket() {
-        return await this.orderRepository.getBasket();
-    }
+  async getBasket() {
+    return await this.orderRepository.getBasket();
+  }
+
+  async confirmBasket(order) {
+    return await this.orderRepository.confirmOrder(order);
+  }
 }

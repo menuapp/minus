@@ -124,6 +124,21 @@ namespace WebService.Controllers
             return Ok();
         }
 
+        [HttpPost]
+        public IActionResult Confirm([FromBody]BasketDto order)
+        {
+            try
+            {
+                order.OrderStatus = OrderStatusEnum.CONFIRMED;
+                basketService.Update(mapper.Map<OrderDomain>(order));
+                return Ok("confirmed");
+            }
+            catch (Exception ex)
+            {
+                return Ok("error");
+            }
+        }
+
         public async Task Talk(WebSocket wSocket)
         {
             using (var ms = new MemoryStream())

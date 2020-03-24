@@ -7,7 +7,7 @@ namespace Service.Domains
 {
     public class OrderDomain
     {
-        public int? Id { get; set; }
+        public int Id { get; set; }
         public int PartnerId { get; set; }
         public PartnerDomain Partner { get; set; }
         public DateTime OrderDate { get; set; }
