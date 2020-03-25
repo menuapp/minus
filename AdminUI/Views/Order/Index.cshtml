@@ -29,32 +29,35 @@
                 socket.send("hello");
             };
 
-            window.onmessage = event => {
-                //let container = document.querySelector(".kitchen-orders .row");
-                //container && container.remove();
-                //container = document.createElement("div");
-                //container.classList.add("row");
+            socket.onerror = (event) => { console.log(event); }
 
-                //let innerHTML = "";
-                //event.data.forEach((item, index) => {
-                //    let products = item.orderProducts.map((orderProduct) => {
-                //        return `<li class="list-group-item"><span>${orderProduct.product.name}</span><span style="float:right;">x${orderProduct.quantity}</span></li>`;
-                //    }).reduce((acc, item) => acc + item);
-                //    let element = `
-                //    <div class="col col-3 nopadding">
-                //        <div class="card bg-light md-3" style="max-width: 18rem;">
-                //            <div class="card-header">Table ${item.counterId}</div>
-                //            <ul class="list-group list-group-flush">
-                //                ${products}
-                //           </ul>
-                //        </div>
-                //    </div>`;
-                //    innerHTML += element;
-                //});
-                //container.innerHTML = innerHTML;
-                //document.querySelector(".kitchen-orders").appendChild(container);
+            socket.onmessage = event => {
+                //debugger
+                let container = document.querySelector(".kitchen-orders .row");
+                container && container.remove();
+                container = document.createElement("div");
+                container.classList.add("row");
+
+                let innerHTML = "";
+                JSON.parse(event.data).forEach((item, index) => {
+                    let products = item.OrderProducts.map((orderProduct) => {
+                        return `<li class="list-group-item"><span>${orderProduct.Product.Name}</span><span style="float:right;">x${orderProduct.Quantity}</span></li>`;
+                    }).reduce((acc, item) => acc + item);
+                    let element = `
+                    <div class="col col-3 nopadding">
+                        <div class="card bg-light md-3" style="max-width: 18rem;">
+                            <div class="card-header">Table ${item.CounterId}</div>
+                            <ul class="list-group list-group-flush">
+                                ${products}
+                           </ul>
+                        </div>
+                    </div>`;
+                    innerHTML += element;
+                });
+                container.innerHTML = innerHTML;
+                document.querySelector(".kitchen-orders").appendChild(container);
                 console.log(JSON.parse(event.data));
-                // console.log("order came...");
+                 console.log("order came...");
             };
         }
 

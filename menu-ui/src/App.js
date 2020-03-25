@@ -72,10 +72,11 @@ export default class App extends React.Component {
     this.socket.onopen = () => {
       console.log('Connected...');
       console.log('hello');
+      this.socket.send('hello');
     };
 
     this.socket.onmessage = event => {
-      console.log(JSON.parse(event.data));
+      console.log(event.data);
       // console.log("order came...");
     };
   }
@@ -157,6 +158,11 @@ export default class App extends React.Component {
             </div>
           </Route>
         </Switch>
+        <button onClick={this.openConnection} className="btn" style={{
+          backgroundColor:"red",
+          zIndex:11111,
+          position:"absolute"
+        }}>Connect></button>
       </div>
     );
   }
