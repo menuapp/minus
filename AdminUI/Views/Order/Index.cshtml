@@ -1,56 +1,100 @@
 ﻿@model IEnumerable<AdminUI.Models.OrderViewModel>
 
-@{
+    @{
     ViewData["Title"] = "Index";
-}
-<style>
-    .nopadding{
-        padding-left:5x !important;
-        padding-right:5px !important;
     }
-</style>
+    <style>
+        .nopadding {
+            padding-left: 5x !important;
+            padding-right: 5px !important;
+        }
+    </style>
 
-<h1>Orders</h1>
+    <h1>Orders</h1>
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col col-6 kitchen-orders"></div>
-        <div class="col col-6 waiter-orders"></div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col col-6 kitchen-orders"></div>
+            <div class="col col-6 waiter-orders"></div>
+        </div>
     </div>
-</div>
 
-<script>
-    setInterval(async () => {
-        var response = await fetch("http://localhost/AdminUI/api/Orders");
-        if (response.status === 200) {
-            var data = await response.json();
+    <script>
+        function openConnection() {
+            window.socket = new WebSocket('ws://localhost/webservice/connect');
 
-            let container = document.querySelector(".kitchen-orders .row");
-            container && container.remove();
-            container = document.createElement("div");
-            container.classList.add("row");
+            socket.onopen = () => {
+                console.log('Connected...');
+                console.log('hello');
+                socket.send("hello");
+            };
 
-            let innerHTML = "";
-            data.forEach((item, index) => {
-                let products = item.orderProducts.map((orderProduct) => {
-                    return `<li class="list-group-item"><span>${orderProduct.product.name}</span><span style="float:right;">x${orderProduct.quantity}</span></li>`;
-                }).reduce((acc, item) => acc + item);
-                let element = `
-                <div class="col col-3 nopadding">
-                    <div class="card bg-light md-3" style="max-width: 18rem;">
-                        <div class="card-header">Table ${item.counterId}</div>
-                        <ul class="list-group list-group-flush">
-                            ${products}
-                       </ul>
-                    </div>
-                </div>`;
-                innerHTML += element;
-            });
-            container.innerHTML = innerHTML;
-            document.querySelector(".kitchen-orders").appendChild(container);
-            //debugger;
-            console.log(data);
+            window.onmessage = event => {
+                //let container = document.querySelector(".kitchen-orders .row");
+                //container && container.remove();
+                //container = document.createElement("div");
+                //container.classList.add("row");
+
+                //let innerHTML = "";
+                //event.data.forEach((item, index) => {
+                //    let products = item.orderProducts.map((orderProduct) => {
+                //        return `<li class="list-group-item"><span>${orderProduct.product.name}</span><span style="float:right;">x${orderProduct.quantity}</span></li>`;
+                //    }).reduce((acc, item) => acc + item);
+                //    let element = `
+                //    <div class="col col-3 nopadding">
+                //        <div class="card bg-light md-3" style="max-width: 18rem;">
+                //            <div class="card-header">Table ${item.counterId}</div>
+                //            <ul class="list-group list-group-flush">
+                //                ${products}
+                //           </ul>
+                //        </div>
+                //    </div>`;
+                //    innerHTML += element;
+                //});
+                //container.innerHTML = innerHTML;
+                //document.querySelector(".kitchen-orders").appendChild(container);
+                console.log(JSON.parse(event.data));
+                // console.log("order came...");
+            };
         }
 
-    }, 1000);
-</script>
+        window.onbeforeunload = () => {
+            debugger;
+            window.socket.close();
+        }
+
+        openConnection();
+        //setInterval(async () => {
+        //    var response = await fetch("http://localhost/AdminUI/api/Orders");
+        //    if (response.status === 200) {
+        //        var data = await response.json();
+
+        //        let container = document.querySelector(".kitchen-orders .row");
+        //        container && container.remove();
+        //        container = document.createElement("div");
+        //        container.classList.add("row");
+
+        //        let innerHTML = "";
+        //        data.forEach((item, index) => {
+        //            let products = item.orderProducts.map((orderProduct) => {
+        //                return `<li class="list-group-item"><span>${orderProduct.product.name}</span><span style="float:right;">x${orderProduct.quantity}</span></li>`;
+        //            }).reduce((acc, item) => acc + item);
+        //            let element = `
+        //            <div class="col col-3 nopadding">
+        //                <div class="card bg-light md-3" style="max-width: 18rem;">
+        //                    <div class="card-header">Table ${item.counterId}</div>
+        //                    <ul class="list-group list-group-flush">
+        //                        ${products}
+        //                   </ul>
+        //                </div>
+        //            </div>`;
+        //            innerHTML += element;
+        //        });
+        //        container.innerHTML = innerHTML;
+        //        document.querySelector(".kitchen-orders").appendChild(container);
+        //        //debugger;
+        //        console.log(data);
+        //    }
+
+        //}, 1000);
+    </script>

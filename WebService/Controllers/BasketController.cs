@@ -59,8 +59,6 @@ namespace WebService.Controllers
 
         public async Task<IActionResult> Get()
         {
-            await Talk(BackgroundSocketProcessor.wSockets[0].WebSocket);
-
             return Ok(mapper.Map<List<BasketDto>>(basketService.GetAll()));
         }
 
@@ -125,10 +123,12 @@ namespace WebService.Controllers
         }
 
         [HttpPost]
-        public IActionResult Confirm([FromBody]BasketDto order)
+        public async Task<IActionResult> Confirm([FromBody]BasketDto order)
         {
             try
             {
+                await Talk(BackgroundSocketProcessor.wSockets[0].WebSocket);
+
                 order.OrderStatus = OrderStatusEnum.CONFIRMED;
                 basketService.Update(mapper.Map<OrderDomain>(order));
                 return Ok("confirmed");
@@ -145,8 +145,8 @@ namespace WebService.Controllers
             {
                 try
                 {
-                    var orders = basketService.GetAll();
-                    var serializer = new System.Runtime.Serialization.Json.DataContractJsonSerializer(typeof(IEnumerable<OrderDomain>));
+                    var orders = mapper.Map<List<BasketDto>>(basketService.GetMany(basket => basket.OrderStatus == OrderStatusEnum.CONFIRMED));
+                    var serializer = new System.Runtime.Serialization.Json.DataContractJsonSerializer(typeof(List<BasketDto>));
                     serializer.WriteObject(ms, orders);
                     byte[] response = ms.ToArray();
                     ms.Close();

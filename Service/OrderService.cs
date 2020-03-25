@@ -135,20 +135,18 @@ namespace Service
             var updatedOrder = mapper.Map<Order>(domain);
             var order = orderRepository.GetById(domain.Id);
 
-            order.OrderProducts = updatedOrder.OrderProducts;
             order.OrderStatusId = updatedOrder.OrderStatusId;
             order.OrderTypeId = updatedOrder.OrderTypeId;
             order.PaymentTypeId = updatedOrder.PaymentTypeId;
-            order.ProductOptions = updatedOrder.ProductOptions;
-            order.TotalPrice = updatedOrder.TotalPrice;
             order.CounterId = updatedOrder.CounterId;
 
             orderRepository.Update(order);
+            unitOfWork.Commit();
         }
 
         public IEnumerable<OrderDomain> GetMany(Expression<Func<OrderDomain, bool>> where)
         {
-            throw new NotImplementedException();
+            return mapper.Map<IEnumerable<OrderDomain>>(orderRepository.GetManyEagerly(mapper.Map<Expression<Func<Order, bool>>>(where)));
         }
     }
 }

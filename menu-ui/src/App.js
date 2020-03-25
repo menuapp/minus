@@ -31,6 +31,7 @@ export default class App extends React.Component {
     this.dimBacklight = this.dimBacklight.bind(this);
     this.updateBasket = this.updateBasket.bind(this);
     this.getBasketStatus = this.getBasketStatus.bind(this);
+    this.preparingOrder = this.preparingOrder.bind(this);
 
     this.state = {
       data: [],
@@ -38,7 +39,7 @@ export default class App extends React.Component {
       backlightDim: false,
       basket: null,
       basketQuantity: null,
-      orderState: orderStates.DELIVERED,
+      orderState: null,
       clickOutsideNavbar: true,
       restaurantName: 'agileaction',
       currentCategoryIndex: 0
@@ -57,9 +58,8 @@ export default class App extends React.Component {
     this.getBasketStatus();
 
     let json = await this.productService.getAll(this.state.restaurantName);
-
-
     let products = [];
+
     json.forEach(category => {
       products.push(...category.products);
     });
@@ -82,6 +82,18 @@ export default class App extends React.Component {
 
   sendMessage() {
     this.socket.send('hello');
+  }
+
+  preparingOrder() {
+    this.setState({
+      orderState: orderStates.PREPARING,
+    });
+  }
+
+  delivered() {
+    this.setState({
+      orderState: orderStates.DELIVERED,
+    });
   }
 
   updateCategoryItems(index) {
@@ -114,7 +126,7 @@ export default class App extends React.Component {
             <Payment />
           </Route>
           <Route path="/confirmation">
-            <Confirm basket={this.state.basket} />
+            <Confirm basket={this.state.basket} preparingOrder={this.preparingOrder} />
           </Route>
           <Route path="/itemDetails/:id">
             <ItemDetails products={this.state.products || []} />

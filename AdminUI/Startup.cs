@@ -28,6 +28,7 @@ using Service.Interfaces;
 using Service.Mapping;
 using Entity;
 using AdminUI.Extensions;
+using System.Net.WebSockets;
 
 namespace AdminUI
 {

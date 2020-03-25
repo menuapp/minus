@@ -14,6 +14,7 @@ export default class Confirm extends React.Component {
 
   async confirm() {
     await this.orderService.confirmBasket(this.props.basket);
+    this.props.preparingOrder();
   }
 
   render() {

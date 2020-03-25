@@ -11,6 +11,6 @@ namespace Service.Domains
         public int ProductId { get; set; }
         public int Quantity { get; set; }
         public ProductDomain Product { get; set; }
-        public OrderDomain Order { get; set; }
+        //public OrderDomain Order { get; set; }
     }
 }

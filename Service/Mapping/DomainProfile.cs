@@ -35,9 +35,9 @@ namespace Service.Mapping
             CreateMap<CommentDomain, Comment>();
 
             CreateMap<Order, OrderDomain>()
-                .ForMember(dest => dest.OrderStatus, opt => opt.MapFrom(src => src.OrderStatusId))
-                .ForMember(dest => dest.OrderType, opt => opt.MapFrom(src => src.OrderTypeId))
-                .ForMember(dest => dest.PaymentType, opt => opt.MapFrom(src => src.PaymentTypeId));
+                .ForMember(dest => dest.OrderStatus, opt => opt.MapFrom(src => (OrderStatusEnum)src.OrderStatusId))
+                .ForMember(dest => dest.OrderType, opt => opt.MapFrom(src => (OrderTypeEnum)src.OrderTypeId))
+                .ForMember(dest => dest.PaymentType, opt => opt.MapFrom(src => (PaymentTypeEnum)src.PaymentTypeId));
 
             CreateMap<OrderDomain, Order>()
                 .ForMember(dest => dest.OrderStatus, opt => opt.Ignore())

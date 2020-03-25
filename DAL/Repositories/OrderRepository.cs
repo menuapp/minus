@@ -29,7 +29,7 @@ namespace DAL.Repositories
 
         public IEnumerable<Order> GetManyEagerly(Expression<Func<Order, bool>> where)
         {
-            return dbSet.Include(order => order.OrderProducts.Select(orderProducts => orderProducts.Product)).Where(where).ToList();
+            return dbSet.Include(order => order.OrderProducts).ThenInclude(orderProduct => orderProduct.Product).Where(where).ToList();
         }
 
         public Order GetByProp(Expression<Func<Order, bool>> where)
