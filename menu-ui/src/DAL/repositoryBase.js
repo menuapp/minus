@@ -1,5 +1,5 @@
 export default class RepositoryBase {
     constructor() {
-        this.endPoint = "http://localhost:5556/api";
+        this.endPoint = "http://localhost/webservice/api";
     }
 }

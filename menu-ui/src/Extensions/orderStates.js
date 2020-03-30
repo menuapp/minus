@@ -1,6 +1,7 @@
 var orderStates = {
-    PREPARING: 1,
-    DELIVERED: 2
+    BASKET: 1,
+    PREPARING: 2,
+    DELIVERED: 5
 }
 
 export default orderStates;

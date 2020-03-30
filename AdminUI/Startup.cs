@@ -163,7 +163,8 @@ namespace AdminUI
                         context.Response.StatusCode = 400;
                     }
                 }
-                else next();
+
+                else await next();
             });
 
             app.UseMvc(routes =>

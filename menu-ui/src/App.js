@@ -64,10 +64,31 @@ export default class App extends React.Component {
     this.setState({ data: json, products: products });
   }
 
+  listenOrderStatus() {
+    this.wSocket = new WebSocket("ws://localhost/webservice/orderstatus?token=" + localStorage.getItem('token'));
+
+    this.wSocket.onopen = (event) => {
+      console.log("listening order status for update");
+      setInterval(() => {
+        this.wSocket.send("keep alive...");
+      }, 5000);
+    };
+
+    this.wSocket.onmessage = (event) => {
+      if (event.data == "order delivered") {
+        this.delivered();
+        this.wSocket.close();
+      }
+
+      console.log(event.data);
+    }
+  }
+
   preparingOrder() {
     this.setState({
       orderState: orderStates.PREPARING,
     });
+    this.listenOrderStatus();
   }
 
   delivered() {
@@ -92,7 +113,8 @@ export default class App extends React.Component {
 
       this.setState({
         basket: basketData,
-        basketQuantity: sum
+        basketQuantity: sum,
+        orderState: basketData.orderStatus
       });
     }
   }

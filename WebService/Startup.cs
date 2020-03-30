@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -145,6 +146,25 @@ namespace WebService
                         ctx.Response.StatusCode = 400;
                     }
                 }
+                else if (ctx.Request.Path == "/orderstatus")
+                {
+                    if (ctx.WebSockets.IsWebSocketRequest)
+                    {
+                        var wSocket = await ctx.WebSockets.AcceptWebSocketAsync();
+                        var socketFinishedTcs = new TaskCompletionSource<object>();
+
+                        var sessionId = ctx.Request.Query["token"].ToString();
+                        var socketWrapper = BackgroundSocketProcessor.AddClientSocket(wSocket, sessionId, socketFinishedTcs);
+
+                        await socketFinishedTcs.Task;
+
+                        BackgroundSocketProcessor.RemoveCientSocket(socketWrapper);
+                    }
+                    else
+                    {
+                        ctx.Response.StatusCode = 400;
+                    }
+                }
                 else
                 {
                     await nextMsg();
@@ -160,6 +180,7 @@ namespace WebService
         public static class BackgroundSocketProcessor
         {
             public static List<SocketWrapper> wSockets = new List<SocketWrapper>();
+            public static List<SocketWrapper> clientSockets = new List<SocketWrapper>();
             public static SocketWrapper AddSocket(WebSocket wSocket, TaskCompletionSource<object> taskCompletionSource)
             {
                 var newSocket = new SocketWrapper(wSocket, taskCompletionSource);
@@ -173,16 +194,39 @@ namespace WebService
                 wSocket.Dispose();
                 wSockets.Remove(wSocket);
             }
+
+            public static SocketWrapper AddClientSocket(WebSocket wSocket, string SessionId, TaskCompletionSource<object> taskCompletionSource)
+            {
+                var newSocket = new SocketWrapper(wSocket, SessionId, taskCompletionSource);
+                clientSockets.Add(newSocket);
+
+                return newSocket;
+            }
+
+            public static void RemoveCientSocket(SocketWrapper wSocket)
+            {
+                wSocket.Dispose();
+                clientSockets.Remove(wSocket);
+            }
         }
 
         public class SocketWrapper
         {
             public TaskCompletionSource<object> TaskCompletionSource { get; set; }
             public WebSocket WebSocket { get; set; }
+            public string SessionId { get; set; }
 
             public SocketWrapper(WebSocket _wSocket, TaskCompletionSource<object> _taskCompletionSource)
             {
                 TaskCompletionSource = _taskCompletionSource;
+                WebSocket = _wSocket;
+                IsConnectionAlive();
+            }
+
+            public SocketWrapper(WebSocket _wSocket, string _sessionId, TaskCompletionSource<object> _taskCompletionSource)
+            {
+                TaskCompletionSource = _taskCompletionSource;
+                SessionId = _sessionId;
                 WebSocket = _wSocket;
                 IsConnectionAlive();
             }

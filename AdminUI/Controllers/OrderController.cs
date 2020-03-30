@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
@@ -94,11 +95,16 @@ namespace AdminUI.Controllers
                 var tasks = BackgroundSocketProcessor.wSockets.Select(sWrapper => Talk(sWrapper.WebSocket, "order completed"));
                 await Task.WhenAll(tasks);
 
+                var clientAPIRequest = WebRequest.Create("http://localhost/webservice/api/order/updateOrderState" + "?sessionId=" + order.SessionId);
+
+                HttpWebResponse response = (HttpWebResponse)clientAPIRequest.GetResponse();
+
+
                 return Ok("delivery confirmed");
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
 
         }
