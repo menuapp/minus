@@ -133,6 +133,7 @@ namespace WebService.Controllers
                 var tasks = BackgroundSocketProcessor.wSockets.Select(sWrapper => Talk(sWrapper.WebSocket));
                 await Task.WhenAll(tasks);
 
+
                 return Ok("confirmed");
             }
             catch (Exception ex)
@@ -144,21 +145,15 @@ namespace WebService.Controllers
 
         public async Task Talk(WebSocket wSocket)
         {
-            using (var ms = new MemoryStream())
+            try
             {
-                try
-                {
-                    var orders = mapper.Map<List<BasketDto>>(basketService.GetMany(basket => basket.OrderStatus == OrderStatusEnum.CONFIRMED));
-                    var serializer = new System.Runtime.Serialization.Json.DataContractJsonSerializer(typeof(List<BasketDto>));
-                    serializer.WriteObject(ms, orders);
-                    byte[] response = ms.ToArray();
-                    ms.Close();
-                    await wSocket.SendAsync(new ArraySegment<byte>(response, 0, response.Length), WebSocketMessageType.Text, true, CancellationToken.None);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
+                string message = string.Format("new order confirmed");
+                byte[] response = System.Text.Encoding.UTF8.GetBytes(message);
+                await wSocket.SendAsync(new ArraySegment<byte>(response, 0, response.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
     }

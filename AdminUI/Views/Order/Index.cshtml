@@ -10,8 +10,12 @@
     }
 </style>
 
-<a id="action-linker" hidden asp-action="UpdateForDelivery"></a>
-<a id="getter-linker" hidden asp-controller="Orders" asp-action="Get"></a>
+<a id="prepared-order-link" hidden asp-action="UpdateForDelivery"></a>
+<a id="completed-order-link" asp-action="UpdateForCompleted"></a>
+
+<a id="get-prepared-orders-link" asp-action="OrdersPrepared"></a>
+<a id="get-confirmed-orders-link" asp-action="OrdersConfirmed"></a>
+<a id="get-completed-orders-link" asp-action="OrdersCompleted"></a>
 
 <h1>Overview</h1>
 
@@ -30,7 +34,7 @@
     </div>
     <div class="card-body confirmed-order-list-container">
         <div class="row confirmed-order-list">
-            @foreach (var item in Model)
+            @foreach (var item in Model.Where(order => order.OrderStatus == Entity.OrderStatusEnum.CONFIRMED))
             {
                 <div class="col col-2 nopadding">
                     <div class="card bg-light md-3" style="max-width: 18rem;">
@@ -43,7 +47,7 @@
                                     <span style="float:right;">x @orderProduct.Quantity</span>
                                 </li>
                             }
-                            <li class="list-group-item"><button class="btn btn-success" value="@item.Id" onclick="updateOrderStatus(event)">Ready</button></li>
+                            <li class="list-group-item"><button class="btn btn-success" value="@item.Id" onclick="orderPrepared(event)">Ready to Serve</button></li>
                         </ul>
                     </div>
                 </div>
@@ -66,36 +70,72 @@
         </div>
     </div>
     <div class="card-body delivery-list-container">
-        <div class="row delivery-list">
-            @*@foreach (var item in Model)
-                {
+        <div class="row prepared-order-list">
+            @foreach (var item in Model.Where(order => order.OrderStatus == Entity.OrderStatusEnum.DELIVERY))
+            {
                 <div class="col col-2 nopadding">
                     <div class="card bg-light md-3" style="max-width: 18rem;">
                         <div class="card-header">Table @Html.DisplayFor(modelItem => item.CounterId)</div>
                         <ul class="list-group list-group-flush">
                             @foreach (var orderProduct in item.OrderProducts)
                             {
-                            <li class="list-group-item">
-                                <span>@orderProduct.Product.Name</span>
-                                <span style="float:right;">x @orderProduct.Quantity</span>
-                            </li>
+                                <li class="list-group-item">
+                                    <span>@orderProduct.Product.Name</span>
+                                    <span style="float:right;">x @orderProduct.Quantity</span>
+                                </li>
                             }
-                            <li class="list-group-item"><button class="btn btn-success" onclick="">Ready</button></li>
+                            <li class="list-group-item"><button class="btn btn-success" value="@item.Id" onclick="orderCompleted(event)">Deliver</button></li>
                         </ul>
                     </div>
                 </div>
-                }*@
+            }
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Completed</h3>
+
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip" title="Remove">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-body delivery-list-container">
+        <div class="row completed-order-list">
+            @foreach (var item in Model.Where(order => order.OrderStatus == Entity.OrderStatusEnum.COMPLETED))
+            {
+                <div class="col col-2 nopadding">
+                    <div class="card bg-light md-3" style="max-width: 18rem;">
+                        <div class="card-header">Table @Html.DisplayFor(modelItem => item.CounterId)</div>
+                        <ul class="list-group list-group-flush">
+                            @foreach (var orderProduct in item.OrderProducts)
+                            {
+                                <li class="list-group-item">
+                                    <span>@orderProduct.Product.Name</span>
+                                    <span style="float:right;">x @orderProduct.Quantity</span>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </div>
 
 <script>
-    async function updateOrderStatus(event) {
-        let response = await fetch(document.body.querySelector("#action-linker").getAttribute("href") + "?id=" + event.target.value);
+    async function orderPrepared(event) {
+        await fetch(document.body.querySelector("#prepared-order-link").getAttribute("href") + "?id=" + event.target.value);
+    }
 
-        if (response.status === 200) {
-            let response = await fetch("http://localhost:5556/api/restaurant/get");
-        }
+    async function orderCompleted(event) {
+        await fetch(document.body.querySelector("#completed-order-link").getAttribute("href") + "?id=" + event.target.value);
     }
 
     function openConnection() {
@@ -113,33 +153,10 @@
             console.log(event);
         }
 
-        orderSocket.onmessage = event => {
-            let container = document.querySelector(".confirmed-order-list");
-            container && container.remove();
-            container = document.createElement("div");
-            container.classList.add("row", "confirmed-order-list");
-
-            let innerHTML = "";
-            JSON.parse(event.data).forEach((item, index) => {
-                let products = item.OrderProducts.map((orderProduct) => {
-                    return `<li class="list-group-item"><span>${orderProduct.Product.Name}</span><span style="float:right;">x ${orderProduct.Quantity}</span></li>`;
-                }).reduce((acc, item) => acc + item);
-                let element = `
-<div class="col col-2 nopadding">
-<div class="card bg-light md-3" style="max-width: 18rem;">
-<div class="card-header">Table ${item.CounterId}</div>
-<ul class="list-group list-group-flush">
-${products}
-<li class="list-group-item"><button class="btn btn-success" value="${item.Id}" onclick="updateOrderStatus(event)">Ready</button></li>
-</ul>
-</div>
-</div>`;
-                innerHTML += element;
-            });
-            container.innerHTML = innerHTML;
-            document.querySelector(".confirmed-order-list-container").appendChild(container);
-            console.log(JSON.parse(event.data));
-            console.log("order came...");
+        orderSocket.onmessage = async event => {
+            response = await fetch(document.body.querySelector("#get-confirmed-orders-link").getAttribute("href"));
+            document.body.querySelector(".confirmed-order-list").innerHTML = await response.text();
+            console.log(event.data);
         };
     }
 
@@ -158,32 +175,26 @@ ${products}
             console.log(event);
         }
 
-        deliverySocket.onmessage = event => {
-            let container = document.querySelector(".delivery-list");
-            container && container.remove();
-            container = document.createElement("div");
-            container.classList.add("row", "delivery-list");
+        deliverySocket.onmessage = async event => {
+            if (event.data == "order prepared") {
+                response = await fetch(document.body.querySelector("#get-confirmed-orders-link").getAttribute("href"));
+                document.body.querySelector(".confirmed-order-list").innerHTML = await response.text();
 
-            let innerHTML = "";
-            JSON.parse(event.data).forEach((item, index) => {
-                let products = item.OrderProducts.map((orderProduct) => {
-                    return `<li class="list-group-item"><span>${orderProduct.Product.Name}</span><span style="float:right;">x ${orderProduct.Quantity}</span></li>`;
-                }).reduce((acc, item) => acc + item);
-                let element = `
-<div class="col col-2 nopadding">
-<div class="card bg-light md-3" style="max-width: 18rem;">
-<div class="card-header">Table ${item.CounterId}</div>
-<ul class="list-group list-group-flush">
-${products}
-</ul>
-</div>
-</div>`;
-                innerHTML += element;
-            });
-            container.innerHTML = innerHTML;
-            document.querySelector(".delivery-list-container").appendChild(container);
-            console.log(JSON.parse(event.data));
-            console.log("delivery came...");
+                if (response.status === 200) {
+                    response = await fetch(document.body.querySelector("#get-prepared-orders-link").getAttribute("href"));
+                    document.body.querySelector(".prepared-order-list").innerHTML = await response.text();
+                }
+            } else if (event.data == "order completed") {
+                response = await fetch(document.body.querySelector("#get-prepared-orders-link").getAttribute("href"));
+                document.body.querySelector(".prepared-order-list").innerHTML = await response.text();
+
+                if (response.status === 200) {
+                    response = await fetch(document.body.querySelector("#get-completed-orders-link").getAttribute("href"));
+                    document.body.querySelector(".completed-order-list").innerHTML = await response.text();
+                }
+            }
+
+            console.log(event.data);
         };
     }
 

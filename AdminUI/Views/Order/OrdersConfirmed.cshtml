@@ -1,0 +1,19 @@
+﻿@model IEnumerable<AdminUI.Models.OrderViewModel>
+@foreach (var item in Model)
+{
+    <div class="col col-2 nopadding">
+        <div class="card bg-light md-3" style="max-width: 18rem;">
+            <div class="card-header">Table @Html.DisplayFor(modelItem => item.CounterId)</div>
+            <ul class="list-group list-group-flush">
+                @foreach (var orderProduct in item.OrderProducts)
+                {
+                    <li class="list-group-item">
+                        <span>@orderProduct.Product.Name</span>
+                        <span style="float:right;">x @orderProduct.Quantity</span>
+                    </li>
+                }
+                <li class="list-group-item"><button class="btn btn-success" value="@item.Id" onclick="orderPrepared(event)">Ready to Serve</button></li>
+            </ul>
+        </div>
+    </div>
+}
