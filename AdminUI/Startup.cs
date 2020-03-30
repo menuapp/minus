@@ -29,6 +29,7 @@ using Service.Mapping;
 using Entity;
 using AdminUI.Extensions;
 using System.Net.WebSockets;
+using System.Threading;
 
 namespace AdminUI
 {
@@ -136,6 +137,35 @@ namespace AdminUI
             _applicationDbInitializer.SeedRoles(roleManager);
             _applicationDbInitializer.SeedUser(userManager);
 
+            var webSocketOptions = new WebSocketOptions()
+            {
+                KeepAliveInterval = TimeSpan.FromSeconds(120)
+            };
+
+            app.UseWebSockets(webSocketOptions);
+            app.Use(async (context, next) =>
+            {
+                if (context.Request.Path == "/getdelivery")
+                {
+                    if (context.WebSockets.IsWebSocketRequest)
+                    {
+                        var wSocket = await context.WebSockets.AcceptWebSocketAsync();
+                        var socketFinishedTcs = new TaskCompletionSource<object>();
+
+                        var socketWrapper = BackgroundSocketProcessor.AddSocket(wSocket, socketFinishedTcs);
+
+                        await socketFinishedTcs.Task;
+
+                        BackgroundSocketProcessor.RemoveSocket(socketWrapper);
+                    }
+                    else
+                    {
+                        context.Response.StatusCode = 400;
+                    }
+                }
+                else next();
+            });
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -144,6 +174,71 @@ namespace AdminUI
             });
         }
 
+    }
+
+    public static class BackgroundSocketProcessor
+    {
+        public static List<SocketWrapper> wSockets = new List<SocketWrapper>();
+        public static SocketWrapper AddSocket(WebSocket wSocket, TaskCompletionSource<object> taskCompletionSource)
+        {
+            var newSocket = new SocketWrapper(wSocket, taskCompletionSource);
+            wSockets.Add(newSocket);
+
+            return newSocket;
+        }
+
+        public static void RemoveSocket(SocketWrapper wSocket)
+        {
+            wSocket.Dispose();
+            wSockets.Remove(wSocket);
+        }
+    }
+
+    public class SocketWrapper
+    {
+        public TaskCompletionSource<object> TaskCompletionSource { get; set; }
+        public WebSocket WebSocket { get; set; }
+
+        public SocketWrapper(WebSocket _wSocket, TaskCompletionSource<object> _taskCompletionSource)
+        {
+            TaskCompletionSource = _taskCompletionSource;
+            WebSocket = _wSocket;
+            IsConnectionAlive();
+        }
+
+        public async void IsConnectionAlive()
+        {
+            try
+            {
+                var buffer = new byte[1024 * 4];
+                CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(10000);
+                WebSocketReceiveResult result = await WebSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellationTokenSource.Token);
+
+                while (!result.CloseStatus.HasValue)
+                {
+                    cancellationTokenSource.Dispose();
+                    cancellationTokenSource = new CancellationTokenSource(10000);
+                    result = await WebSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellationTokenSource.Token);
+                }
+
+                CompleteTask();
+
+            }
+            catch (Exception)
+            {
+                CompleteTask();
+            }
+        }
+
+        public void CompleteTask()
+        {
+            TaskCompletionSource.SetResult(new { result = "Task Completed" });
+        }
+
+        public void Dispose()
+        {
+            WebSocket.Dispose();
+        }
     }
 
     public class MinusEmailSender : IEmailSender

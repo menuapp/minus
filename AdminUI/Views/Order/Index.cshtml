@@ -1,103 +1,192 @@
 ﻿@model IEnumerable<AdminUI.Models.OrderViewModel>
 
-    @{
+@{
     ViewData["Title"] = "Index";
+}
+<style>
+    .nopadding {
+        padding-left: 5x !important;
+        padding-right: 5px !important;
     }
-    <style>
-        .nopadding {
-            padding-left: 5x !important;
-            padding-right: 5px !important;
-        }
-    </style>
+</style>
 
-    <h1>Orders</h1>
+<a id="action-linker" hidden asp-action="UpdateForDelivery"></a>
+<a id="getter-linker" hidden asp-controller="Orders" asp-action="Get"></a>
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col col-6 kitchen-orders"></div>
-            <div class="col col-6 waiter-orders"></div>
+<h1>Overview</h1>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Kitchen</h3>
+
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip" title="Remove">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
     </div>
+    <div class="card-body confirmed-order-list-container">
+        <div class="row confirmed-order-list">
+            @foreach (var item in Model)
+            {
+                <div class="col col-2 nopadding">
+                    <div class="card bg-light md-3" style="max-width: 18rem;">
+                        <div class="card-header">Table @Html.DisplayFor(modelItem => item.CounterId)</div>
+                        <ul class="list-group list-group-flush">
+                            @foreach (var orderProduct in item.OrderProducts)
+                            {
+                                <li class="list-group-item">
+                                    <span>@orderProduct.Product.Name</span>
+                                    <span style="float:right;">x @orderProduct.Quantity</span>
+                                </li>
+                            }
+                            <li class="list-group-item"><button class="btn btn-success" value="@item.Id" onclick="updateOrderStatus(event)">Ready</button></li>
+                        </ul>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
 
-    <script>
-        function openConnection() {
-            window.socket = new WebSocket('ws://localhost/webservice/connect');
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Delivery</h3>
 
-            socket.onopen = () => {
-                console.log('Connected...');
-                console.log('hello');
-                socket.send("hello");
-            };
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip" title="Remove">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-body delivery-list-container">
+        <div class="row delivery-list">
+            @*@foreach (var item in Model)
+                {
+                <div class="col col-2 nopadding">
+                    <div class="card bg-light md-3" style="max-width: 18rem;">
+                        <div class="card-header">Table @Html.DisplayFor(modelItem => item.CounterId)</div>
+                        <ul class="list-group list-group-flush">
+                            @foreach (var orderProduct in item.OrderProducts)
+                            {
+                            <li class="list-group-item">
+                                <span>@orderProduct.Product.Name</span>
+                                <span style="float:right;">x @orderProduct.Quantity</span>
+                            </li>
+                            }
+                            <li class="list-group-item"><button class="btn btn-success" onclick="">Ready</button></li>
+                        </ul>
+                    </div>
+                </div>
+                }*@
+        </div>
+    </div>
+</div>
 
-            socket.onerror = (event) => { console.log(event); }
+<script>
+    async function updateOrderStatus(event) {
+        let response = await fetch(document.body.querySelector("#action-linker").getAttribute("href") + "?id=" + event.target.value);
 
-            socket.onmessage = event => {
-                //debugger
-                let container = document.querySelector(".kitchen-orders .row");
-                container && container.remove();
-                container = document.createElement("div");
-                container.classList.add("row");
+        if (response.status === 200) {
+            let response = await fetch("http://localhost:5556/api/restaurant/get");
+        }
+    }
 
-                let innerHTML = "";
-                JSON.parse(event.data).forEach((item, index) => {
-                    let products = item.OrderProducts.map((orderProduct) => {
-                        return `<li class="list-group-item"><span>${orderProduct.Product.Name}</span><span style="float:right;">x${orderProduct.Quantity}</span></li>`;
-                    }).reduce((acc, item) => acc + item);
-                    let element = `
-                    <div class="col col-3 nopadding">
-                        <div class="card bg-light md-3" style="max-width: 18rem;">
-                            <div class="card-header">Table ${item.CounterId}</div>
-                            <ul class="list-group list-group-flush">
-                                ${products}
-                           </ul>
-                        </div>
-                    </div>`;
-                    innerHTML += element;
-                });
-                container.innerHTML = innerHTML;
-                document.querySelector(".kitchen-orders").appendChild(container);
-                console.log(JSON.parse(event.data));
-                 console.log("order came...");
-            };
+    function openConnection() {
+        window.orderSocket = new WebSocket('ws://localhost:5556/getorder');
+
+        orderSocket.onopen = () => {
+            console.log('Connected for orders...');
+            console.log('hello');
+            setInterval(() => {
+                orderSocket.send("keep alive...");
+            }, 5000);
+        };
+
+        orderSocket.onerror = (event) => {
+            console.log(event);
         }
 
-        window.onbeforeunload = () => {
-            debugger;
-            window.socket.close();
+        orderSocket.onmessage = event => {
+            let container = document.querySelector(".confirmed-order-list");
+            container && container.remove();
+            container = document.createElement("div");
+            container.classList.add("row", "confirmed-order-list");
+
+            let innerHTML = "";
+            JSON.parse(event.data).forEach((item, index) => {
+                let products = item.OrderProducts.map((orderProduct) => {
+                    return `<li class="list-group-item"><span>${orderProduct.Product.Name}</span><span style="float:right;">x ${orderProduct.Quantity}</span></li>`;
+                }).reduce((acc, item) => acc + item);
+                let element = `
+<div class="col col-2 nopadding">
+<div class="card bg-light md-3" style="max-width: 18rem;">
+<div class="card-header">Table ${item.CounterId}</div>
+<ul class="list-group list-group-flush">
+${products}
+<li class="list-group-item"><button class="btn btn-success" value="${item.Id}" onclick="updateOrderStatus(event)">Ready</button></li>
+</ul>
+</div>
+</div>`;
+                innerHTML += element;
+            });
+            container.innerHTML = innerHTML;
+            document.querySelector(".confirmed-order-list-container").appendChild(container);
+            console.log(JSON.parse(event.data));
+            console.log("order came...");
+        };
+    }
+
+    function openConnectionForDelivery() {
+        window.deliverySocket = new WebSocket('ws://localhost/adminUI/getdelivery');
+
+        deliverySocket.onopen = () => {
+            console.log('Connected for delivery...');
+            console.log('hello');
+            setInterval(() => {
+                deliverySocket.send("keep alive...");
+            }, 5000);
+        };
+
+        deliverySocket.onerror = (event) => {
+            console.log(event);
         }
 
-        openConnection();
-        //setInterval(async () => {
-        //    var response = await fetch("http://localhost/AdminUI/api/Orders");
-        //    if (response.status === 200) {
-        //        var data = await response.json();
+        deliverySocket.onmessage = event => {
+            let container = document.querySelector(".delivery-list");
+            container && container.remove();
+            container = document.createElement("div");
+            container.classList.add("row", "delivery-list");
 
-        //        let container = document.querySelector(".kitchen-orders .row");
-        //        container && container.remove();
-        //        container = document.createElement("div");
-        //        container.classList.add("row");
+            let innerHTML = "";
+            JSON.parse(event.data).forEach((item, index) => {
+                let products = item.OrderProducts.map((orderProduct) => {
+                    return `<li class="list-group-item"><span>${orderProduct.Product.Name}</span><span style="float:right;">x ${orderProduct.Quantity}</span></li>`;
+                }).reduce((acc, item) => acc + item);
+                let element = `
+<div class="col col-2 nopadding">
+<div class="card bg-light md-3" style="max-width: 18rem;">
+<div class="card-header">Table ${item.CounterId}</div>
+<ul class="list-group list-group-flush">
+${products}
+</ul>
+</div>
+</div>`;
+                innerHTML += element;
+            });
+            container.innerHTML = innerHTML;
+            document.querySelector(".delivery-list-container").appendChild(container);
+            console.log(JSON.parse(event.data));
+            console.log("delivery came...");
+        };
+    }
 
-        //        let innerHTML = "";
-        //        data.forEach((item, index) => {
-        //            let products = item.orderProducts.map((orderProduct) => {
-        //                return `<li class="list-group-item"><span>${orderProduct.product.name}</span><span style="float:right;">x${orderProduct.quantity}</span></li>`;
-        //            }).reduce((acc, item) => acc + item);
-        //            let element = `
-        //            <div class="col col-3 nopadding">
-        //                <div class="card bg-light md-3" style="max-width: 18rem;">
-        //                    <div class="card-header">Table ${item.counterId}</div>
-        //                    <ul class="list-group list-group-flush">
-        //                        ${products}
-        //                   </ul>
-        //                </div>
-        //            </div>`;
-        //            innerHTML += element;
-        //        });
-        //        container.innerHTML = innerHTML;
-        //        document.querySelector(".kitchen-orders").appendChild(container);
-        //        //debugger;
-        //        console.log(data);
-        //    }
-
-        //}, 1000);
-    </script>
+    openConnection();
+    openConnectionForDelivery();
+</script>

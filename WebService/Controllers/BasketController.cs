@@ -127,16 +127,17 @@ namespace WebService.Controllers
         {
             try
             {
-                
-
                 order.OrderStatus = OrderStatusEnum.CONFIRMED;
                 basketService.Update(mapper.Map<OrderDomain>(order));
 
-                await Talk(BackgroundSocketProcessor.wSockets.WebSocket);
+                var tasks = BackgroundSocketProcessor.wSockets.Select(sWrapper => Talk(sWrapper.WebSocket));
+                await Task.WhenAll(tasks);
+
                 return Ok("confirmed");
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return Ok("error");
             }
         }

@@ -127,17 +127,18 @@ namespace WebService
             app.UseWebSockets(webSocketOptions);
             app.Use(async (ctx, nextMsg) =>
             {
-                if (ctx.Request.Path == "/connect")
+                if (ctx.Request.Path == "/getorder")
                 {
                     if (ctx.WebSockets.IsWebSocketRequest)
                     {
                         var wSocket = await ctx.WebSockets.AcceptWebSocketAsync();
                         var socketFinishedTcs = new TaskCompletionSource<object>();
 
-                        BackgroundSocketProcessor.AddSocket(wSocket, socketFinishedTcs);
+                        var socketWrapper = BackgroundSocketProcessor.AddSocket(wSocket, socketFinishedTcs);
 
                         await socketFinishedTcs.Task;
-                        //await Talk(ctx, wSocket);
+
+                        BackgroundSocketProcessor.RemoveSocket(socketWrapper);
                     }
                     else
                     {
@@ -156,50 +157,23 @@ namespace WebService
 
         }
 
-        private async Task Talk(HttpContext hContext, WebSocket wSocket)
-        {
-            var bag = new byte[1024];
-            var result = await wSocket.ReceiveAsync(new ArraySegment<byte>(bag), CancellationToken.None);
-            while (!result.CloseStatus.HasValue)
-            {
-                var incomingMessage = System.Text.Encoding.UTF8.GetString(bag, 0, result.Count);
-                Console.WriteLine("\nClient says that '{0}'\n", incomingMessage);
-                var rnd = new Random();
-                var number = rnd.Next(1, 100);
-                string message = string.Format("Your lucky Number is '{0}'. Don't remember that :)", number.ToString());
-                byte[] outgoingMessage = System.Text.Encoding.UTF8.GetBytes(message);
-                await wSocket.SendAsync(new ArraySegment<byte>(outgoingMessage, 0, outgoingMessage.Length), result.MessageType, result.EndOfMessage, CancellationToken.None);
-                result = await wSocket.ReceiveAsync(new ArraySegment<byte>(bag), CancellationToken.None);
-            }
-            await wSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
-        }
-
         public static class BackgroundSocketProcessor
         {
-            public static SocketWrapper wSockets;
-            public static void AddSocket(WebSocket wSocket, TaskCompletionSource<object> taskCompletionSource)
+            public static List<SocketWrapper> wSockets = new List<SocketWrapper>();
+            public static SocketWrapper AddSocket(WebSocket wSocket, TaskCompletionSource<object> taskCompletionSource)
             {
                 var newSocket = new SocketWrapper(wSocket, taskCompletionSource);
-                wSockets = newSocket;
+                wSockets.Add(newSocket);
+
+                return newSocket;
+            }
+
+            public static void RemoveSocket(SocketWrapper wSocket)
+            {
+                wSocket.Dispose();
+                wSockets.Remove(wSocket);
             }
         }
-
-        //private async Task Talk(WebSocket wSocket)
-        //{
-        //    try
-        //    {
-        //        var rnd = new Random();
-        //        var number = rnd.Next(1, 100);
-        //        string message = string.Format("Your lucky Number is '{0}'. Don't remember that :)", number.ToString());
-        //        byte[] outgoingMessage = System.Text.Encoding.UTF8.GetBytes(message);
-        //        await wSocket.SendAsync(new ArraySegment<byte>(outgoingMessage, 0, outgoingMessage.Length), WebSocketMessageType.Text, true, CancellationToken.None);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine(ex);
-        //    }
-
-        //}
 
         public class SocketWrapper
         {
@@ -210,6 +184,41 @@ namespace WebService
             {
                 TaskCompletionSource = _taskCompletionSource;
                 WebSocket = _wSocket;
+                IsConnectionAlive();
+            }
+
+            public async void IsConnectionAlive()
+            {
+                try
+                {
+                    var buffer = new byte[1024 * 4];
+                    CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(10000);
+                    WebSocketReceiveResult result = await WebSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellationTokenSource.Token);
+
+                    while (!result.CloseStatus.HasValue)
+                    {
+                        cancellationTokenSource.Dispose();
+                        cancellationTokenSource = new CancellationTokenSource(10000);
+                        result = await WebSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellationTokenSource.Token);
+                    }
+
+                    CompleteTask();
+
+                }
+                catch (Exception)
+                {
+                    CompleteTask();
+                }
+            }
+
+            public void CompleteTask()
+            {
+                TaskCompletionSource.SetResult(new { result = "Task Completed" });
+            }
+
+            public void Dispose()
+            {
+                WebSocket.Dispose();
             }
         }
     }

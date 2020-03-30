@@ -20,7 +20,7 @@ namespace WebService
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                //.UseUrls("http://localhost:5556/")
+                .UseUrls("http://localhost:5556/")
                 .UseStartup<Startup>();
             //.ConfigureServices(services =>
             //{

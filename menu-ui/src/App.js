@@ -24,8 +24,6 @@ export default class App extends React.Component {
     this.productService = new ProductService();
     this.orderService = new OrderService();
     this.authenticationService = new AuthenticationService();
-    this.sendMessage = this.sendMessage.bind(this);
-    this.openConnection = this.openConnection.bind(this);
     this.updateCategoryItems = this.updateCategoryItems.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.dimBacklight = this.dimBacklight.bind(this);
@@ -64,25 +62,6 @@ export default class App extends React.Component {
       products.push(...category.products);
     });
     this.setState({ data: json, products: products });
-  }
-
-  openConnection() {
-    this.socket = new WebSocket('ws://localhost/webservice/connect');
-
-    this.socket.onopen = () => {
-      console.log('Connected...');
-      console.log('hello');
-      this.socket.send('hello');
-    };
-
-    this.socket.onmessage = event => {
-      console.log(event.data);
-      // console.log("order came...");
-    };
-  }
-
-  sendMessage() {
-    this.socket.send('hello');
   }
 
   preparingOrder() {
@@ -158,11 +137,6 @@ export default class App extends React.Component {
             </div>
           </Route>
         </Switch>
-        <button onClick={this.openConnection} className="btn" style={{
-          backgroundColor:"red",
-          zIndex:11111,
-          position:"absolute"
-        }}>Connect></button>
       </div>
     );
   }
