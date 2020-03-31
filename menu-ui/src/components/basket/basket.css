@@ -40,3 +40,61 @@ td {
     width: 33.33%;
     justify-content: center;
 }
+
+/* incdec */
+.qContainer {
+    display: flex;
+    width: 40%;
+    justify-content: center;
+    align-items: center;
+}
+
+.qEksi,
+.qArti {
+    display: block;
+    width: 22px;
+    height: 23px;
+    margin: 0px;
+    background: #ff931e;
+    text-decoration: none;
+    text-align: center;
+    line-height: 23px;
+}
+
+.qEksi:hover,
+.qArti:hover {
+    background: #ff4500;
+    color: #fff;
+}
+
+.qEksi {
+    border-radius: 3px 0 0 3px;
+}
+
+.qArti {
+    border-radius: 0 3px 3px 0;
+}
+
+.qValue {
+    width: 32px;
+    height: 23px;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    border-top: 2px solid #ff931e;
+    border-bottom: 2px solid #ff931e;
+    border-left: 1px solid #ff931e;
+    border-right: 2px solid #ff931e;
+    background: #f8cf26;
+    color: #000000;
+}
+
+.qEksi:link,
+.qArti:link {
+    color: #8184a1;
+}
+
+.qEksi:visited,
+.qArti:visited {
+    color: #fff;
+}
