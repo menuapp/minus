@@ -41,6 +41,7 @@ export default class Payment extends React.Component {
                             <button>
                                 <Link to="success">Ask Cheque</Link>
                             </button>
+                            <span style={{ borderLeft: "2px solid black", height:"auto"}}/>
                             <button>
                                 <Link to="success">Pay at Desk</Link>
                             </button>
