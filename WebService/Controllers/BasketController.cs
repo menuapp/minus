@@ -131,9 +131,10 @@ namespace WebService.Controllers
                 order.OrderStatus = OrderStatusEnum.CONFIRMED;
                 basketService.Update(mapper.Map<OrderDomain>(order));
 
-                var tasks = BackgroundSocketProcessor.wSockets.Select(sWrapper => Talk(sWrapper.WebSocket));
-                await Task.WhenAll(tasks);
-
+                foreach (var pair in Sockets.wSockets)
+                {
+                    await Talk(pair.Value);
+                }
 
                 return Ok("confirmed");
             }

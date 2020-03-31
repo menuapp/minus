@@ -16,14 +16,14 @@ namespace WebService.Controllers
     {
         public async Task<IActionResult> UpdateOrderState(string sessionId)
         {
-            SocketWrapper socketWrapper = BackgroundSocketProcessor.clientSockets.FirstOrDefault(wsocket => wsocket.SessionId == sessionId);
-
-            if (socketWrapper == null)
+            WebSocket webSocket = Sockets.clientSockets.FirstOrDefault(pair => pair.Key == sessionId).Value;
+            
+            if (webSocket == null)
             {
                 return Ok("client could not be found");
-            } 
+            }
 
-            await Talk(socketWrapper.WebSocket);
+            await Talk(webSocket);
 
             return Ok("client notified");
         }

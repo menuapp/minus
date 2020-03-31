@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
 using System.Net.WebSockets;
@@ -126,144 +127,88 @@ namespace WebService
             app.UseAuthentication();
             app.UseSession();
             app.UseWebSockets(webSocketOptions);
-            app.Use(async (ctx, nextMsg) =>
+
+            app.Map("/getorder", (IApplicationBuilder builder) =>
             {
-                if (ctx.Request.Path == "/getorder")
+                builder.Use(async (context, next) =>
                 {
-                    if (ctx.WebSockets.IsWebSocketRequest)
+                    if (!context.WebSockets.IsWebSocketRequest)
                     {
-                        var wSocket = await ctx.WebSockets.AcceptWebSocketAsync();
-                        var socketFinishedTcs = new TaskCompletionSource<object>();
-
-                        var socketWrapper = BackgroundSocketProcessor.AddSocket(wSocket, socketFinishedTcs);
-
-                        await socketFinishedTcs.Task;
-
-                        BackgroundSocketProcessor.RemoveSocket(socketWrapper);
+                        return;
                     }
-                    else
+
+                    var wSocket = await context.WebSockets.AcceptWebSocketAsync();
+                    Sockets.wSockets.TryAdd(Guid.NewGuid().ToString(), wSocket);
+
+                    await Receive(wSocket, async (result, message) =>
                     {
-                        ctx.Response.StatusCode = 400;
-                    }
-                }
-                else if (ctx.Request.Path == "/orderstatus")
+                        //if (result.MessageType == WebSocketMessageType.Text)
+                        //{
+
+                        //}
+                        /*else*/
+                        if (result.MessageType == WebSocketMessageType.Close)
+                        {
+                            Sockets.wSockets.TryRemove(Sockets.wSockets.FirstOrDefault(p => p.Value == wSocket).Key, out wSocket);
+                            await wSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "closed by client", CancellationToken.None);
+                        }
+
+                        return;
+                    });
+                });
+            });
+
+            app.Map("/orderstatus", (IApplicationBuilder builder) =>
+            {
+                builder.Use(async (context, next) =>
                 {
-                    if (ctx.WebSockets.IsWebSocketRequest)
+                    if (!context.WebSockets.IsWebSocketRequest)
                     {
-                        var wSocket = await ctx.WebSockets.AcceptWebSocketAsync();
-                        var socketFinishedTcs = new TaskCompletionSource<object>();
-
-                        var sessionId = ctx.Request.Query["token"].ToString();
-                        var socketWrapper = BackgroundSocketProcessor.AddClientSocket(wSocket, sessionId, socketFinishedTcs);
-
-                        await socketFinishedTcs.Task;
-
-                        BackgroundSocketProcessor.RemoveCientSocket(socketWrapper);
+                        return;
                     }
-                    else
+
+                    var wSocket = await context.WebSockets.AcceptWebSocketAsync();
+                    Sockets.clientSockets.TryAdd(context.Request.Query["token"].ToString(), wSocket);
+
+                    await Receive(wSocket, async (result, message) =>
                     {
-                        ctx.Response.StatusCode = 400;
-                    }
-                }
-                else
-                {
-                    await nextMsg();
-                }
+                        //if (result.MessageType == WebSocketMessageType.Text)
+                        //{
+
+                        //}
+                        /*else*/
+                        if (result.MessageType == WebSocketMessageType.Close)
+                        {
+                            Sockets.clientSockets.TryRemove(Sockets.clientSockets.FirstOrDefault(p => p.Value == wSocket).Key, out wSocket);
+                            await wSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "closed by client", CancellationToken.None);
+                        }
+
+                        return;
+                    });
+                });
             });
 
             app.UseCors("AllowAll");
             app.UseHttpsRedirection();
             app.UseMvc();
-
         }
 
-        public static class BackgroundSocketProcessor
+        private async Task Receive(WebSocket socket, Action<WebSocketReceiveResult, byte[]> handleMesssage)
         {
-            public static List<SocketWrapper> wSockets = new List<SocketWrapper>();
-            public static List<SocketWrapper> clientSockets = new List<SocketWrapper>();
-            public static SocketWrapper AddSocket(WebSocket wSocket, TaskCompletionSource<object> taskCompletionSource)
+            var buffer = new byte[1024 * 4];
+
+            while (socket.State == WebSocketState.Open)
             {
-                var newSocket = new SocketWrapper(wSocket, taskCompletionSource);
-                wSockets.Add(newSocket);
+                var result = await socket.ReceiveAsync(buffer: new ArraySegment<byte>(buffer), cancellationToken: CancellationToken.None);
 
-                return newSocket;
-            }
-
-            public static void RemoveSocket(SocketWrapper wSocket)
-            {
-                wSocket.Dispose();
-                wSockets.Remove(wSocket);
-            }
-
-            public static SocketWrapper AddClientSocket(WebSocket wSocket, string SessionId, TaskCompletionSource<object> taskCompletionSource)
-            {
-                var newSocket = new SocketWrapper(wSocket, SessionId, taskCompletionSource);
-                clientSockets.Add(newSocket);
-
-                return newSocket;
-            }
-
-            public static void RemoveCientSocket(SocketWrapper wSocket)
-            {
-                wSocket.Dispose();
-                clientSockets.Remove(wSocket);
+                handleMesssage(result, buffer);
             }
         }
 
-        public class SocketWrapper
+        public static class Sockets
         {
-            public TaskCompletionSource<object> TaskCompletionSource { get; set; }
-            public WebSocket WebSocket { get; set; }
-            public string SessionId { get; set; }
-
-            public SocketWrapper(WebSocket _wSocket, TaskCompletionSource<object> _taskCompletionSource)
-            {
-                TaskCompletionSource = _taskCompletionSource;
-                WebSocket = _wSocket;
-                IsConnectionAlive();
-            }
-
-            public SocketWrapper(WebSocket _wSocket, string _sessionId, TaskCompletionSource<object> _taskCompletionSource)
-            {
-                TaskCompletionSource = _taskCompletionSource;
-                SessionId = _sessionId;
-                WebSocket = _wSocket;
-                IsConnectionAlive();
-            }
-
-            public async void IsConnectionAlive()
-            {
-                try
-                {
-                    var buffer = new byte[1024 * 4];
-                    CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(10000);
-                    WebSocketReceiveResult result = await WebSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellationTokenSource.Token);
-
-                    while (!result.CloseStatus.HasValue)
-                    {
-                        cancellationTokenSource.Dispose();
-                        cancellationTokenSource = new CancellationTokenSource(10000);
-                        result = await WebSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellationTokenSource.Token);
-                    }
-
-                    CompleteTask();
-
-                }
-                catch (Exception)
-                {
-                    CompleteTask();
-                }
-            }
-
-            public void CompleteTask()
-            {
-                TaskCompletionSource.SetResult(new { result = "Task Completed" });
-            }
-
-            public void Dispose()
-            {
-                WebSocket.Dispose();
-            }
+            public static ConcurrentDictionary<string, WebSocket> wSockets = new ConcurrentDictionary<string, WebSocket>();
+            public static ConcurrentDictionary<string, WebSocket> clientSockets = new ConcurrentDictionary<string, WebSocket>();
         }
     }
 }

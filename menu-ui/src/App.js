@@ -65,19 +65,20 @@ export default class App extends React.Component {
   }
 
   listenOrderStatus() {
-    this.wSocket = new WebSocket("ws://localhost/webservice/orderstatus?token=" + localStorage.getItem('token'));
+    this.wSocket = new WebSocket("ws://localhost:5556/orderstatus?token=" + localStorage.getItem('token'));
 
     this.wSocket.onopen = (event) => {
       console.log("listening order status for update");
-      setInterval(() => {
-        this.wSocket.send("keep alive...");
-      }, 5000);
+      // this.wSocketTimer = setInterval(() => {
+      //   this.wSocket.send("keep alive...");
+      // }, 5000);
     };
 
     this.wSocket.onmessage = (event) => {
       if (event.data == "order delivered") {
         this.delivered();
         this.wSocket.close();
+        clearInterval(this.wSocketTimer);
       }
 
       console.log(event.data);

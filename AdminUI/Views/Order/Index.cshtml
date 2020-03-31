@@ -91,7 +91,7 @@
             {
                 <div class="col col-2 nopadding">
                     <div class="card bg-light md-3" style="max-width: 18rem;">
-                        <div class="card-header">Table @Html.DisplayFor(modelItem => item.CounterId)</div>
+                        <div class="card-header">Table @Html.DisplayFor(modelItem => item.CounterId) -- @item.Id</div>
                         <ul class="list-group list-group-flush">
                             @foreach (var orderProduct in item.OrderProducts)
                             {
@@ -128,7 +128,7 @@
             {
                 <div class="col col-2 nopadding">
                     <div class="card bg-light md-3" style="max-width: 18rem;">
-                        <div class="card-header">Table @Html.DisplayFor(modelItem => item.CounterId)</div>
+                        <div class="card-header">Table @Html.DisplayFor(modelItem => item.CounterId) -- @item.Id</div>
                         <ul class="list-group list-group-flush">
                             @foreach (var orderProduct in item.OrderProducts)
                             {
@@ -165,7 +165,7 @@
             {
                 <div class="col col-2 nopadding">
                     <div class="card bg-light md-3" style="max-width: 18rem;">
-                        <div class="card-header">Table @Html.DisplayFor(modelItem => item.CounterId)</div>
+                        <div class="card-header">Table @Html.DisplayFor(modelItem => item.CounterId) -- @item.Id</div>
                         <ul class="list-group list-group-flush">
                             @foreach (var orderProduct in item.OrderProducts)
                             {
@@ -300,21 +300,21 @@
     }
 
     function openConnection() {
-        window.orderSocket = new WebSocket('ws://localhost/webservice/getorder');
+        window.orderSocket = new WebSocket('ws://localhost:5556/getorder');
 
         orderSocket.onopen = () => {
             console.log('Connected for orders...');
             console.log('hello');
-            setInterval(() => {
-                orderSocket.send("keep alive...");
-            }, 5000);
+            //setInterval(() => {
+            //    orderSocket.send("keep alive...");
+            //}, 5000);
         };
 
         orderSocket.onerror = (event) => {
             console.log(event);
         }
 
-        orderSocket.onmessage = async event => {
+        orderSocket.onmessage = async event => {    
             response = await fetch(document.body.querySelector("#get-confirmed-orders-link").getAttribute("href"));
             document.body.querySelector(".confirmed-order-list").innerHTML = await response.text();
             console.log(event.data);
@@ -322,14 +322,14 @@
     }
 
     function openConnectionForDelivery() {
-        window.deliverySocket = new WebSocket('ws://localhost/adminui/getdelivery');
+        window.deliverySocket = new WebSocket('ws://localhost:5050/getdelivery');
 
         deliverySocket.onopen = () => {
             console.log('Connected for delivery...');
             console.log('hello');
-            setInterval(() => {
-                deliverySocket.send("keep alive...");
-            }, 5000);
+            //setInterval(() => {
+            //    deliverySocket.send("keep alive...");
+            //}, 5000);
         };
 
         deliverySocket.onerror = (event) => {

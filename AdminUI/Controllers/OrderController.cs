@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.Domains;
 using Service.Interfaces;
+using static AdminUI.Startup;
 
 namespace AdminUI.Controllers
 {
@@ -72,8 +73,10 @@ namespace AdminUI.Controllers
                 order.OrderStatus = OrderStatusEnum.DELIVERY;
                 orderService.Update(order);
 
-                var tasks = BackgroundSocketProcessor.wSockets.Select(sWrapper => Talk(sWrapper.WebSocket, "order prepared"));
-                await Task.WhenAll(tasks);
+                foreach (var pair in Sockets.wSockets)
+                {
+                    await Talk(pair.Value, "order prepared");
+                }
 
                 return Ok("delivery confirmed");
             }
@@ -92,12 +95,14 @@ namespace AdminUI.Controllers
                 order.OrderStatus = OrderStatusEnum.COMPLETED;
                 orderService.Update(order);
 
-                var tasks = BackgroundSocketProcessor.wSockets.Select(sWrapper => Talk(sWrapper.WebSocket, "order completed"));
-                await Task.WhenAll(tasks);
+                foreach (var pair in Sockets.wSockets)
+                {
+                    await Talk(pair.Value, "order completed");
+                }
 
-                var clientAPIRequest = WebRequest.Create("http://localhost/webservice/api/order/updateOrderState" + "?sessionId=" + order.SessionId);
+                var clientAPIRequest = WebRequest.Create("http://localhost:5556/api/order/updateOrderState" + "?sessionId=" + order.SessionId);
 
-                HttpWebResponse response = (HttpWebResponse)clientAPIRequest.GetResponse();
+                var response = await clientAPIRequest.GetResponseAsync();
 
 
                 return Ok("delivery confirmed");
@@ -109,22 +114,17 @@ namespace AdminUI.Controllers
 
         }
 
-
-
         public async Task Talk(WebSocket wSocket, string message)
         {
-            using (var ms = new MemoryStream())
+            try
             {
-                try
-                {
-                    string text = string.Format(message);
-                    byte[] response = System.Text.Encoding.UTF8.GetBytes(text);
-                    await wSocket.SendAsync(new ArraySegment<byte>(response, 0, response.Length), WebSocketMessageType.Text, true, CancellationToken.None);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
+                string text = string.Format(message);
+                byte[] response = System.Text.Encoding.UTF8.GetBytes(text);
+                await wSocket.SendAsync(new ArraySegment<byte>(response, 0, response.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
     }
