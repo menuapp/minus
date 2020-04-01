@@ -23,15 +23,20 @@ export default class Basket extends React.Component {
                         {this.props.basket ? (this.props.basket.orderProducts.map(orderProduct => {
                             return (<tr>
                                 <td>{orderProduct.product.name}</td>
-                                <td>{orderProduct.quantity}</td>
-                                <td>{(orderProduct.quantity * orderProduct.product.unitPrice) + " TL"}</td>
+                                <div className="qContainer">
+                                    <td href="#" className="qEksi"><span>-</span></td>
+                                    {/* <td>{orderProduct.quantity}</td> */}
+                                    <input type="text" className="qValue" value={orderProduct.quantity} />
+                                    <td href="#" className="qArti"><span>+</span></td>
+                                </div>
+                                <td>{(orderProduct.quantity * orderProduct.product.unitPrice) + " ₺"}</td>
                             </tr>)
                         })) : ""}
                     </tbody>
                 </table>{
                     totalPrice > 0 ?
                         <BottomNavBar>
-                            <div className="col-3">{totalPrice + " TL"}</div>
+                            <div className="col-3">{totalPrice + " ₺"}</div>
                             <Link to="/confirmation" className="pay-btn col-3 h-100 offset-6">
                                 Confirm
                             </Link>
