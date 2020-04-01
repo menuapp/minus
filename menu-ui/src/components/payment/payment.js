@@ -16,14 +16,12 @@ export default class Payment extends React.Component {
     }
 
     expandCashOption() {
-        console.log("asd");
         this.setState({
             cashOptionExpand: !this.state.cashOptionExpand
         });
     }
 
     expandOnlineOption() {
-        console.log("asd");
         this.setState({
             onlineOptionExpand: !this.state.onlineOptionExpand
         });
@@ -31,7 +29,6 @@ export default class Payment extends React.Component {
 
     render() {
         return (
-
             <div className="payment-options">
                 <div className="payment-title">Choose Payment Method</div>
                 <a className="payment-link" onClick={this.expandCashOption}>Cash</a>

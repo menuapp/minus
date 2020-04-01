@@ -65,7 +65,7 @@ export default class App extends React.Component {
   }
 
   listenOrderStatus() {
-    this.wSocket = new WebSocket("ws://localhost:5556/orderstatus?token=" + localStorage.getItem('token'));
+    this.wSocket = new WebSocket("ws://192.168.1.174:5556/orderstatus?token=" + localStorage.getItem('token'));
 
     this.wSocket.onopen = (event) => {
       console.log("listening order status for update");

@@ -19,7 +19,7 @@ namespace AdminUI
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-            .UseUrls("http://localhost:5050/")
+            .UseUrls("http://0.0.0.0:5050/")
                 .UseStartup<Startup>();
     }
 }
