@@ -14,11 +14,13 @@ namespace Service
     public class OrderService : IOrderService
     {
         private IOrderRepository orderRepository { get; set; }
+        public IOrderProductRepository orderProductRepository { get; set; }
         private IMapper mapper { get; set; }
         private IUnitOfWork unitOfWork;
 
-        public OrderService(IOrderRepository orderRepository, IMapper mapper, IUnitOfWork unitOfWork)
+        public OrderService(IOrderRepository orderRepository, IOrderProductRepository orderProductRepository, IMapper mapper, IUnitOfWork unitOfWork)
         {
+            this.orderProductRepository = orderProductRepository;
             this.orderRepository = orderRepository;
             this.mapper = mapper;
             this.unitOfWork = unitOfWork;

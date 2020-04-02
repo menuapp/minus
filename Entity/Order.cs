@@ -17,7 +17,7 @@ namespace Entity
         public OrderStatus OrderStatus { get; set; }
         public int OrderStatusId { get; set; }
         public PaymentType PaymentType { get; set; }
-        public int PaymentTypeId { get; set; }
+        public int? PaymentTypeId { get; set; }
         public OrderType OrderType { get; set; }
         public int OrderTypeId { get; set; }
         public Counter Counter { get; set; }

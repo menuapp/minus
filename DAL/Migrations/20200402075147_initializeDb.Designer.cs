@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(MinusContext))]
-    [Migration("20200322070907_initializeDb")]
+    [Migration("20200402075147_initializeDb")]
     partial class initializeDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -162,7 +162,8 @@ namespace DAL.Migrations
 
                     b.Property<int>("PartnerId");
 
-                    b.Property<int>("PaymentTypeId");
+                    b.Property<int?>("PaymentTypeId")
+                        .IsRequired();
 
                     b.Property<string>("SessionId")
                         .IsRequired();
@@ -192,6 +193,11 @@ namespace DAL.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Description");
+
+                    b.Property<short>("IsDelivered")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("BIT(1)")
+                        .HasDefaultValue((short)0);
 
                     b.Property<int>("OrderId");
 

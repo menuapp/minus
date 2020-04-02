@@ -373,7 +373,8 @@ namespace DAL.Migrations
                     ProductId = table.Column<int>(nullable: false),
                     OrderId = table.Column<int>(nullable: false),
                     Quantity = table.Column<int>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
+                    Description = table.Column<string>(nullable: true),
+                    IsDelivered = table.Column<short>(type: "BIT(1)", nullable: false, defaultValue: (short)0)
                 },
                 constraints: table =>
                 {

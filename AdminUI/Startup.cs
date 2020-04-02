@@ -58,6 +58,7 @@ namespace AdminUI
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IOrderRepository, OrderRepository>();
+            services.AddTransient<IOrderProductRepository, OrderProductRepository>();
             //REGISTER SERVICE LAYER
             services.AddTransient<ITableService, TableService>();
             services.AddTransient<IPartnerService, PartnerService>();

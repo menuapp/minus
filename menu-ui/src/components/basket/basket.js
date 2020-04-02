@@ -2,11 +2,14 @@ import './basket.css';
 
 import React from 'react';
 import BottomNavBar from '../bottomNavBar/bottomNavBar';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import AuthenticationService from '../../Service/authenticationService';
 
 export default class Basket extends React.Component {
     constructor(props) {
         super(props);
+
+        this.authenticationService = new AuthenticationService();
     }
 
     render() {
@@ -16,22 +19,65 @@ export default class Basket extends React.Component {
             var totalPrice = sum;
         }
 
-        return (
-            <div>
+        return this.authenticationService.isAuthenticated() ? (
+            <div id="order-list-wrapper">
                 <table className="order-list">
                     <tbody>
                         {this.props.basket ? (this.props.basket.orderProducts.map(orderProduct => {
                             return (<tr>
                                 <td>{orderProduct.product.name}</td>
                                 <div className="qContainer">
-                                    <td href="#" className="qEksi"><span>-</span></td>
+                                    <button href="#" className="qEksi"><span>-</span></button>
                                     {/* <td>{orderProduct.quantity}</td> */}
                                     <input type="text" className="qValue" value={orderProduct.quantity} />
-                                    <td href="#" className="qArti"><span>+</span></td>
+                                    <button className="qArti"><span>+</span></button>
                                 </div>
-                                <td>{(orderProduct.quantity * orderProduct.product.unitPrice) + " ₺"}</td>
+                                <td>{(orderProduct.quantity * orderProduct.product.unitPrice).toFixed(2) + " ₺"}</td>
                             </tr>)
                         })) : ""}
+                        <tr className="total-amount">
+                            <td>
+                                <b>Previous</b>
+                            </td>
+                            <td></td>
+                            <td>
+                                <b>45 TL</b>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table className="order-list">
+                    <tbody>
+                        {this.props.basket ? (this.props.basket.orderProducts.map(orderProduct => {
+                            return (<tr>
+                                <td>{orderProduct.product.name}</td>
+                                <div className="qContainer">
+                                    <button href="#" className="qEksi"><span>-</span></button>
+                                    {/* <td>{orderProduct.quantity}</td> */}
+                                    <input type="text" className="qValue" value={orderProduct.quantity} />
+                                    <button className="qArti"><span>+</span></button>
+                                </div>
+                                <td>{(orderProduct.quantity * orderProduct.product.unitPrice).toFixed(2) + " ₺"}</td>
+                            </tr>)
+                        })) : ""}
+                        <tr className="total-amount">
+                            <td>
+                                <b>In Basket</b>
+                            </td>
+                            <td></td>
+                            <td>
+                                <b>45 TL</b>
+                            </td>
+                        </tr>
+                        <tr className="total-amount">
+                            <td>
+                                <b>Total</b>
+                            </td>
+                            <td></td>
+                            <td>
+                                <b>45 TL</b>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>{
                     totalPrice > 0 ?
@@ -43,6 +89,6 @@ export default class Basket extends React.Component {
                         </BottomNavBar> : ""
                 }
             </div>
-        );
+        ) : (<Redirect to="/" />);
     }
 }

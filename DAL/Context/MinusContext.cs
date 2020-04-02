@@ -137,6 +137,7 @@ namespace DAL.Context
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Description);
+                entity.Property(e => e.IsDelivered).HasDefaultValue(false);
                 entity.HasOne(e => e.Product).WithMany(src => src.OrderProducts).HasForeignKey(a => a.ProductId).IsRequired();
                 entity.HasOne(e => e.Order).WithMany(src => src.OrderProducts).HasForeignKey(a => a.OrderId).IsRequired();
             });

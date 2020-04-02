@@ -16,6 +16,7 @@ import Payment from './components/payment/payment';
 import OrderStatus from './components/orderStatus/orderStatus';
 import orderStates from './Extensions/orderStates';
 import Confirm from './components/confirmation/confirmation';
+import Success from './components/success/success';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -121,12 +122,15 @@ export default class App extends React.Component {
   }
 
   render() {
+    console.log("main");
     return (
       <div className={"App" + (this.state.backlightDim ? " backlightDim" : "")} onClick={this.handleClick}>
         <NavigationBar basketQuantity={this.state.basketQuantity} clickOutsideNavbar={this.state.clickOutsideNavbar} dimBacklight={this.dimBacklight} />
         <Switch>
+          <Route path="/success" component={Success}>
+          </Route>
           <Route path="/payment">
-            <Payment />
+            <Payment basket={this.state.basket} />
           </Route>
           <Route path="/confirmation">
             <Confirm basket={this.state.basket} preparingOrder={this.preparingOrder} />

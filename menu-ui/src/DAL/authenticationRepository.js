@@ -18,4 +18,12 @@ export default class AuthenticationRepository extends RepositoryBase {
 
         return false;
     }
+
+    async isAuthorized() {
+        return !!localStorage.getItem("token");
+    }
+
+    async checkout() {
+        localStorage.removeItem("token");
+    }
 }

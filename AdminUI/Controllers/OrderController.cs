@@ -29,13 +29,17 @@ namespace AdminUI.Controllers
             this.orderService = orderService;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(bool partial = false)
         {
             List<OrderViewModel> orders = new List<OrderViewModel>();
 
-            orders = mapper.Map<List<OrderViewModel>>(orderService.GetMany(basket => basket.OrderStatus == OrderStatusEnum.CONFIRMED || basket.OrderStatus == OrderStatusEnum.DELIVERY || basket.OrderStatus == OrderStatusEnum.COMPLETED));
+            orders = mapper.Map<List<OrderViewModel>>(orderService.GetMany(basket => basket.OrderStatus == OrderStatusEnum.CONFIRMED || basket.OrderStatus == OrderStatusEnum.PREPARING || basket.OrderStatus == OrderStatusEnum.DELIVERY || basket.OrderStatus == OrderStatusEnum.COMPLETED));
 
-            return View(orders);
+            if (partial)
+            {
+                return PartialView(orders);
+            }
+            else return View(orders);
         }
 
         public IActionResult OrdersConfirmed()
@@ -51,12 +55,39 @@ namespace AdminUI.Controllers
         {
             List<OrderViewModel> orders = new List<OrderViewModel>();
 
-            orders = mapper.Map<List<OrderViewModel>>(orderService.GetMany(basket => basket.OrderStatus == OrderStatusEnum.DELIVERY));
+            orders = mapper.Map<List<OrderViewModel>>(orderService.GetMany(basket => basket.OrderStatus == OrderStatusEnum.PREPARING));
 
             return PartialView(orders);
         }
 
         public IActionResult OrdersCompleted()
+        {
+            List<OrderViewModel> orders = new List<OrderViewModel>();
+
+            orders = mapper.Map<List<OrderViewModel>>(orderService.GetMany(basket => basket.OrderStatus == OrderStatusEnum.DELIVERY));
+
+            return PartialView(orders);
+        }
+
+        public IActionResult confirmedPayments()
+        {
+            List<OrderViewModel> orders = new List<OrderViewModel>();
+
+            orders = mapper.Map<List<OrderViewModel>>(orderService.GetMany(basket => (basket.PaymentType == PaymentTypeEnum.CARD || basket.PaymentType == PaymentTypeEnum.CASH)));
+
+            return PartialView(orders);
+        }
+
+        public IActionResult receivedOnline()
+        {
+            List<OrderViewModel> orders = new List<OrderViewModel>();
+
+            orders = mapper.Map<List<OrderViewModel>>(orderService.GetMany(basket => basket.PaymentType == PaymentTypeEnum.MOBILE));
+
+            return PartialView(orders);
+        }
+
+        public IActionResult completedOrders()
         {
             List<OrderViewModel> orders = new List<OrderViewModel>();
 
@@ -70,7 +101,7 @@ namespace AdminUI.Controllers
             try
             {
                 var order = orderService.GetById(id);
-                order.OrderStatus = OrderStatusEnum.DELIVERY;
+                order.OrderStatus = OrderStatusEnum.PREPARING;
                 orderService.Update(order);
 
                 foreach (var pair in Sockets.wSockets)
@@ -92,7 +123,7 @@ namespace AdminUI.Controllers
             try
             {
                 var order = orderService.GetById(id);
-                order.OrderStatus = OrderStatusEnum.COMPLETED;
+                order.OrderStatus = OrderStatusEnum.DELIVERY;
                 orderService.Update(order);
 
                 foreach (var pair in Sockets.wSockets)

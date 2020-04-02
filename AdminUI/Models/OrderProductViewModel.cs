@@ -12,5 +12,6 @@ namespace AdminUI.Models
         public int ProductId { get; set; }
         public int Quantity { get; set; }
         public ProductViewModel Product { get; set; }
+        public bool IsDelivered { get; set; }
     }
 }

@@ -160,7 +160,8 @@ namespace DAL.Migrations
 
                     b.Property<int>("PartnerId");
 
-                    b.Property<int>("PaymentTypeId");
+                    b.Property<int?>("PaymentTypeId")
+                        .IsRequired();
 
                     b.Property<string>("SessionId")
                         .IsRequired();
@@ -190,6 +191,11 @@ namespace DAL.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Description");
+
+                    b.Property<short>("IsDelivered")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("BIT(1)")
+                        .HasDefaultValue((short)0);
 
                     b.Property<int>("OrderId");
 

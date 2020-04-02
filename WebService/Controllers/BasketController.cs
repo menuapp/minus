@@ -79,7 +79,7 @@ namespace WebService.Controllers
 
             basketService.Add(mapper.Map<OrderDomain>(basket));
 
-            return Ok();
+            return RedirectToAction("Get", new { id = basket.Id });
         }
 
         public IActionResult GetBasket()
@@ -94,20 +94,26 @@ namespace WebService.Controllers
             orderProduct.OrderId = (int)basket.Id;
 
             basketService.AddProduct(mapper.Map<OrderProductDomain>(orderProduct));
-            return Ok();
+            return RedirectToAction("Get", new { id = basket.Id });
         }
         [HttpPost]
         public IActionResult RemoveProduct(OrderProductDto orderProduct)
         {
+            var basket = basketService.GetBySession(SessionId);
+            orderProduct.OrderId = (int)basket.Id;
+
             basketService.RemoveProduct(mapper.Map<OrderProductDomain>(orderProduct));
-            return Ok();
+            return RedirectToAction("Get", new { id = basket.Id });
         }
 
         [HttpPost]
         public IActionResult UpdateProduct(OrderProductDto orderProduct)
         {
+            var basket = basketService.GetBySession(SessionId);
+            orderProduct.OrderId = (int)basket.Id;
+
             basketService.UpdateProduct(mapper.Map<OrderProductDomain>(orderProduct));
-            return Ok();
+            return RedirectToAction("Get", new { id = basket.Id });
         }
 
         [HttpPost]
@@ -128,7 +134,36 @@ namespace WebService.Controllers
         {
             try
             {
+                //order.OrderProducts.ForEach(op =>
+                //{
+                //    if (op.IsDelivered == false)
+                //    {
+                //        op.IsDelivered = true;
+                //    }
+                //});
+
                 order.OrderStatus = OrderStatusEnum.CONFIRMED;
+                basketService.Update(mapper.Map<OrderDomain>(order));
+
+                foreach (var pair in Sockets.wSockets)
+                {
+                    await Talk(pair.Value);
+                }
+
+                return Ok("confirmed");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Ok("error");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChoosePayment([FromBody]BasketDto order)
+        {
+            try
+            {
                 basketService.Update(mapper.Map<OrderDomain>(order));
 
                 foreach (var pair in Sockets.wSockets)

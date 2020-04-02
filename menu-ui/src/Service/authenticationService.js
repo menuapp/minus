@@ -10,4 +10,12 @@ export default class AuthenticationService extends ServiceBase {
     async getToken(restaurantName, table) {
         return await this.authenticationRepository.getToken(restaurantName, table);
     }
+
+    async isAuthenticated() {
+        return this.authenticationRepository.isAuthorized();
+    }
+
+    async checkout() {
+        this.authenticationRepository.checkout();
+    }
 }

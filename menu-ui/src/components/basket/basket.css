@@ -1,3 +1,7 @@
+#order-list-wrapper {
+    padding-top: 65px;
+}
+
 .pay-btn {
     color: white;
     background-color: #30be76;
@@ -10,7 +14,7 @@
 .order-list {
     width: 100%;
     display: block;
-    padding-top: 100px;
+    /* padding-top: 100px; */
 }
 
 .order-list tbody tr:nth-child(even) {
@@ -61,8 +65,8 @@ td {
     line-height: 23px;
 }
 
-.qEksi:hover,
-.qArti:hover {
+.qEksi:active,
+.qArti:active {
     background: #ff4500;
     color: #fff;
 }
@@ -78,6 +82,7 @@ td {
 .qValue {
     width: 32px;
     height: 23px;
+    line-height: 23px;
     margin: 0;
     padding: 0;
     text-align: center;

@@ -1,4 +1,5 @@
 import RepositoryBase from './repositoryBase';
+import paymentTypes from '../Extensions/paymenTypes';
 
 export default class OrderRepository extends RepositoryBase {
   constructor() {

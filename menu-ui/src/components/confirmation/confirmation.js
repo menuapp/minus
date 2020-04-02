@@ -1,8 +1,9 @@
 import './confirmation.css';
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import OrderService from '../../Service/orderService';
+import AuthenticationService from '../../Service/authenticationService';
 
 export default class Confirm extends React.Component {
   constructor(props) {
@@ -10,6 +11,7 @@ export default class Confirm extends React.Component {
 
     this.confirm = this.confirm.bind(this);
     this.orderService = new OrderService();
+    this.authenticationService = new AuthenticationService();
   }
 
   async confirm() {
@@ -18,7 +20,7 @@ export default class Confirm extends React.Component {
   }
 
   render() {
-    return (
+    return this.authenticationService.isAuthenticated() ? (
       <div className="order-confirmation">
         <div>Do you confirm following order?</div>
         {
@@ -26,18 +28,18 @@ export default class Confirm extends React.Component {
             <tbody>
               {this.props.basket
                 ? this.props.basket.orderProducts.map(orderProduct => {
-                    return (
-                      <tr>
-                        <td>{orderProduct.product.name}</td>
-                        <td>{orderProduct.quantity}</td>
-                        <td>
-                          {orderProduct.quantity *
-                            orderProduct.product.unitPrice +
-                            ' TL'}
-                        </td>
-                      </tr>
-                    );
-                  })
+                  return (
+                    <tr>
+                      <td>{orderProduct.product.name}</td>
+                      <td>{orderProduct.quantity}</td>
+                      <td>
+                        {orderProduct.quantity *
+                          orderProduct.product.unitPrice +
+                          ' TL'}
+                      </td>
+                    </tr>
+                  );
+                })
                 : ''}
               <tr className="total-amount">
                 <td>
@@ -60,6 +62,6 @@ export default class Confirm extends React.Component {
           </Link>
         </div>
       </div>
-    );
+    ) : (<Redirect to="/" />);
   }
 }

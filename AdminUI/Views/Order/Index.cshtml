@@ -12,6 +12,7 @@
 
 <a id="prepared-order-link" hidden asp-action="UpdateForDelivery"></a>
 <a id="completed-order-link" asp-action="UpdateForCompleted"></a>
+<a id="page-link" asp-action="Index" asp-route-partial="true"></a>
 
 <a id="get-prepared-orders-link" asp-action="OrdersPrepared"></a>
 <a id="get-confirmed-orders-link" asp-action="OrdersConfirmed"></a>
@@ -124,7 +125,7 @@
     </div>
     <div class="card-body delivery-list-container">
         <div class="row prepared-order-list">
-            @foreach (var item in Model.Where(order => order.OrderStatus == Entity.OrderStatusEnum.DELIVERY))
+            @foreach (var item in Model.Where(order => order.OrderStatus == Entity.OrderStatusEnum.PREPARING))
             {
                 <div class="col col-2 nopadding">
                     <div class="card bg-light md-3" style="max-width: 18rem;">
@@ -161,7 +162,7 @@
     </div>
     <div class="card-body delivery-list-container">
         <div class="row completed-order-list">
-            @foreach (var item in Model.Where(order => order.OrderStatus == Entity.OrderStatusEnum.COMPLETED))
+            @foreach (var item in Model.Where(order => order.OrderStatus == Entity.OrderStatusEnum.DELIVERY))
             {
                 <div class="col col-2 nopadding">
                     <div class="card bg-light md-3" style="max-width: 18rem;">
@@ -197,7 +198,7 @@
     </div>
     <div class="card-body delivery-list-container">
         <div class="row completed-order-list">
-            @*@foreach (var item in Model.Where(order => order.OrderStatus == Entity.OrderStatusEnum.COMPLETED))
+            @foreach (var item in Model.Where(order => order.OrderStatus == Entity.OrderStatusEnum.DELIVERY && order.PaymentType == Entity.PaymentTypeEnum.MOBILE))
             {
                 <div class="col col-2 nopadding">
                     <div class="card bg-light md-3" style="max-width: 18rem;">
@@ -213,7 +214,7 @@
                         </ul>
                     </div>
                 </div>
-            }*@
+            }
         </div>
     </div>
 </div>
@@ -233,7 +234,7 @@
     </div>
     <div class="card-body delivery-list-container">
         <div class="row completed-order-list">
-            @*@foreach (var item in Model.Where(order => order.OrderStatus == Entity.OrderStatusEnum.COMPLETED))
+            @foreach (var item in Model.Where(order => order.OrderStatus == Entity.OrderStatusEnum.DELIVERY && (order.PaymentType == Entity.PaymentTypeEnum.CARD || order.PaymentType == Entity.PaymentTypeEnum.CASH)))
             {
                 <div class="col col-2 nopadding">
                     <div class="card bg-light md-3" style="max-width: 18rem;">
@@ -249,7 +250,7 @@
                         </ul>
                     </div>
                 </div>
-            }*@
+            }
         </div>
     </div>
 </div>
@@ -269,23 +270,23 @@
     </div>
     <div class="card-body delivery-list-container">
         <div class="row completed-order-list">
-            @*@foreach (var item in Model.Where(order => order.OrderStatus == Entity.OrderStatusEnum.COMPLETED))
-                {
-                    <div class="col col-2 nopadding">
-                        <div class="card bg-light md-3" style="max-width: 18rem;">
-                            <div class="card-header">Table @Html.DisplayFor(modelItem => item.CounterId)</div>
-                            <ul class="list-group list-group-flush">
-                                @foreach (var orderProduct in item.OrderProducts)
-                                {
-                                    <li class="list-group-item">
-                                        <span>@orderProduct.Product.Name</span>
-                                        <span style="float:right;">x @orderProduct.Quantity</span>
-                                    </li>
-                                }
-                            </ul>
-                        </div>
+            @foreach (var item in Model.Where(order => order.OrderStatus == Entity.OrderStatusEnum.COMPLETED))
+            {
+                <div class="col col-2 nopadding">
+                    <div class="card bg-light md-3" style="max-width: 18rem;">
+                        <div class="card-header">Table @Html.DisplayFor(modelItem => item.CounterId)</div>
+                        <ul class="list-group list-group-flush">
+                            @foreach (var orderProduct in item.OrderProducts)
+                            {
+                                <li class="list-group-item">
+                                    <span>@orderProduct.Product.Name</span>
+                                    <span style="float:right;">x @orderProduct.Quantity</span>
+                                </li>
+                            }
+                        </ul>
                     </div>
-                }*@
+                </div>
+            }
         </div>
     </div>
 </div>
@@ -314,9 +315,9 @@
             console.log(event);
         }
 
-        orderSocket.onmessage = async event => {    
-            response = await fetch(document.body.querySelector("#get-confirmed-orders-link").getAttribute("href"));
-            document.body.querySelector(".confirmed-order-list").innerHTML = await response.text();
+        orderSocket.onmessage = async event => {
+            response = await fetch(document.body.querySelector("#page-link").getAttribute("href"));
+            document.body.querySelector("#content-wrapper").innerHTML = await response.text();
             console.log(event.data);
         };
     }
@@ -337,24 +338,28 @@
         }
 
         deliverySocket.onmessage = async event => {
-            if (event.data == "order prepared") {
-                response = await fetch(document.body.querySelector("#get-confirmed-orders-link").getAttribute("href"));
-                document.body.querySelector(".confirmed-order-list").innerHTML = await response.text();
+            //if (event.data == "order prepared") {
+            //    response = await fetch(document.body.querySelector("#get-confirmed-orders-link").getAttribute("href"));
+            //    document.body.querySelector(".confirmed-order-list").innerHTML = await response.text();
 
-                if (response.status === 200) {
-                    response = await fetch(document.body.querySelector("#get-prepared-orders-link").getAttribute("href"));
-                    document.body.querySelector(".prepared-order-list").innerHTML = await response.text();
-                }
-            } else if (event.data == "order completed") {
-                response = await fetch(document.body.querySelector("#get-prepared-orders-link").getAttribute("href"));
-                document.body.querySelector(".prepared-order-list").innerHTML = await response.text();
+            //    if (response.status === 200) {
+            //        response = await fetch(document.body.querySelector("#get-prepared-orders-link").getAttribute("href"));
+            //        document.body.querySelector(".prepared-order-list").innerHTML = await response.text();
+            //    }
+            //} else if (event.data == "order completed") {
+            //    response = await fetch(document.body.querySelector("#get-prepared-orders-link").getAttribute("href"));
+            //    document.body.querySelector(".prepared-order-list").innerHTML = await response.text();
 
-                if (response.status === 200) {
-                    response = await fetch(document.body.querySelector("#get-completed-orders-link").getAttribute("href"));
-                    document.body.querySelector(".completed-order-list").innerHTML = await response.text();
-                }
-            }
+            //    if (response.status === 200) {
+            //        response = await fetch(document.body.querySelector("#get-completed-orders-link").getAttribute("href"));
+            //        document.body.querySelector(".completed-order-list").innerHTML = await response.text();
+            //    }
+            //}
 
+            //console.log(event.data);
+
+            response = await fetch(document.body.querySelector("#page-link").getAttribute("href"));
+            document.body.querySelector("#content-wrapper").innerHTML = await response.text();
             console.log(event.data);
         };
     }

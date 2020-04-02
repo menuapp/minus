@@ -4,6 +4,7 @@
   background-color: #f8f9fa;
   overflow: auto;
   height: 100vh;
+  scroll-behavior: smooth;
 }
 
 .App.backlightDim {
